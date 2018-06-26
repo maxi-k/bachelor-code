@@ -1,5 +1,5 @@
 /* 2016 */
-package de.unia.oc.robotcontrol.coding;
+package de.unia.oc.robotcontrol.util;
 
 import java.util.function.Function;
 
@@ -14,7 +14,7 @@ import java.util.function.Function;
  * @param <T> The 'unencoded' type.
  * @param <F> The 'encoded' type.
  */
-public interface BijectiveTransformation<T, F> {
+public interface Bijection<T, F> {
 
     /**
      * Transforms the given object of type {@link T} into
@@ -51,71 +51,71 @@ public interface BijectiveTransformation<T, F> {
     default Function<F, T> decoder() { return this::decode; }
 
     /**
-     * Builds a new {@link BijectiveTransformation} interface that uses
+     * Builds a new {@link Bijection} interface that uses
      * this instance as well as the given instance to decode and encode:
      * (T <-> F), (R <-> T) => (R <-> F)
-     * @param top The instance of of {@link BijectiveTransformation} that is used
+     * @param top The instance of of {@link Bijection} that is used
      *            to encode first and decode last (R <-> T)
      * @param <R> The type that is used for encoding and targeted by decoding
-     * @return A new {@link BijectiveTransformation} interface (R <-> F)
+     * @return A new {@link Bijection} interface (R <-> F)
      */
-    default <R> BijectiveTransformation<R, F> stack(
-            BijectiveTransformation<R, T> top) {
-        return BijectiveTransformation.create(
+    default <R> Bijection<R, F> stack(
+            Bijection<R, T> top) {
+        return Bijection.create(
                 top.encoder().andThen(this.encoder()),
                 this.decoder().andThen(top.decoder())
         );
     }
 
     /**
-     * Builds a new {@link BijectiveTransformation} interface that uses
+     * Builds a new {@link Bijection} interface that uses
      * this instance as well as the given instance to decode and encode:
      * (T <-> F), (F <-> R) => (T <-> R)
-     * @param bottom The instance of of {@link BijectiveTransformation} that is used
+     * @param bottom The instance of of {@link Bijection} that is used
      *               to encode last and decode first (F <-> R)
      * @param <R> The type that is targeted by encoding and used for decoding
-     * @return A new {@link BijectiveTransformation} interface (T <-> R)
+     * @return A new {@link Bijection} interface (T <-> R)
      */
-    default <R> BijectiveTransformation<T, R> supplement(
-            BijectiveTransformation<F, R> bottom
+    default <R> Bijection<T, R> supplement(
+            Bijection<F, R> bottom
     ) {
         return bottom.stack(this);
     }
 
     /**
-     * Builds a new {@link BijectiveTransformation} interface that uses
+     * Builds a new {@link Bijection} interface that uses
      * this instance as well as the given instances to decode and encode:
      * (T <-> F), (R <-> T), (F <-> S) => (T <-> R)
      *
-     * @param top The instance of of {@link BijectiveTransformation} that is used
+     * @param top The instance of of {@link Bijection} that is used
      *            to encode first and decode last (R <-> T)
-     * @param bottom The instance of of {@link BijectiveTransformation} that is used
+     * @param bottom The instance of of {@link Bijection} that is used
      *               to encode last and decode first (F <-> S)
      * @param <R> The type that is used for encoding and targeted by decoding
      * @param <S> The type that is targeted by encoding and used for decoding
-     * @return A new {@link BijectiveTransformation} interface (R <-> S)
+     * @return A new {@link Bijection} interface (R <-> S)
      */
-    default <R, S> BijectiveTransformation<R, S> wrap(
-            BijectiveTransformation<R, T> top,
-            BijectiveTransformation<F, S> bottom
+    default <R, S> Bijection<R, S> wrap(
+            Bijection<R, T> top,
+            Bijection<F, S> bottom
     ) {
         return bottom.stack(this).stack(top);
     }
 
     /**
-     * Creates a {@link BijectiveTransformation} instance (A <-> B)
+     * Creates a {@link Bijection} instance (A <-> B)
      * given an encoder function (A -> B) and a decoder function (B -> A).
      *
      * @param encoder The function used for encoding (A -> B)
      * @param decoder The function used for decoding (B -> A)
      * @param <A> The type of the unencoded value
      * @param <B> The type of the encoded value
-     * @return A new instance of {@link BijectiveTransformation} (A <-> B)
+     * @return A new instance of {@link Bijection} (A <-> B)
      */
-    static <A, B> BijectiveTransformation<A, B> create(
+    static <A, B> Bijection<A, B> create(
             Function<A, B> encoder,
             Function<B, A> decoder) {
-        return new BijectiveTransformation<A, B>() {
+        return new Bijection<A, B>() {
             @Override
             public B encode(A object) throws IllegalArgumentException {
                 return encoder.apply(object);

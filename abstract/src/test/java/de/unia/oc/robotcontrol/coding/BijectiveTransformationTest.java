@@ -1,5 +1,6 @@
 package de.unia.oc.robotcontrol.coding;
 
+import de.unia.oc.robotcontrol.util.Bijection;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,12 +13,12 @@ class BijectiveTransformationTest {
     @Test
     void isStackable() {
 
-        BijectiveTransformation<Character, Integer> top = BijectiveTransformation.create(
+        Bijection<Character, Integer> top = Bijection.create(
                 (c) -> (int) c,
                 (i) -> (char) i.intValue()
         );
 
-        BijectiveTransformation<Integer, String> bottom = BijectiveTransformation.create(
+        Bijection<Integer, String> bottom = Bijection.create(
                 Object::toString,
                 Integer::parseInt
         );
@@ -33,7 +34,7 @@ class BijectiveTransformationTest {
         assertEquals(testString, bottom.encode(testInt));
         assertEquals(testInt, bottom.decode(testString).intValue());
 
-        List<BijectiveTransformation<Character, String>> transforms = new ArrayList<>(2);
+        List<Bijection<Character, String>> transforms = new ArrayList<>(2);
 
         transforms.add(bottom.stack(top));
         transforms.add(top.supplement(bottom));
@@ -41,18 +42,18 @@ class BijectiveTransformationTest {
         transforms.add(top.supplement(bottom).wrap(makeIdentity('a'), makeIdentity("a")));
         transforms.add(makeIdentity(65).wrap(top, bottom));
 
-        for (BijectiveTransformation<Character, String> whole : transforms) {
+        for (Bijection<Character, String> whole : transforms) {
             assertEquals(testString, whole.encode(testChar));
             assertEquals(testChar, whole.decode(testString).charValue());
         }
     }
 
     /**
-     * Returns an BijectiveTransformation instance that does nothing. Requires unused type-parameter
+     * Returns an Bijection instance that does nothing. Requires unused type-parameter
      * to prevent type erasure in call cases.
      */
-    private <A> BijectiveTransformation<A, A> makeIdentity(A type) {
-        return BijectiveTransformation.create(
+    private <A> Bijection<A, A> makeIdentity(A type) {
+        return Bijection.create(
                 (A a)  -> a,
                 (A a) -> a
         );

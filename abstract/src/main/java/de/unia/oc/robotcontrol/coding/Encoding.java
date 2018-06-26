@@ -1,6 +1,8 @@
 /* 2016 */
 package de.unia.oc.robotcontrol.coding;
 
+import de.unia.oc.robotcontrol.util.Bijection;
+
 /**
  * Interface for encoding Java objects and primitives into byte sequences
  * and vice versa. Intended for use in exchanging data between the
@@ -14,7 +16,7 @@ package de.unia.oc.robotcontrol.coding;
  * @param <T> The type of Java Object a particular Instance of {@link Encoding}
  *            will encode and decode to.
  */
-public interface Encoding<T> extends BijectiveTransformation<T, byte[]> {
+public interface Encoding<T> extends Bijection<T, byte[]> {
 
     /**
      *
@@ -60,7 +62,7 @@ public interface Encoding<T> extends BijectiveTransformation<T, byte[]> {
     }
 
     @Override
-    default <R> Encoding<R> stack(BijectiveTransformation<R, T> top) {
+    default <R> Encoding<R> stack(Bijection<R, T> top) {
         Encoding<T> bottom = this;
         return new Encoding<R>() {
 
