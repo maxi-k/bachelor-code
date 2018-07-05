@@ -10,7 +10,7 @@ import java.util.Arrays;
  * that represents a single value being encoded as bytes.
  * @param <T> The type of the objects to be encoded
  */
-public abstract class SingleValueEncoding<T> implements Encoding<T> {
+public abstract class SingleValueEncoding<T> implements FixedEncoding<T> {
 
     /**
      * The CodingContext used for this Encoding.
@@ -22,8 +22,9 @@ public abstract class SingleValueEncoding<T> implements Encoding<T> {
     }
 
     public SingleValueEncoding() {
-        this(CodingContext.ARDUINO);
+        this(CodingContext.NATIVE);
     }
+
 
     /**
      *

@@ -1,6 +1,6 @@
 #!/bin/bash
 version=1.0-SNAPSHOT
-jar=target/unia-oc-robotcontrol-$version.jar
+jar=target/unia-oc-robotcontrol-examples-$version.jar
 
 target=robotcontrol.jar
 address="robot-pi1.local"

@@ -16,19 +16,7 @@ import de.unia.oc.robotcontrol.util.Bijection;
  * @param <T> The type of Java Object a particular Instance of {@link Encoding}
  *            will encode and decode to.
  */
-public interface Encoding<T> extends Bijection<T, byte[]> {
-
-    /**
-     *
-     * @return The number of bytes this Encoding needs.
-     */
-    int numBytes();
-
-    /**
-     *
-     * @return The context with which encoding/decoding takes place.
-     */
-    CodingContext getContext();
+public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
 
     /**
      * Return an encoding of type {@link T}  with its context
@@ -36,13 +24,10 @@ public interface Encoding<T> extends Bijection<T, byte[]> {
      * @param context The conding context that has to be set
      * @return An encoding with the context set to {@param context}
      */
+    @Override
     default Encoding<T> withContext(CodingContext context) {
         Encoding<T> old = this;
         return new Encoding<T>() {
-            @Override
-            public int numBytes() {
-                return old.numBytes();
-            }
 
             @Override
             public CodingContext getContext() {
@@ -65,9 +50,6 @@ public interface Encoding<T> extends Bijection<T, byte[]> {
     default <R> Encoding<R> stack(Bijection<R, T> top) {
         Encoding<T> bottom = this;
         return new Encoding<R>() {
-
-            @Override
-            public int numBytes() { return bottom.numBytes(); }
 
             @Override
             public CodingContext getContext() { return bottom.getContext(); }

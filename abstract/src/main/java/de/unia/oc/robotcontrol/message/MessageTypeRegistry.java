@@ -1,11 +1,10 @@
 /* 2016 */
 package de.unia.oc.robotcontrol.message;
 
-public interface MessageTypeRegistry<I> {
+import de.unia.oc.robotcontrol.util.Registry;
+
+public interface MessageTypeRegistry<I> extends Registry<I, MessageType> {
 
     MessageIdentifier<I> getIdentifier();
 
-    <T extends Message> MessageType<T> getMessageTypeFor(I identifier);
-
-    <T extends Message> I getIdentifierFor(MessageType<T> t);
 }

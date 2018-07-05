@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ListEncoding<T> implements Encoding<List<T>> {
+public class ListEncoding<T> implements FixedEncoding<List<T>> {
 
-    private Encoding<T> singleEncoding;
+    private FixedEncoding<T> singleEncoding;
     private int numElements;
 
-    public ListEncoding(Encoding<T> singleEncoding,
+    public ListEncoding(FixedEncoding<T> singleEncoding,
                         int numElements) {
         this.singleEncoding = singleEncoding;
         this.numElements = numElements;
@@ -55,7 +55,7 @@ public class ListEncoding<T> implements Encoding<List<T>> {
 
     @Override
     public ListEncoding<T> withContext(CodingContext context) {
-        return new ListEncoding<>(
+        return new ListEncoding<T>(
                 this.singleEncoding.withContext(context),
                 this.numElements);
     }
