@@ -6,9 +6,7 @@ import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.message.Message;
-import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.util.Logger;
-import de.unia.oc.robotcontrol.flow.ProviderStrategy;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,16 +39,6 @@ public class I2CConnector extends Observable implements Device, Observer {
         this.i2c = I2CFactory.getInstance(I2CBus.BUS_1);
         this.device = i2c.getDevice(DEVICE_ADDRESS);
         this.readBuffer = new byte[MAX_MESSAGE_SIZE];
-    }
-
-    @Override
-    public FlowStrategy getFlowType() {
-        return FlowStrategy.PULL;
-    }
-
-    @Override
-    public ProviderStrategy getProviderStrategy() {
-        return ProviderStrategy.timed(5);
     }
 
     @Override

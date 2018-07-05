@@ -1,7 +1,8 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
-import de.unia.oc.robotcontrol.util.Feed;
+import de.unia.oc.robotcontrol.flow.OutFlowElement;
 
-public interface MessageSender<T extends Message> extends Feed<T> {
+public interface MessageSender<T extends Message> extends OutFlowElement {
+
 }

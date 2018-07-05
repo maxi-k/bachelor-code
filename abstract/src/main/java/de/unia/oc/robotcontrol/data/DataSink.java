@@ -1,7 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.data;
 
-import de.unia.oc.robotcontrol.util.Subscriber;
+import de.unia.oc.robotcontrol.flow.InFlowElement;
 
 /**
  * A generic interface for something that receives data
@@ -9,6 +9,6 @@ import de.unia.oc.robotcontrol.util.Subscriber;
  *
  * @param <T>
  */
-public interface DataSink<T extends DataPayload> extends Subscriber<T> {
+public interface DataSink<T extends DataPayload> extends InFlowElement {
 
 }

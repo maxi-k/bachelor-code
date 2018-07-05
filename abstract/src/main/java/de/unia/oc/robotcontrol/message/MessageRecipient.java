@@ -2,7 +2,8 @@
 package de.unia.oc.robotcontrol.message;
 
 
-import de.unia.oc.robotcontrol.util.Subscriber;
+import de.unia.oc.robotcontrol.flow.InFlowElement;
 
-public interface MessageRecipient<T extends Message> extends Subscriber<T> {
+public interface MessageRecipient<T extends Message> extends InFlowElement {
+
 }
