@@ -1,4 +1,4 @@
-/* 2016 */
+/* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.device;
 
 import com.pi4j.io.i2c.I2CBus;

@@ -1,4 +1,4 @@
-/* 2016 */
+/* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol;
 
 import com.pi4j.io.i2c.I2CFactory;
@@ -42,7 +42,8 @@ public class Main {
 
                     I2CConnector arduino = new I2CConnector(32, 1, (byte) 4, encoder);
                     arduino.sendMessage(new SpeedCmdMessage(first));
-                    SpeedCmdMessage result = arduino.getMessage();
+
+                    SpeedCmdMessage result = (SpeedCmdMessage) arduino.getMessage();
 
                     // ∂t ist konsistent zwischen 6 und 7 millisekunden
                     // außer bei der ersten kommunikation (~400ms).

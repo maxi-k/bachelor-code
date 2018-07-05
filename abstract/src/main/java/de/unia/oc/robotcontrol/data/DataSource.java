@@ -1,4 +1,4 @@
-/* 2016 */
+/* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.data;
 
 import de.unia.oc.robotcontrol.util.Feed;
