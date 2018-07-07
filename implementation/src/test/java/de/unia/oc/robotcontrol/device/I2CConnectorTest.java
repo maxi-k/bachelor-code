@@ -27,7 +27,7 @@ public class I2CConnectorTest {
 
         CallbackMessageRecipient recipient = new CallbackMessageRecipient((m) -> {
             // System.out.println("Message received: " + m.toString());
-            SingleValueMessage<Integer> msg = (SingleValueMessage<Integer>) m;
+            SingleValueMessage<Integer> msg = msgType.cast(m);
             Assertions.assertNotNull(m);
             Assertions.assertEquals((int) msg.getValue(), sentValue);
         });

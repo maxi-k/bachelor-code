@@ -12,6 +12,25 @@ import de.unia.oc.robotcontrol.coding.Encoding;
  */
 public interface MessageType<T extends Message> extends Encoding<T> {
 
+    /**
+     * Try to cast the message to a message of this message type.
+     * @param m
+     * @return A Message of type {@link T}
+     * @throws IllegalArgumentException if the message could not be cast.
+     */
+    @SuppressWarnings("unchecked")
+    default T cast(Message m) throws IllegalArgumentException {
+        MessageType t = m.getType();
+        if (t != this) {
+            throw new IllegalArgumentException("MessageType Casting: The MessageType of the Message type did not match");
+        }
+        try {
+            return (T) m;
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException("MessageType Casting: Even though the MessageType matched, the Message could not be cast.");
+        }
+    }
+
     default Encoding<Message> asEncoding() {
         Encoding<T> self = this;
         return new Encoding<Message>() {
