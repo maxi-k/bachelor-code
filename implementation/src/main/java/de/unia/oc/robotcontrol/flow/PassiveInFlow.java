@@ -36,4 +36,15 @@ public abstract class PassiveInFlow<T> implements InFlow<T> {
         };
     }
 
+    public static <T> PassiveInFlow<T> multiplex(PassiveInFlow<T>... recipients) {
+        return new PassiveInFlow<T>() {
+            @Override
+            public void accept(T t) {
+                for(PassiveInFlow<T> r : recipients) {
+                    r.accept(t);
+                }
+            }
+        };
+    }
+
 }

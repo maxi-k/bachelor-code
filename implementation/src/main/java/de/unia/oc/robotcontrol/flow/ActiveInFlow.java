@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public abstract class ActiveInFlow<T> implements InFlow<OutFlow<T>> {
+public abstract class ActiveInFlow<T> implements InFlow<Supplier<OutFlow<T>>> {
 
     @Override
     public PressureType getFlowPressure() {
@@ -15,11 +16,11 @@ public abstract class ActiveInFlow<T> implements InFlow<OutFlow<T>> {
     }
 
     public static <T> ActiveInFlow<T> createOnDemand(Consumer<T> c) {
+
         return new ActiveInFlow<T>() {
             @Override
-            public void accept(OutFlow<T> outFlow) {
-                T obj = outFlow.get();
-                c.accept(obj);
+            public void accept(Supplier<OutFlow<T>> outFlowSupplier) {
+                c.accept(outFlowSupplier.get().get());
             }
         };
     }

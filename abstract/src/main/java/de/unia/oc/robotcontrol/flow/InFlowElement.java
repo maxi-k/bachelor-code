@@ -1,7 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
-public interface InFlowElement<IF extends InFlow> {
+public interface InFlowElement {
 
-    IF getInFlow();
+   InFlow inFlow();
 }

@@ -37,4 +37,23 @@ public interface MessageType<T extends Message> extends Encoding<T> {
             }
         };
     }
+
+    static <T extends Message> MessageType<T> fromEncoding(Encoding<T> e) {
+        return new MessageType<T>() {
+            @Override
+            public byte[] encode(T object) throws IllegalArgumentException {
+                return e.encode(object);
+            }
+
+            @Override
+            public T decode(byte[] raw) throws IllegalArgumentException {
+                return e.decode(raw);
+            }
+
+            @Override
+            public CodingContext getContext() {
+                return e.getContext();
+            }
+        };
+    }
 }

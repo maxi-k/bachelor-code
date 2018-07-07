@@ -3,6 +3,8 @@ package de.unia.oc.robotcontrol.coding;
 
 import de.unia.oc.robotcontrol.util.Bijection;
 
+import java.util.function.Function;
+
 /**
  * Interface for encoding Java objects and primitives into byte sequences
  * and vice versa. Intended for use in exchanging data between the
@@ -17,6 +19,12 @@ import de.unia.oc.robotcontrol.util.Bijection;
  *            will encode and decode to.
  */
 public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
+
+    @Override
+    byte[] encode(T object) throws IllegalArgumentException;
+
+    @Override
+    T decode(byte[] raw) throws IllegalArgumentException;
 
     /**
      * Return an encoding of type {@link T}  with its context

@@ -5,6 +5,8 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 import de.unia.oc.robotcontrol.coding.Encoding;
+import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
+import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.util.Logger;
 
@@ -13,7 +15,7 @@ import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
-public class I2CConnector implements Device, Observer {
+public class I2CConnector implements Device {
 
     private final int MAX_MESSAGE_SIZE; // = 32;
     private final int BUS;             // = I2CBus.BUS_1;
@@ -41,19 +43,6 @@ public class I2CConnector implements Device, Observer {
         this.readBuffer = new byte[MAX_MESSAGE_SIZE];
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        if (!(arg instanceof Message)) {
-            return;
-        }
-        Message msg = (Message) arg;
-        try {
-            sendMessage(msg);
-        } catch (IOException e) {
-            Logger.instance().logException(e);
-        }
-    }
-
     public <T extends Message> void sendMessage(T message) throws IOException {
         sendMessage(encoding.encode(message));
     }
@@ -75,5 +64,15 @@ public class I2CConnector implements Device, Observer {
     public Message getMessage() throws IOException {
         byte[] recv = receiveMessage();
         return this.encoding.decode(recv);
+    }
+
+    @Override
+    public PassiveInFlow inFlow() {
+        return null;
+    }
+
+    @Override
+    public ActiveOutFlow outFlow() {
+        return null;
     }
 }

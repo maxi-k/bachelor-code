@@ -1,30 +1,54 @@
 package de.unia.oc.robotcontrol.device;
 
-import com.pi4j.io.i2c.I2CBus;
-import com.pi4j.io.i2c.I2CDevice;
-import de.unia.oc.robotcontrol.flow.InFlow;
-import de.unia.oc.robotcontrol.flow.OutFlow;
+import de.unia.oc.robotcontrol.coding.Encoding;
+import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
+import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
+import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.Message;
+
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * Mock Device which echoes the bytes it received back.
  */
 public class I2CEchoConnector implements Device<Message> {
 
-    private final InFlow inFlow;
-    private final OutFlow outFlow;
+    private final PassiveInFlow<Message> inFlow;
+    private final ActiveOutFlow<Message> outFlow;
 
-    public I2CEchoConnector() {
-        this.inFlow = new
+    private byte[] mockMessage;
+    private final Encoding<Message> encoding;
+    private final PassiveInFlow<Message> next;
+
+    public I2CEchoConnector(Encoding<Message> encoding,
+                            ScheduleProvider schedule,
+                            PassiveInFlow<Message> next) {
+        this.encoding = encoding;
+        this.next = next;
+        this.inFlow = PassiveInFlow.createUnbuffered(this::pushMessage);
+        this.outFlow = ActiveOutFlow.createOnDemand(this::getAnswer);
+
+        schedule.submit(() -> {
+            outFlow.get().accept(next);
+        });
     }
 
     @Override
-    public InFlow getInFlow() {
-        return null;
+    public PassiveInFlow<Message> inFlow() {
+        return inFlow;
     }
 
     @Override
-    public OutFlow getOutFlow() {
-        return null;
+    public ActiveOutFlow<Message> outFlow() {
+        return outFlow;
     }
+
+    private synchronized void pushMessage(Message m) {
+        this.mockMessage = encoding.encode(m);
+    }
+
+    private Message getAnswer() {
+        return this.encoding.decode(mockMessage.clone());
+    }
+
 }
