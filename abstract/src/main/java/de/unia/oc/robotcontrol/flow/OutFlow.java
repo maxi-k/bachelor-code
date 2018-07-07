@@ -3,6 +3,6 @@ package de.unia.oc.robotcontrol.flow;
 
 import java.util.function.Supplier;
 
-interface OutFlow<T> extends Supplier, FlowPressure {
+interface OutFlow<T> extends Supplier<T>, FlowPressure {
 
 }

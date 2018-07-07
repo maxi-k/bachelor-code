@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
-public class I2CConnector extends Observable implements Device, Observer {
+public class I2CConnector implements Device, Observer {
 
     private final int MAX_MESSAGE_SIZE; // = 32;
     private final int BUS;             // = I2CBus.BUS_1;
@@ -39,16 +39,6 @@ public class I2CConnector extends Observable implements Device, Observer {
         this.i2c = I2CFactory.getInstance(I2CBus.BUS_1);
         this.device = i2c.getDevice(DEVICE_ADDRESS);
         this.readBuffer = new byte[MAX_MESSAGE_SIZE];
-    }
-
-    @Override
-    public Observable asObservable() {
-        return this;
-    }
-
-    @Override
-    public Observer asObserver() {
-        return this;
     }
 
     @Override
