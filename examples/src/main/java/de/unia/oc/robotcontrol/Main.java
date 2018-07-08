@@ -5,7 +5,6 @@ import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.device.I2CConnector;
-import de.unia.oc.robotcontrol.message.ArduinoMessageType;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.message.SpeedCmdMessage;
 

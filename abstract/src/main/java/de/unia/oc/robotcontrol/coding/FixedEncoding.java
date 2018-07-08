@@ -103,4 +103,8 @@ public interface FixedEncoding<T> extends Encoding<T> {
             }
         };
     }
+
+    default <S> FixedEncoding<Tuple<T, S>> append(FixedEncoding<S> second) {
+        return append(second, Bijection.identity());
+    }
 }
