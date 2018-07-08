@@ -2,7 +2,6 @@ package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.coding.CodingContext;
 import de.unia.oc.robotcontrol.coding.Encoding;
-import io.reactivex.Single;
 
 public class SingleValueMessageType<T> implements MessageType<SingleValueMessage<T>> {
 

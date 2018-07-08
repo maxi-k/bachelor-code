@@ -1,8 +1,6 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
-import java.util.NoSuchElementException;
-
 public interface FlowItem<T> {
 
     T get() throws NoValuePresentException;

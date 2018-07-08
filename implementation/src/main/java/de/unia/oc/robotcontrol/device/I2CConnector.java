@@ -8,12 +8,9 @@ import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
 import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.Message;
-import de.unia.oc.robotcontrol.util.Logger;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Observable;
-import java.util.Observer;
 
 public class I2CConnector implements Device {
 

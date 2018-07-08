@@ -4,7 +4,10 @@ package de.unia.oc.robotcontrol.device;
 import de.unia.oc.robotcontrol.coding.CodingContext;
 import de.unia.oc.robotcontrol.coding.IntegerEncoding;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.message.*;
+import de.unia.oc.robotcontrol.concurrent.Scheduling;
+import de.unia.oc.robotcontrol.message.CallbackMessageRecipient;
+import de.unia.oc.robotcontrol.message.SingleValueMessage;
+import de.unia.oc.robotcontrol.message.SingleValueMessageType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
@@ -45,7 +48,7 @@ public class I2CConnectorTest {
         SingleValueMessageType<Integer> msgType = new SingleValueMessageType<>(new IntegerEncoding(CodingContext.ARDUINO));
 
         // Create new schedule provider with fixed interval
-        ScheduleProvider schedule = ScheduleProvider.interval(
+        ScheduleProvider schedule = Scheduling.interval(
                 Executors.newScheduledThreadPool(1),
                 firstInterval,
                 timeUnit
@@ -59,14 +62,14 @@ public class I2CConnectorTest {
         });
 
         // Mock Device which echoes back the last value sent
-        // on the schedule provides by the ScheduleProvider
-        I2CEchoConnector connector = new I2CEchoConnector(msgType.asEncoding(), schedule, recipient.inFlow());
+        // on the schedule provides by the TrackingScheduleProvider
+        MockDeviceConnector connector = new MockDeviceConnector(msgType.asEncoding(), schedule, recipient.inFlow());
 
         // Sent the connector a first value
         connector.inFlow().accept(msgType.produce(sentValue));
 
         // Execute the task a couple of times, then
-        // reschedule the ScheduleProvider
+        // reschedule the TrackingScheduleProvider
         TimeUnit.MILLISECONDS.sleep(firstInterval * 5);
         schedule.reschedule(1, secondInterval, timeUnit);
         TimeUnit.MILLISECONDS.sleep(secondInterval * 5);

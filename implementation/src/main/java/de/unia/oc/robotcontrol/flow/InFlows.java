@@ -1,21 +1,30 @@
 package de.unia.oc.robotcontrol.flow;
 
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import io.reactivex.Observable;
+import io.reactivex.Observer;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public abstract class ActiveInFlow<T> implements InFlow<Supplier<OutFlow<T>>> {
+public final class InFlows {
 
-    @Override
-    public PressureType getFlowPressure() {
-        return PressureType.ACTIVE;
+
+    public static <T> PassiveInFlow<T> createUnbuffered(Consumer<T> consumer) {
+        return t -> consumer.accept(t);
     }
 
+    public static <T> PassiveInFlow<T> createFromObserver(Observer<T> observer) {
+
+        return t -> observer.onNext(t);
+    }
+
+    public static <T> PassiveInFlow<T> multiplex(PassiveInFlow<T>... recipients) {
+        return t -> {
+            for(PassiveInFlow<T> r : recipients) {
+                r.accept(t);
+            }
+        };
+    }
     public static <T> ActiveInFlow<T> createOnDemand(Consumer<T> c) {
 
         return new ActiveInFlow<T>() {
@@ -59,4 +68,5 @@ public abstract class ActiveInFlow<T> implements InFlow<Supplier<OutFlow<T>>> {
         schedule.submit(result);
         return result;
     }
+
 }

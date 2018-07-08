@@ -2,9 +2,12 @@ package de.unia.oc.robotcontrol.concurrent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
-public final class ScheduleProvider {
+final class TrackingScheduleProvider implements ScheduleProvider {
 
     private ScheduledExecutorService exec;
     private TaskMode taskMode;
@@ -13,11 +16,11 @@ public final class ScheduleProvider {
 
     private List<Runnable> attachedTasks;
 
-    private ScheduleProvider(ScheduledExecutorService exec, TaskMode taskMode, long delay, TimeUnit unit, List<Runnable> tasks) {
+    private TrackingScheduleProvider(ScheduledExecutorService exec, TaskMode taskMode, long delay, TimeUnit unit, List<Runnable> tasks) {
         initialize(exec, taskMode, delay, unit, tasks);
     }
 
-    private ScheduleProvider(ScheduledExecutorService exec, TaskMode taskMode, long delay, TimeUnit unit) {
+    TrackingScheduleProvider(ScheduledExecutorService exec, TaskMode taskMode, long delay, TimeUnit unit) {
         this(exec, taskMode, delay, unit, new ArrayList<>());
     }
 
@@ -47,6 +50,7 @@ public final class ScheduleProvider {
         }
     }
 
+    @Override
     public synchronized void submit(Runnable task) {
         this.attachedTasks.add(task);
         // Don't return the ScheduledFuture as it might
@@ -54,10 +58,12 @@ public final class ScheduleProvider {
         submitNonTracking(task);
     }
 
+    @Override
     public void submit(Schedulable schedulable) {
         submit(schedulable.getTask());
     }
 
+    @Override
     public synchronized void reschedule(int size, long newDelay, TimeUnit newUnit) {
         int poolSize = size <= 0 ? this.attachedTasks.size() : size;
         ScheduledExecutorService newService = Executors.newScheduledThreadPool(poolSize);
@@ -66,11 +72,23 @@ public final class ScheduleProvider {
         initialize(newService, taskMode, newDelay, newUnit, attachedTasks);
     }
 
-    public static ScheduleProvider interval(ScheduledExecutorService exec, long delay, TimeUnit unit) {
-        return new ScheduleProvider(exec, TaskMode.INTERVAL, delay, unit);
+    @Override
+    public synchronized void reschedule(long delay, TimeUnit unit) {
+        reschedule(-1, delay, unit);
     }
 
-    public static ScheduleProvider delayed(ScheduledExecutorService exec, long delay, TimeUnit unit) {
-        return new ScheduleProvider(exec, TaskMode.DELAYED, delay, unit);
+    @Override
+    public long getDelay() {
+        return delay;
+    }
+
+    @Override
+    public TimeUnit getTimeUnit() {
+        return unit;
+    }
+
+    @Override
+    public TaskMode getTaskMode() {
+        return taskMode;
     }
 }
