@@ -5,9 +5,14 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 import de.unia.oc.robotcontrol.coding.Encoding;
+import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
+import de.unia.oc.robotcontrol.flow.InFlows;
+import de.unia.oc.robotcontrol.flow.OutFlows;
 import de.unia.oc.robotcontrol.flow.PassiveInFlow;
+import de.unia.oc.robotcontrol.message.ErrorMessage;
 import de.unia.oc.robotcontrol.message.Message;
+import de.unia.oc.robotcontrol.util.Logger;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,16 +25,21 @@ public class I2CConnector implements Device {
 
     private final I2CBus i2c;
     private final I2CDevice device;
+    private final PassiveInFlow<Message> inFlow;
+    private final ActiveOutFlow<Message> outFlow;
 
-    private int lastRead;
+    private volatile int lastRead;
     private final byte[] readBuffer;
 
     private final Encoding<Message> encoding;
 
-    public <T extends Encoding<? extends Message>> I2CConnector(int messageSize,
-                        int bus,
-                        byte deviceAddress,
-                        Encoding<Message> encoding)
+    public I2CConnector(
+            int messageSize,
+            int bus,
+            byte deviceAddress,
+            Encoding<Message> encoding,
+            ScheduleProvider schedule,
+            PassiveInFlow<Message> next)
             throws IOException, I2CFactory.UnsupportedBusNumberException {
         this.MAX_MESSAGE_SIZE = messageSize;
         this.DEVICE_ADDRESS = deviceAddress;
@@ -38,10 +48,27 @@ public class I2CConnector implements Device {
         this.i2c = I2CFactory.getInstance(I2CBus.BUS_1);
         this.device = i2c.getDevice(DEVICE_ADDRESS);
         this.readBuffer = new byte[MAX_MESSAGE_SIZE];
+
+        this.inFlow = InFlows.createUnbuffered(this::sendMessage);
+        this.outFlow = OutFlows.createScheduled(schedule, this::getMessage, next);
     }
 
-    public <T extends Message> void sendMessage(T message) throws IOException {
-        sendMessage(encoding.encode(message));
+    @Override
+    public PassiveInFlow<Message> inFlow() {
+        return inFlow;
+    }
+
+    @Override
+    public ActiveOutFlow<Message> outFlow() {
+        return outFlow;
+    }
+
+    private void sendMessage(Message message) {
+        try {
+            sendMessage(encoding.encode(message));
+        } catch (IOException e) {
+            Logger.instance().logException(e);
+        }
     }
 
     private void sendMessage(byte[] message) throws IOException {
@@ -49,27 +76,23 @@ public class I2CConnector implements Device {
     }
 
     private byte[] receiveMessage() throws IOException {
-        int read = device.read(readBuffer, 0, readBuffer.length);
-        if (read > 0) {
-            lastRead = read;
-            return Arrays.copyOf(readBuffer, read);
-        } else {
-            throw new IOException("No bytes were read");
+        synchronized(readBuffer) {
+            int read = device.read(readBuffer, 0, readBuffer.length);
+            if (read > 0) {
+                lastRead = read;
+                return Arrays.copyOf(readBuffer, read);
+            } else {
+                throw new IOException("No bytes were read");
+            }
         }
     }
 
-    public Message getMessage() throws IOException {
-        byte[] recv = receiveMessage();
-        return this.encoding.decode(recv);
-    }
-
-    @Override
-    public PassiveInFlow inFlow() {
-        return null;
-    }
-
-    @Override
-    public ActiveOutFlow outFlow() {
-        return null;
+    private Message getMessage() {
+        try {
+            byte[] recv = receiveMessage();
+            return this.encoding.decode(recv);
+        } catch (Exception e) {
+            return new ErrorMessage<>(e);
+        }
     }
 }

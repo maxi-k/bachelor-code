@@ -14,6 +14,6 @@ public abstract class SingleValueMessage<T> implements Message<SingleValueMessag
 
     @Override
     public String toString() {
-        return value.toString();
+        return "Message wrapping: " + value.toString();
     }
 }

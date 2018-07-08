@@ -10,12 +10,11 @@ public final class InFlows {
 
 
     public static <T> PassiveInFlow<T> createUnbuffered(Consumer<T> consumer) {
-        return t -> consumer.accept(t);
+        return consumer::accept;
     }
 
     public static <T> PassiveInFlow<T> createFromObserver(Observer<T> observer) {
-
-        return t -> observer.onNext(t);
+        return observer::onNext;
     }
 
     public static <T> PassiveInFlow<T> multiplex(PassiveInFlow<T>... recipients) {
