@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class I2CConnectorTest {
+public class SchedulingTest {
 
     private void assertInRange(long actual, long expected, long hysteresis) {
         try {
