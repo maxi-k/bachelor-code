@@ -1,5 +1,6 @@
 package de.unia.oc.robotcontrol.flow;
 
+import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import io.reactivex.Observable;
 
 import java.util.List;
@@ -19,13 +20,43 @@ public abstract class ActiveInFlow<T> implements InFlow<Supplier<OutFlow<T>>> {
 
         return new ActiveInFlow<T>() {
             @Override
+            public boolean isScheduled() {
+                return false;
+            }
+
+            @Override
+            public Runnable getTask() {
+                return null;
+            }
+
+            @Override
             public void accept(Supplier<OutFlow<T>> outFlowSupplier) {
                 c.accept(outFlowSupplier.get().get());
             }
         };
     }
 
-    // public static <T> ActiveInFlow<T> createTimed(long interval, TimeUnit time, Consumer<T> c) {
-    //     Observable.interval()
-    // }
+    public static <T> ActiveInFlow<T> createScheduled(ScheduleProvider schedule,
+                                                      Consumer<T> c,
+                                                      PassiveOutFlow<T> supplier) {
+
+        ActiveInFlow<T> result = new ActiveInFlow<T>() {
+            @Override
+            public boolean isScheduled() {
+                return true;
+            }
+
+            @Override
+            public Runnable getTask() {
+                return () -> accept(() -> supplier);
+            }
+
+            @Override
+            public void accept(Supplier<OutFlow<T>> outFlowSupplier) {
+                c.accept(outFlowSupplier.get().get());
+            }
+        };
+        schedule.submit(result);
+        return result;
+    }
 }

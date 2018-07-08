@@ -13,6 +13,16 @@ public abstract class PassiveOutFlow<T> implements OutFlow<T> {
         return PressureType.PASSIVE;
     }
 
+    @Override
+    public boolean isScheduled() {
+        return false;
+    }
+
+    @Override
+    public Runnable getTask() {
+        return null;
+    }
+
     public static <T> PassiveOutFlow<T> createUnbuffered(Supplier<T> supplier) {
 
         return new PassiveOutFlow<T>() {

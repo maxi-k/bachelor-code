@@ -26,11 +26,7 @@ public class I2CEchoConnector implements Device<Message> {
         this.encoding = encoding;
         this.next = next;
         this.inFlow = PassiveInFlow.createUnbuffered(this::pushMessage);
-        this.outFlow = ActiveOutFlow.createOnDemand(this::getAnswer);
-
-        schedule.submit(() -> {
-            outFlow.get().accept(next);
-        });
+        this.outFlow = ActiveOutFlow.createScheduled(schedule, this::getAnswer, next);
     }
 
     @Override

@@ -17,6 +17,16 @@ public abstract class PassiveInFlow<T> implements InFlow<T> {
         return PressureType.PASSIVE;
     }
 
+    @Override
+    public boolean isScheduled() {
+        return false;
+    }
+
+    @Override
+    public Runnable getTask() {
+        return null;
+    }
+
     public static <T> PassiveInFlow<T> createUnbuffered(Consumer<T> consumer) {
         return new PassiveInFlow<T>() {
             @Override
