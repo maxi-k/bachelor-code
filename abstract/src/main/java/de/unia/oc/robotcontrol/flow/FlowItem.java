@@ -1,6 +1,10 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
+/**
+ * Will probably be removed or changed.
+ * Not in use
+ */
 public interface FlowItem<T> {
 
     T get() throws NoValuePresentException;
