@@ -1,3 +1,4 @@
+/* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
 public class DistanceDataMessage implements Message<DistanceDataMessage> {

@@ -1,3 +1,4 @@
+/* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.coding;
 
 import de.unia.oc.robotcontrol.util.Bijection;
