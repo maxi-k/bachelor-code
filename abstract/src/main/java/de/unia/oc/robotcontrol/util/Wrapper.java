@@ -3,6 +3,14 @@ package de.unia.oc.robotcontrol.util;
 
 import java.util.function.Function;
 
+/**
+ * Reverse of {@link Builder}.
+ * Impractical due to restrictions on the java type system, will probably be removed.
+ *
+ * @param <I> the type of the input element
+ * @param <O> the type of the output element
+ */
+@Deprecated
 public final class Wrapper<I, O> {
 
     private final Function<I, O> constructor;
