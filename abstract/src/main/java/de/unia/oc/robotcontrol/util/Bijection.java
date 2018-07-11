@@ -128,6 +128,11 @@ public interface Bijection<T, F> {
         };
     }
 
+    /**
+     * A bijection which does nothing, akin to {@link Function#identity()}
+     * @param <T> The type of the input / output parameters
+     * @return An identity-bijection
+     */
     static <T> Bijection<T, T> identity() {
         return create(Function.identity(), Function.identity());
     }

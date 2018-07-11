@@ -62,6 +62,18 @@ public interface FixedEncoding<T> extends Encoding<T> {
         };
     }
 
+    /**
+     * Creates an new FixedEncoding instance which appends the bytes used
+     * for the `second` parameter to those of the first parameter.
+     * The encodable value is thus a tuple, which is then transformed using the
+     * given `joiner` bijection (to- and from a tuple).
+     *
+     * @param second The encoding which to append to the first
+     * @param joiner The bijection which can produce a value based on the tuple produced by the first and second encoding and vice versa
+     * @param <S> The type of the second encoding
+     * @param <R> The type of the joined value
+     * @return An instance of FixedEncoding which can encode R
+     */
     default <S, R> FixedEncoding<R> append(FixedEncoding<S> second, Bijection<Tuple<T, S>, R> joiner) {
         FixedEncoding<T> first = this;
 
@@ -104,6 +116,14 @@ public interface FixedEncoding<T> extends Encoding<T> {
         };
     }
 
+    /**
+     * Creates a new instance of FixedEncoding that appends the bytes of the given
+     * second encoding to the bytes of this one, and decodes to a tuple of type
+     * (T, S).
+     * @param second the encoding which to append to this one
+     * @param <S> the type of the second encoding
+     * @return An instance of FixedEncoding that can encode a Tuple (T, S)
+     */
     default <S> FixedEncoding<Tuple<T, S>> append(FixedEncoding<S> second) {
         return append(second, Bijection.identity());
     }
