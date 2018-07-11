@@ -37,7 +37,7 @@ public final class ArduinoMessageTypes {
             );
 
     public static final MessageIdentifier<Character> IDENTIFIER =
-            new CharIdentifier(CONTEXT);
+            new SimpleMessageIdentifier<>(new CharEncoding(CONTEXT));
 
     public static final MessageTypeRegistry<Character> REGISTRY =
             Messaging.createRegistry(

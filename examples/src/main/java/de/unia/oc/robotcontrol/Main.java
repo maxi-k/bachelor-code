@@ -28,7 +28,7 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
 
-        // create Pi4J console wrapper/helper
+        // start Pi4J console wrapper/helper
         // (This is a utility class to abstract some of the boilerplate code)
         final Console console = new Console();
 

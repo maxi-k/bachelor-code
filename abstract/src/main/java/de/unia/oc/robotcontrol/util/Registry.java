@@ -13,7 +13,7 @@ public interface Registry<K, V> {
 
     default Bijection<K, V> asBijection() {
         return Bijection.create(
-                (K obj)  -> getValueFor(obj).orElseThrow(IllegalArgumentException::new),
-                (V obj)  -> getKeyFor(obj).orElseThrow(IllegalAccessError::new)        );
+                (K obj)  -> getValueFor(obj).<IllegalArgumentException>orElseThrow(IllegalArgumentException::new),
+                (V obj)  -> getKeyFor(obj).<IllegalArgumentException>orElseThrow(IllegalArgumentException::new));
     }
 }
