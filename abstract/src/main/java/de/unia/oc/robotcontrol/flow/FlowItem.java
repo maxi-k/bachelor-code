@@ -5,6 +5,7 @@ package de.unia.oc.robotcontrol.flow;
  * Will probably be removed or changed.
  * Not in use
  */
+@Deprecated
 public interface FlowItem<T> {
 
     T get() throws NoValuePresentException;
