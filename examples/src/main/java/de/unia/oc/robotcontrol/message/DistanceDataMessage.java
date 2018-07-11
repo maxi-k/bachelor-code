@@ -33,4 +33,20 @@ public class DistanceDataMessage implements Message<DistanceDataMessage> {
     public int getZ() {
         return z;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof DistanceDataMessage)) {
+            return false;
+        }
+        DistanceDataMessage msg = (DistanceDataMessage) obj;
+        return msg.x == this.x
+                && msg.y == this.y
+                && msg.z == this.z;
+    }
+
+    @Override
+    public String toString() {
+        return "DistanceData Message: x: " + x + ", y: " + y + ", z: " + z;
+    }
 }
