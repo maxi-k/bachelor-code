@@ -37,4 +37,8 @@ public final class Tuple<F, S> {
     public static <F, S, R> Tuple<F, S> split(R value, Function<R, Tuple<F, S>> splitter) {
         return splitter.apply(value);
     }
+
+    public static <F, S> Tuple<F, S> create(F first, S second) {
+        return new Tuple(first, second);
+    }
 }

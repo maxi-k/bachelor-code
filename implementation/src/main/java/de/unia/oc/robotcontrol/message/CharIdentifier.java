@@ -27,9 +27,4 @@ public class CharIdentifier
     public FixedEncoding<Character> getIdentifierEncoding() {
         return this.idEncoding;
     }
-
-    @Override
-    public CharIdentifier withContext(CodingContext context) {
-        return new CharIdentifier(context);
-    }
 }

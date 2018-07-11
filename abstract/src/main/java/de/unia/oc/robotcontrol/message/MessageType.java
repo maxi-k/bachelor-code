@@ -12,6 +12,12 @@ import de.unia.oc.robotcontrol.coding.Encoding;
  */
 public interface MessageType<T extends Message> extends Encoding<T> {
 
+    @Override
+    T decode(byte[] raw) throws IllegalArgumentException;
+
+    @Override
+    byte[] encode(T object) throws IllegalArgumentException;
+
     /**
      * Try to cast the message to a message of this message type.
      * @param m

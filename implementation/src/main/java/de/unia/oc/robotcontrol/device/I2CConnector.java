@@ -40,12 +40,16 @@ public class I2CConnector implements Device {
             Encoding<Message> encoding,
             ScheduleProvider schedule,
             PassiveInFlow<Message> next)
-            throws IOException, I2CFactory.UnsupportedBusNumberException {
+            throws IOException, IllegalArgumentException {
         this.MAX_MESSAGE_SIZE = messageSize;
         this.DEVICE_ADDRESS = deviceAddress;
         this.BUS = bus;
         this.encoding = encoding;
-        this.i2c = I2CFactory.getInstance(I2CBus.BUS_1);
+        try {
+            this.i2c = I2CFactory.getInstance(I2CBus.BUS_1);
+        } catch (I2CFactory.UnsupportedBusNumberException e) {
+            throw new IllegalArgumentException("Unsupported bus number!", e);
+        }
         this.device = i2c.getDevice(DEVICE_ADDRESS);
         this.readBuffer = new byte[MAX_MESSAGE_SIZE];
 

@@ -1,6 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+import de.unia.oc.robotcontrol.coding.CodingContext;
 import de.unia.oc.robotcontrol.coding.CodingUtil;
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.coding.FixedEncoding;
@@ -29,5 +30,21 @@ public interface MessageIdentifier<T>
         FixedEncoding<T> e = getIdentifierEncoding();
         Tuple<byte[], byte[]> split = CodingUtil.splitAt(raw, e.numBytes());
         return split.mapFirst(e::decode);
+    }
+
+    @Override
+    default MessageIdentifier<T> withContext(CodingContext context) {
+        MessageIdentifier<T> self = this;
+        return new MessageIdentifier<T>() {
+            @Override
+            public FixedEncoding<T> getIdentifierEncoding() {
+                return self.getIdentifierEncoding();
+            }
+
+            @Override
+            public CodingContext getContext() {
+                return context;
+            }
+        };
     }
 }

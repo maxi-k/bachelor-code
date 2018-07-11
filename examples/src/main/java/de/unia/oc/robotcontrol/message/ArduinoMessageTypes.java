@@ -4,11 +4,12 @@ import de.unia.oc.robotcontrol.coding.*;
 import de.unia.oc.robotcontrol.util.Bijection;
 import de.unia.oc.robotcontrol.util.Tuple;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public final class ArduinoMessageTypes {
+
+    private ArduinoMessageTypes() {}
 
     public static final CodingContext CONTEXT = CodingContext.ARDUINO;
 
@@ -34,5 +35,19 @@ public final class ArduinoMessageTypes {
                             )
                     )
             );
+
+    public static final MessageIdentifier<Character> IDENTIFIER =
+            new CharIdentifier(CONTEXT);
+
+    public static final MessageTypeRegistry<Character> REGISTRY =
+            Messaging.createRegistry(
+                    IDENTIFIER,
+                    (p) -> {
+                        p.apply('d', ArduinoMessageTypes.DISTANCE_DATA);
+                        p.apply('s', ArduinoMessageTypes.SPEED_CMD);
+                    }
+            );
+
+    public static final Encoding<Message> ENCODING = REGISTRY;
 
 }
