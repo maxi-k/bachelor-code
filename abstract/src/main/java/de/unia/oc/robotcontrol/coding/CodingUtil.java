@@ -31,8 +31,8 @@ public class CodingUtil {
     public static Tuple<byte[], byte[]> splitAt(byte[] input, int pos) {
         byte[] first = new byte[pos];
         byte[] rest = new byte[input.length - pos];
-        System.arraycopy(input, 0, first, 0, rest.length);
-        System.arraycopy(input, pos, rest, 0, first.length);
+        System.arraycopy(input, 0, first, 0, first.length);
+        System.arraycopy(input, pos, rest, 0, rest.length);
         return new Tuple<>(first, rest);
     }
 
