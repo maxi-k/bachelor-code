@@ -15,7 +15,7 @@ public final class Encodings {
     public static <F, S, R> Encoding<R> join(
             FixedEncoding<F> first,
             FixedEncoding<S> second,
-            Bijection<Tuple<F, S>, R> joiner) {
+            Bijection<R, Tuple<F, S>> joiner) {
         return first.append(second, joiner);
     }
 }

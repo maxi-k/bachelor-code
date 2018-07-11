@@ -74,7 +74,7 @@ public interface FixedEncoding<T> extends Encoding<T> {
      * @param <R> The type of the joined value
      * @return An instance of FixedEncoding which can encode R
      */
-    default <S, R> FixedEncoding<R> append(FixedEncoding<S> second, Bijection<Tuple<T, S>, R> joiner) {
+    default <S, R> FixedEncoding<R> append(FixedEncoding<S> second, Bijection<R, Tuple<T, S>> joiner) {
         FixedEncoding<T> first = this;
 
         if (first.getContext() != second.getContext()) {
@@ -101,7 +101,7 @@ public interface FixedEncoding<T> extends Encoding<T> {
             @Override
             public byte[] encode(R object) throws IllegalArgumentException {
                 return joiner
-                        .decode(object)
+                        .encode(object)
                         .map(first::encode, second::encode)
                         .joinWith(CodingUtil::join);
             }
@@ -111,7 +111,7 @@ public interface FixedEncoding<T> extends Encoding<T> {
                 return CodingUtil
                         .splitAt(raw, first.numBytes())
                         .map(first::decode, second::decode)
-                        .joinWith(joiner::encode);
+                        .joinWith(joiner::decode);
             }
         };
     }
