@@ -37,6 +37,7 @@ public interface CodingContext {
 
         @Override
         public int getCharSize() { return Character.BYTES; }
+
     };
 
     /**

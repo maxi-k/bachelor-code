@@ -3,7 +3,7 @@ package de.unia.oc.robotcontrol.util;
 
 import java.util.Optional;
 
-public interface Registry<K, V> extends Bijection<K, V> {
+public interface Registry<K, V> {
 
     boolean register(K key, V value);
 
@@ -11,13 +11,9 @@ public interface Registry<K, V> extends Bijection<K, V> {
 
     Optional<K> getKeyFor(V value);
 
-    @Override
-    default V encode(K object) throws IllegalArgumentException {
-        return getValueFor(object).orElseThrow(IllegalArgumentException::new);
-    }
-
-    @Override
-    default K decode(V raw) throws IllegalArgumentException {
-        return getKeyFor(raw).orElseThrow(IllegalAccessError::new);
+    default Bijection<K, V> asBijection() {
+        return Bijection.create(
+                (K obj)  -> getValueFor(obj).orElseThrow(IllegalArgumentException::new),
+                (V obj)  -> getKeyFor(obj).orElseThrow(IllegalAccessError::new)        );
     }
 }

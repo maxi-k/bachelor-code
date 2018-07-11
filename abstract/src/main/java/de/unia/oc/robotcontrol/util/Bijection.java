@@ -128,4 +128,7 @@ public interface Bijection<T, F> {
         };
     }
 
+    static <T> Bijection<T, T> identity() {
+        return create(Function.identity(), Function.identity());
+    }
 }

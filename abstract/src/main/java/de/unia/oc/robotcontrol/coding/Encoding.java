@@ -18,10 +18,16 @@ import de.unia.oc.robotcontrol.util.Bijection;
  */
 public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
 
+    @Override
+    byte[] encode(T object) throws IllegalArgumentException;
+
+    @Override
+    T decode(byte[] raw) throws IllegalArgumentException;
+
     /**
      * Return an encoding of type {@link T}  with its context
      * set to {@param context}
-     * @param context The conding context that has to be set
+     * @param context The coding context that has to be set
      * @return An encoding with the context set to {@param context}
      */
     @Override
