@@ -47,7 +47,13 @@ public interface Registry<K, V> {
      */
     default Bijection<K, V> asBijection() {
         return Bijection.create(
-                (K obj)  -> getValueFor(obj).<IllegalArgumentException>orElseThrow(IllegalArgumentException::new),
-                (V obj)  -> getKeyFor(obj).<IllegalArgumentException>orElseThrow(IllegalArgumentException::new));
+                (K obj)  -> getValueFor(obj).<ItemNotRegisteredException>orElseThrow(ItemNotRegisteredException::new),
+                (V obj)  -> getKeyFor(obj).<ItemNotRegisteredException>orElseThrow(ItemNotRegisteredException::new));
     }
+
+    /**
+     * Exception that is thrown when an item (supposedly given in a method argument)
+     * is not registered.
+     */
+    class ItemNotRegisteredException extends IllegalArgumentException {}
 }

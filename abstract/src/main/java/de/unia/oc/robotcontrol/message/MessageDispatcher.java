@@ -1,17 +1,20 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+import de.unia.oc.robotcontrol.util.Dispatcher;
+import de.unia.oc.robotcontrol.util.Registry;
+
+/**
+ * Dispatcher that can associates MessageTypes with Recipients.
+ * @param <T>
+ */
 public interface MessageDispatcher<T extends Message>
-        extends MessageSender<T>, MessageRecipient<T> {
-
-    <M extends Message> void registerRecipientForType(
-            MessageRecipient<M> recipient,
-            MessageType<M> type);
-
-    <M extends Message> boolean removeRecipientForType(
-            MessageRecipient<M> recipient,
-            MessageType<M> type);
-
-    <M extends Message> void dispatchMessage(Message<M> m);
-
+        extends
+        MessageSender<T>,
+        MessageRecipient<T>,
+        Registry<MessageType<T>, MessageRecipient<T>>,
+        Dispatcher<T>
+{
+    @Override
+    void dispatch(T msg) throws ItemNotRegisteredException;
 }

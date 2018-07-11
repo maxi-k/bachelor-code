@@ -5,9 +5,19 @@ import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.util.Registry;
 import de.unia.oc.robotcontrol.util.Tuple;
 
+/**
+ * A generic interface for a Registry that associates a MessageIdentifier
+ * with a MessageType, so that it is possible to decode received bytes
+ * with an included identifier to all registered MessageTypes.
+ *
+ * @param <I> The element used as an identifier
+ */
 public interface MessageTypeRegistry<I>
         extends Registry<I, MessageType>, Encoding<Message> {
 
+    /**
+     * @return the identifier instance used to encode instances of {@link I}
+     */
     MessageIdentifier<I> getIdentifier();
 
     @Override

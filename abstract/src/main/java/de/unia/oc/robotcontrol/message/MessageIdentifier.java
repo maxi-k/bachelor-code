@@ -11,11 +11,14 @@ import de.unia.oc.robotcontrol.util.Tuple;
  * A message identifier that can be encoded, which makes it
  * possible to determine the type of message from just bytes.
  *
- * @param <T>
+ * @param <T> The type of object that is encoded and used for identification
  */
 public interface MessageIdentifier<T>
         extends Encoding<Tuple<T, byte[]>> {
 
+    /**
+     * @return The Encoding for the identifier type
+     */
     FixedEncoding<T> getIdentifierEncoding();
 
     @Override

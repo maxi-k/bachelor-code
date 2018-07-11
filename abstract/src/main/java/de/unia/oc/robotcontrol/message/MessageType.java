@@ -37,6 +37,9 @@ public interface MessageType<T extends Message> extends Encoding<T> {
         }
     }
 
+    /**
+     * @return An instance of Encoding with the generic 'Message' type parameter
+     */
     default Encoding<Message> asEncoding() {
         Encoding<T> self = this;
         return new Encoding<Message>() {
@@ -63,6 +66,13 @@ public interface MessageType<T extends Message> extends Encoding<T> {
         };
     }
 
+    /**
+     * Construct a {@link MessageType} instance from an existing encoding
+     *
+     * @param e The encoding which is used for this {@link MessageType}
+     * @param <T> The type of message this encodes
+     * @return An instance of {@link MessageType} that uses the given encoding
+     */
     static <T extends Message> MessageType<T> fromEncoding(Encoding<T> e) {
         return new MessageType<T>() {
             @Override
