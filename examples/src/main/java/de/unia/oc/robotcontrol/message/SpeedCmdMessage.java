@@ -1,6 +1,12 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+/**
+ * A message wrapping the command sent to an arduino used for
+ * setting its speed.
+ *
+ * TODO: Currently simplified to only include one direction and speed parameter
+ */
 public class SpeedCmdMessage implements Message<SpeedCmdMessage> {
 
     private final char direction;

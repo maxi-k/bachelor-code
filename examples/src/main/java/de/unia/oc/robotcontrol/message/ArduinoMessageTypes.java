@@ -12,8 +12,14 @@ public final class ArduinoMessageTypes {
 
     private ArduinoMessageTypes() {}
 
+    /**
+     * Holds the coding-context in which the arduino is run
+     */
     public static final CodingContext CONTEXT = CodingContext.ARDUINO;
 
+    /**
+     * MessageType for {@link DistanceDataMessage}. [int, int, int] -> [x, y, z]
+     */
     public static final MessageType<DistanceDataMessage> DISTANCE_DATA =
             MessageType.fromEncoding(
                     Encodings.stack(
@@ -25,6 +31,9 @@ public final class ArduinoMessageTypes {
                     )
             );
 
+    /**
+     * MessageType for {@link SpeedCmdMessage}. [char, byte] -> [direction, speed]
+     */
     public static final MessageType<SpeedCmdMessage> SPEED_CMD =
             MessageType.fromEncoding(
                     Encodings.join(
@@ -37,9 +46,16 @@ public final class ArduinoMessageTypes {
                     )
             );
 
+    /**
+     * The MessageIdentifier used to identify Arduino Messages.
+     */
     public static final MessageIdentifier<Character> IDENTIFIER =
             new SimpleMessageIdentifier<>(new CharEncoding(CONTEXT));
 
+    /**
+     * Message Type Registry for the arduino, where the identifiers for
+     * the different message types are defined
+     */
     public static final MessageTypeRegistry<Character> REGISTRY =
             Messaging.createRegistry(
                     IDENTIFIER,
@@ -49,6 +65,9 @@ public final class ArduinoMessageTypes {
                     }
             );
 
+    /**
+     * Encoding for the {@link ArduinoMessageTypes#REGISTRY}
+     */
     public static final Encoding<Message> ENCODING = REGISTRY;
 
 }

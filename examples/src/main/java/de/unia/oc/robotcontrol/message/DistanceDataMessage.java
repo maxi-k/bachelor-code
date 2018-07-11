@@ -1,6 +1,10 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+/**
+ * A message wrapping the distance data from the
+ * three arduino ultrasound sensors (x, y, z).
+ */
 public class DistanceDataMessage implements Message<DistanceDataMessage> {
 
     private final int x;
