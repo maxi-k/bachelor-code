@@ -43,7 +43,7 @@ public class ListEncoding<T> implements FixedEncoding<List<T>> {
         byte[] result = new byte[list.size() * singleBytes];
         for (int i = 0; i < list.size(); ++i) {
             byte[] single = singleEncoding.encode(list.get(i));
-            System.arraycopy(single, 0, result, i, singleBytes);
+            System.arraycopy(single, 0, result, i * singleBytes, singleBytes);
         }
         return result;
     }
