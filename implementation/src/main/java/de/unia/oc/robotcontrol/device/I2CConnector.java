@@ -46,9 +46,9 @@ public class I2CConnector implements Device {
         this.BUS = bus;
         this.encoding = encoding;
         try {
-            this.i2c = I2CFactory.getInstance(I2CBus.BUS_1);
+            this.i2c = I2CFactory.getInstance(BUS);
         } catch (I2CFactory.UnsupportedBusNumberException e) {
-            throw new IllegalArgumentException("Unsupported bus number!", e);
+            throw new IllegalArgumentException("Unsupported bus number! " + BUS, e);
         }
         this.device = i2c.getDevice(DEVICE_ADDRESS);
         this.readBuffer = new byte[MAX_MESSAGE_SIZE];
