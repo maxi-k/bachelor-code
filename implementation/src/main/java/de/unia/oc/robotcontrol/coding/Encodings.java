@@ -3,6 +3,8 @@ package de.unia.oc.robotcontrol.coding;
 import de.unia.oc.robotcontrol.util.Bijection;
 import de.unia.oc.robotcontrol.util.Tuple;
 
+import java.util.function.Supplier;
+
 public final class Encodings {
 
 
@@ -17,5 +19,9 @@ public final class Encodings {
             FixedEncoding<S> second,
             Bijection<R, Tuple<F, S>> joiner) {
         return first.append(second, joiner);
+    }
+
+    public static <T> Encoding<T> nullEncoding(CodingContext context, Supplier<T> supplier) {
+        return Encoding.nullEncoding(context, supplier);
     }
 }

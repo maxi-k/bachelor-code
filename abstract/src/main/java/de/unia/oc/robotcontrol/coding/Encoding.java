@@ -3,6 +3,8 @@ package de.unia.oc.robotcontrol.coding;
 
 import de.unia.oc.robotcontrol.util.Bijection;
 
+import java.util.function.Supplier;
+
 /**
  * Interface for encoding Java objects and primitives into byte sequences
  * and vice versa. Intended for use in exchanging data between the
@@ -68,6 +70,26 @@ public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
             @Override
             public R decode(byte[] raw) throws IllegalArgumentException {
                 return top.decode(bottom.decode(raw));
+            }
+        };
+    }
+
+    static <T> Encoding<T> nullEncoding(CodingContext context, Supplier<T> supplier) {
+        return new Encoding<T>() {
+
+            @Override
+            public CodingContext getContext() {
+                return context;
+            }
+
+            @Override
+            public byte[] encode(T object) throws IllegalArgumentException {
+                return new byte[0];
+            }
+
+            @Override
+            public T decode(byte[] raw) throws IllegalArgumentException {
+                return supplier.get();
             }
         };
     }
