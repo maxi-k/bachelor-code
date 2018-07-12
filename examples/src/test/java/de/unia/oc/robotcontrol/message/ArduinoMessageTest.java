@@ -44,4 +44,21 @@ public class ArduinoMessageTest {
                 m
         );
     }
+
+    @Test
+    void updateRequestMessageWorkds() {
+
+        UpdateRequestMessage m = new UpdateRequestMessage();
+
+        Assertions.assertEquals(
+                ArduinoMessageTypes.UPDATE_REQUEST.decode(m.getType().encode(m)),
+                m
+        );
+
+        Assertions.assertEquals(
+                ArduinoMessageTypes.ENCODING.decode(
+                        ArduinoMessageTypes.ENCODING.encode(m)),
+                m
+        );
+    }
 }

@@ -46,6 +46,11 @@ public final class ArduinoMessageTypes {
                     )
             );
 
+    public static final MessageType<UpdateRequestMessage> UPDATE_REQUEST =
+            MessageType.fromEncoding(
+                    Encodings.nullEncoding(CONTEXT, UpdateRequestMessage::new)
+            );
+
     /**
      * The MessageIdentifier used to identify Arduino Messages.
      */
@@ -60,8 +65,9 @@ public final class ArduinoMessageTypes {
             Messaging.createRegistry(
                     IDENTIFIER,
                     (p) -> {
-                        p.apply('d', ArduinoMessageTypes.DISTANCE_DATA);
-                        p.apply('s', ArduinoMessageTypes.SPEED_CMD);
+                        p.apply('d', DISTANCE_DATA);
+                        p.apply('s', SPEED_CMD);
+                        p.apply('u', UPDATE_REQUEST);
                     }
             );
 
