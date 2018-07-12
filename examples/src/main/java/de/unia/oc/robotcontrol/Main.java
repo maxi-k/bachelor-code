@@ -8,6 +8,7 @@ import de.unia.oc.robotcontrol.device.I2CConnector;
 import de.unia.oc.robotcontrol.message.ArduinoMessageTypes;
 import de.unia.oc.robotcontrol.message.CallbackMessageRecipient;
 import de.unia.oc.robotcontrol.message.SpeedCmdMessage;
+import de.unia.oc.robotcontrol.message.UpdateRequestMessage;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -66,7 +67,8 @@ public class Main {
                 (byte) 4,
                 ArduinoMessageTypes.ENCODING,
                 schedule,
-                printer.inFlow());
+                printer.inFlow(),
+                UpdateRequestMessage::new);
 
         // read user commands and send them to the arduino constantly
         console.println("Press 'q' to stop.");
