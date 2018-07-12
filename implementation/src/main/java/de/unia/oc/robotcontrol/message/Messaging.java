@@ -2,6 +2,7 @@ package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.util.Tuple;
 
+import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -24,6 +25,10 @@ public final class Messaging {
         MapMessageTypeRegistry<I> reg = new MapMessageTypeRegistry<>(identifier);
         registration.accept(reg::register);
         return reg;
+    }
+
+    public static MessageDispatcher createDispatcher(Executor executor) {
+        return new QueuedMessageDispatcher(executor);
     }
 
 }

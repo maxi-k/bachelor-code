@@ -8,7 +8,7 @@ import de.unia.oc.robotcontrol.util.Registry;
  * Dispatcher that can associates MessageTypes with Recipients.
  * @param <T>
  */
-public interface MessageDispatcher<T extends Message>
+public interface MessageDispatcher<T extends Message<T>>
         extends
         MessageSender<T>,
         MessageRecipient<T>,

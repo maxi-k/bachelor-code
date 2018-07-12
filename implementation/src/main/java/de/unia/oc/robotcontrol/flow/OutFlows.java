@@ -3,7 +3,9 @@ package de.unia.oc.robotcontrol.flow;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import io.reactivex.Observable;
 
+import java.util.concurrent.Executor;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class OutFlows {
@@ -38,6 +40,29 @@ public final class OutFlows {
             }
         };
     }
+
+    public static <T> ActiveOutFlow<T> createOnDemand(Executor e, Function<Consumer<T>, T> s) {
+
+        Consumer<InFlow<T>> pusher = (i) -> e.execute(() -> i.accept(s.apply(i)));
+
+        return new ActiveOutFlow<T>() {
+            @Override
+            public boolean isScheduled() {
+                return false;
+            }
+
+            @Override
+            public Runnable getTask() {
+                return null;
+            }
+
+            @Override
+            public Consumer<InFlow<T>> get() {
+                return pusher;
+            }
+        };
+    }
+
 
     public static <T> ActiveOutFlow<T> createScheduled(ScheduleProvider schedule,
                                                        Supplier<T> s,
