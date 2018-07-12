@@ -60,4 +60,25 @@ public interface ScheduleProvider {
      * and the start of another (of one specific task)
      */
     TaskMode getTaskMode();
+
+    /**
+     * Terminate this schedule and all tasks running on it,
+     * blocking until all tasks have completed or the timeout has run out.
+     * Like {@link java.util.concurrent.ScheduledExecutorService#awaitTermination(long, TimeUnit)}
+     *
+     * Also frees the list of tasks associated with this ScheduleProvider,
+     * if the termination was successful.
+     *
+     * @param delay
+     * @param unit
+     * @return {@code true} if everything terminated orderly
+     *         {@code false} if the timeout ran out before
+     */
+    boolean terminate(long delay, TimeUnit unit) throws InterruptedException;
+
+    /**
+     * Terminate this schedule. Do not wait until all tasks are completed.
+     * Also frees the list of tasks associated with this ScheduleProvider.
+     */
+    void terminate();
 }

@@ -27,7 +27,8 @@ public class SchedulingTest {
             );
         } catch(AssertionFailedError e) {
             throw new AssertionFailedError(
-                    "Assertion Failed: Value was not in range: ",
+                    "Assertion Failed: Value was not in range: " +
+                    expected  + " +/- " + hysteresis + " vs. " + actual,
                     expected  + " +/- " + hysteresis,
                     actual
             );
@@ -72,7 +73,7 @@ public class SchedulingTest {
         // reschedule the TrackingScheduleProvider
         TimeUnit.MILLISECONDS.sleep(firstInterval * 5);
         schedule.reschedule(1, secondInterval, timeUnit);
-        TimeUnit.MILLISECONDS.sleep(secondInterval * 5);
+        TimeUnit.MILLISECONDS.sleep(secondInterval * 10);
 
         // Assert that the provider rescheduled the task correctly
         long firstDelay = timestamps.get(2) - timestamps.get(1);

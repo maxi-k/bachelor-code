@@ -57,23 +57,25 @@ public abstract class QueuedDeviceConnector implements Device<Message> {
     private Message getAnswer() {
         try {
             pushMessage(this.encoding.encode(getNext()));
-            return this.encoding.decode(retreiveMessage());
-        } catch (IOException e) {
-            return new ErrorMessage<>(e);
+            Thread.sleep(10);
+            return this.encoding.decode(retrieveMessage());
+        } catch (InterruptedException | IOException e) {
+            System.out.println("Error while sending or retrieving message!");
+            e.printStackTrace();
+            return new ErrorMessage(e);
         }
     }
 
     private Message getNext() {
         synchronized (this.messageQueue) {
-            Message m = this.messageQueue.isEmpty()
+            return this.messageQueue.isEmpty()
                     ? this.updateRequestMessageProvider.get()
                     : this.messageQueue.remove();
-            return m;
         }
     }
 
     protected abstract void pushMessage(byte[] message) throws IOException;
 
-    protected abstract byte[] retreiveMessage() throws IOException;
+    protected abstract byte[] retrieveMessage() throws IOException;
 
 }

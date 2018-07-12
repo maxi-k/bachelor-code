@@ -5,10 +5,7 @@ import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
 import de.unia.oc.robotcontrol.device.I2CConnector;
-import de.unia.oc.robotcontrol.message.ArduinoMessageTypes;
-import de.unia.oc.robotcontrol.message.CallbackMessageRecipient;
-import de.unia.oc.robotcontrol.message.SpeedCmdMessage;
-import de.unia.oc.robotcontrol.message.UpdateRequestMessage;
+import de.unia.oc.robotcontrol.message.*;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -17,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
+    static volatile Message lastMessage = null;
     /**
      * Control the arduino using
      * - w (forward)
@@ -24,10 +22,11 @@ public class Main {
      * - s (stop)
      * - d (right)
      * - r (rotate)
+     * -- p to print the last received arduino message
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         // start Pi4J console wrapper/helper
         // (This is a utility class to abstract some of the boilerplate code)
@@ -39,6 +38,7 @@ public class Main {
         // allow for user to exit program using CTRL-C
         console.promptForExit();
 
+
         // Define a recipient for the arduino messages
         // which executes the given callback
         final CallbackMessageRecipient printer = new CallbackMessageRecipient((msg) -> {
@@ -47,16 +47,17 @@ public class Main {
             // vermutung: i2c protokoll *oder* jvm optimierung der
             // neu allokierten objekte im while loop
             // console.println("∂t:" + (System.currentTimeMillis() - now));
-            console.print("Arduino: ");
-            console.print(msg.toString());
-            console.emptyLine();
+            // console.print("Arduino: ");
+            // console.print(msg.toString());
+            // console.emptyLine();
+            lastMessage = msg;
         });
 
         // define a schedule for how often the raspberry pi should
         // ask for updates on the arduino
         final ScheduleProvider schedule = Scheduling.interval(
-                Executors.newScheduledThreadPool(2),
-                20,
+                Executors.newScheduledThreadPool(1),
+                40,
                 TimeUnit.MILLISECONDS
         );
 
@@ -71,7 +72,7 @@ public class Main {
                 UpdateRequestMessage::new);
 
         // read user commands and send them to the arduino constantly
-        console.println("Press 'q' to stop.");
+        console.println("Press 'q' to stop, p to print the last received message");
         try (Scanner reader = new Scanner(System.in)) {
             while (true) {
                 try {
@@ -79,6 +80,10 @@ public class Main {
                     String read = reader.next();
                     char first = read.charAt(0);
                     if (first == 'q') break;
+                    if (first == 'p') {
+                        console.println(lastMessage.toString());
+                        continue;
+                    }
                     // send the read command as a message to the arduino
                     // with a fixed speed of 20
                     arduino.inFlow().accept(new SpeedCmdMessage(first, (byte) 20));
@@ -86,6 +91,12 @@ public class Main {
                     e.printStackTrace();
                 }
             }
+        }
+        System.out.println("Stopping...");
+        try {
+            schedule.terminate(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            schedule.terminate();
         }
     }
 }

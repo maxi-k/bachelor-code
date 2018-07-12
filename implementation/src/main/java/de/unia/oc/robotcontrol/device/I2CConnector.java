@@ -35,33 +35,36 @@ public class I2CConnector extends QueuedDeviceConnector {
             Supplier<Message> updateRequestMessageSupplier)
             throws IOException, IllegalArgumentException {
         super(encoding, schedule, next, updateRequestMessageSupplier);
-        this.MAX_MESSAGE_SIZE = messageSize;
-        this.DEVICE_ADDRESS = deviceAddress;
-        this.BUS = bus;
-        try {
-            this.i2c = I2CFactory.getInstance(BUS);
-        } catch (I2CFactory.UnsupportedBusNumberException e) {
-            throw new IllegalArgumentException("Unsupported bus number! " + BUS, e);
+        synchronized(this) {
+            this.MAX_MESSAGE_SIZE = messageSize;
+            this.DEVICE_ADDRESS = deviceAddress;
+            this.BUS = bus;
+            try {
+                this.i2c = I2CFactory.getInstance(BUS);
+            } catch (I2CFactory.UnsupportedBusNumberException e) {
+                throw new IllegalArgumentException("Unsupported bus number! " + BUS, e);
+            }
+            this.device = i2c.getDevice(DEVICE_ADDRESS);
+            this.readBuffer = new byte[MAX_MESSAGE_SIZE];
         }
-        this.device = i2c.getDevice(DEVICE_ADDRESS);
-        this.readBuffer = new byte[MAX_MESSAGE_SIZE];
+
+        // System.out.println("Testing device!");
+        // pushMessage(encoding.encode(updateRequestMessageSupplier.get()));
     }
 
     @Override
-    protected void pushMessage(byte[] message) throws IOException {
+    protected synchronized void pushMessage(byte[] message) throws IOException {
         device.write(message);
     }
 
     @Override
-    protected byte[] retreiveMessage() throws IOException {
-        synchronized(readBuffer) {
-            int read = device.read(readBuffer, 0, readBuffer.length);
-            if (read > 0) {
-                lastRead = read;
-                return Arrays.copyOf(readBuffer, read);
-            } else {
-                throw new IOException("No bytes were read");
-            }
+    protected synchronized byte[] retrieveMessage() throws IOException {
+        int read = device.read(readBuffer, 0, readBuffer.length);
+        if (read > 0) {
+            lastRead = read;
+            return Arrays.copyOf(readBuffer, read);
+        } else {
+            throw new IOException("No bytes were read");
         }
     }
 }

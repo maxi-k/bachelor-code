@@ -53,6 +53,6 @@ public class DispatcherTest {
         dispatcher.dispatch(msgType1.produce(10));
         dispatcher.dispatch(msgType1.produce(1000));
         // System.out.println(System.currentTimeMillis() - time);
-        Assertions.assertTrue(System.currentTimeMillis() - time < 5);
+        Assertions.assertTrue(System.currentTimeMillis() - time < 10);
     }
 }

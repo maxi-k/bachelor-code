@@ -92,4 +92,19 @@ final class TrackingScheduleProvider implements ScheduleProvider {
     public TaskMode getTaskMode() {
         return taskMode;
     }
+
+    @Override
+    public boolean terminate(long delay, TimeUnit unit) throws InterruptedException {
+        boolean orderly =  this.exec.awaitTermination(delay, unit);
+        if (orderly) {
+           this.attachedTasks.clear();
+        }
+        return orderly;
+    }
+
+    @Override
+    public void terminate() {
+        this.exec.shutdown();
+        this.attachedTasks.clear();
+    }
 }

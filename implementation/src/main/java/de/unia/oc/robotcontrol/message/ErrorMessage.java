@@ -1,13 +1,24 @@
 package de.unia.oc.robotcontrol.message;
 
-public class ErrorMessage<T extends Exception> extends SingleValueMessage<T> {
+import de.unia.oc.robotcontrol.coding.CodingContext;
+import de.unia.oc.robotcontrol.coding.Encoding;
 
-    public ErrorMessage(T value) {
+public class ErrorMessage extends SingleValueMessage<Exception> {
+
+    public static final MessageType<SingleValueMessage<Exception>> errorMessageType =
+            MessageType.fromEncoding(
+                    Encoding.nullEncoding(
+                            CodingContext.NATIVE,
+                            () -> new ErrorMessage(new RuntimeException())
+                    )
+            );
+
+    public ErrorMessage(Exception value) {
         super(value);
     }
 
     @Override
-    public MessageType<SingleValueMessage<T>> getType() {
-        return null;
+    public MessageType<SingleValueMessage<Exception>> getType() {
+        return errorMessageType;
     }
 }
