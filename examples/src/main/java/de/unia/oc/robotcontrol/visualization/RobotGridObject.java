@@ -6,12 +6,12 @@ import de.unia.oc.robotcontrol.util.Tuple;
 
 import java.awt.*;
 
-public class VisualizedRobot extends GridObject {
+public class RobotGridObject extends GridObject {
 
     private RobotDrivingCommand command;
     private int rotation;
 
-    public VisualizedRobot() {
+    public RobotGridObject() {
         rotation = 0;
         command = RobotDrivingCommand.STOP;
     }

@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
 
     private final ObjectGrid simulationEnvironment;
-    private final VisualizedRobot robot;
+    private final RobotGridObject robot;
 
     private final VisualizingWindow window;
 
@@ -30,7 +30,7 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
                                   ObjectGrid simulationEnvironment) {
         super(encoding, schedule, next, updateRequestMessageProvider);
         this.simulationEnvironment = simulationEnvironment;
-        this.robot = new VisualizedRobot();
+        this.robot = new RobotGridObject();
         this.window = new VisualizingWindow(simulationEnvironment);
 
         setupVisualization();
@@ -38,7 +38,7 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
 
     private void setupVisualization() {
         simulationEnvironment.fillPercentage(0.2f, (i) -> new GridObject());
-        simulationEnvironment.putRandomly(new VisualizedTarget());
+        simulationEnvironment.putRandomly(new TargetGridObject());
         simulationEnvironment.putRandomly(robot);
         SwingUtilities.invokeLater(window::setup);
     }
@@ -77,7 +77,7 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
         };
     }
 
-    private int commandToRotation(RobotDrivingCommand cmd, VisualizedRobot r) {
+    private int commandToRotation(RobotDrivingCommand cmd, RobotGridObject r) {
         switch(cmd) {
             case ROTATE:
                 return r.getRotation() + 1 % 4;

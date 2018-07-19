@@ -3,7 +3,7 @@ package de.unia.oc.robotcontrol.visualization;
 
 import java.awt.*;
 
-public class VisualizedTarget extends GridObject {
+public class TargetGridObject extends GridObject {
 
     @Override
     protected Color getColor() {
