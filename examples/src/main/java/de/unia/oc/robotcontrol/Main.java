@@ -4,12 +4,17 @@ package de.unia.oc.robotcontrol;
 import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
+import de.unia.oc.robotcontrol.device.Device;
 import de.unia.oc.robotcontrol.device.DiscreteSimulatedRobot;
+import de.unia.oc.robotcontrol.device.I2CConnector;
+import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
+import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
+import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
 
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -29,12 +34,14 @@ public class Main {
      */
     public static void main(String[] args) throws IOException, InterruptedException {
 
+        final Set<String> argSet = new HashSet<>(Arrays.asList(args));
+
         // start Pi4J console wrapper/helper
         // (This is a utility class to abstract some of the boilerplate code)
         final Console console = new Console();
 
         // print program title/header
-        console.title("<-- The Pi4J Project -->", "I2C Example");
+        console.title("<-- Observer/Controller Robot-Control -->", "Example");
 
         // allow for user to exit program using CTRL-C
         console.promptForExit();
@@ -66,23 +73,23 @@ public class Main {
         ObjectGrid grid = new ObjectGrid(20, 20);
 
         // define the arduino which is connected using I2C
-        /*
-        final I2CConnector arduino = new I2CConnector(
-                32,
-                1,
-                (byte) 4,
-                ArduinoMessageTypes.ENCODING,
-                schedule,
-                printer.inFlow(),
-                UpdateRequestMessage::new);
-                */
-        final DiscreteSimulatedRobot arduino = new DiscreteSimulatedRobot(
-                ArduinoMessageTypes.ENCODING,
-                schedule,
-                printer.inFlow(),
-                UpdateRequestMessage::new,
-                grid
-        );
+        final QueuedDeviceConnector arduino = (argSet.contains("simulate") || argSet.contains("simulation"))
+                ?
+                new DiscreteSimulatedRobot(
+                        ArduinoMessageTypes.ENCODING,
+                        schedule,
+                        printer.inFlow(),
+                        UpdateRequestMessage::new,
+                        grid
+                ) :
+                new I2CConnector(
+                        32,
+                        1,
+                        (byte) 4,
+                        ArduinoMessageTypes.ENCODING,
+                        schedule,
+                        printer.inFlow(),
+                        UpdateRequestMessage::new);
 
         // read user commands and send them to the arduino constantly
         console.println("Press 'q' to stop, p to print the last received message");
