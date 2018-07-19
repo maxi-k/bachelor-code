@@ -15,7 +15,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 
-public abstract class QueuedDeviceConnector implements Device<Message> {
+public abstract class QueuedDeviceConnector implements Device<Message, PassiveInFlow, ActiveOutFlow> {
 
     private final PassiveInFlow<Message> inFlow;
     private final ActiveOutFlow<Message> outFlow;

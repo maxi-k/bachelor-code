@@ -10,6 +10,6 @@ import java.util.function.Supplier;
  *
  * @param <T> The type of items this can provide
  */
-interface OutFlow<T> extends Supplier<T>, FlowPressure, Schedulable {
+public interface OutFlow<T> extends Supplier<T>, FlowPressure, Schedulable {
 
 }

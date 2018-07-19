@@ -10,6 +10,6 @@ import java.util.function.Consumer;
  *
  * @param <T> The type of items this can accept
  */
-interface InFlow<T> extends Consumer<T>, FlowPressure, Schedulable {
+public interface InFlow<T> extends Consumer<T>, FlowPressure, Schedulable {
 
 }

@@ -5,7 +5,7 @@ import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 
 import java.util.function.Consumer;
 
-public class CallbackMessageRecipient implements MessageRecipient<Message> {
+public class CallbackMessageRecipient implements de.unia.oc.robotcontrol.flow.InFlowElement {
 
     private final PassiveInFlow<Message> inFlow;
     private final Consumer<Message> callback;

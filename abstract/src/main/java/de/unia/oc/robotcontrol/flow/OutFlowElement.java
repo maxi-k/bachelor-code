@@ -4,7 +4,7 @@ package de.unia.oc.robotcontrol.flow;
 /**
  * Describes something which has an {@link InFlow}
  */
-public interface OutFlowElement {
+public interface OutFlowElement<OF extends OutFlow> {
 
-    OutFlow outFlow();
+    OF outFlow();
 }

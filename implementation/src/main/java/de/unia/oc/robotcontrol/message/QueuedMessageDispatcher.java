@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
-public class QueuedMessageDispatcher<T extends Message<T>>
+public class QueuedMessageDispatcher<T extends Message<T>, PassiveInFlow, ActiveOutFlow>
         extends BidirectionalRegistry<MessageType<T>, MessageRecipient<T>>
         implements MessageDispatcher<T> {
 
