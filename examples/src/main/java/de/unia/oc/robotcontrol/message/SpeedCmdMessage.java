@@ -1,27 +1,34 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+import de.unia.oc.robotcontrol.data.RobotDrivingCommand;
+
 /**
  * A message wrapping the command sent to an arduino used for
  * setting its speed.
  *
- * TODO: Currently simplified to only include one direction and speed parameter
+ * TODO: Currently simplified to only include one command and speed parameter
  */
 public class SpeedCmdMessage implements Message<SpeedCmdMessage> {
 
-    private final char direction;
-    private final byte speed;
+    private final RobotDrivingCommand command;
+    private final int speed;
 
-    public SpeedCmdMessage(char direction, byte speed) {
-        this.direction = direction;
+    public SpeedCmdMessage(char command, int speed) {
+        this.command = RobotDrivingCommand.fromIdentifier(command);
         this.speed = speed;
     }
 
-    public char getDirection() {
-        return direction;
+    public SpeedCmdMessage(RobotDrivingCommand command, int speed) {
+        this.command = command;
+        this.speed = speed;
     }
 
-    public byte getSpeed() {
+    public RobotDrivingCommand getCommand() {
+        return command;
+    }
+
+    public int getSpeed() {
         return speed;
     }
 
@@ -36,12 +43,12 @@ public class SpeedCmdMessage implements Message<SpeedCmdMessage> {
             return false;
         }
         SpeedCmdMessage msg = (SpeedCmdMessage) obj;
-        return msg.direction == this.direction &&
+        return msg.command == this.command &&
                 msg.speed == this.speed;
     }
 
     @Override
     public String toString() {
-        return "SpeedCmd Message: dir: " + direction + " speed: " + speed;
+        return "SpeedCmd Message: dir: " + command + " speed: " + speed;
     }
 }

@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    static volatile Message lastMessage = null;
+    private static volatile Message lastMessage = null;
     /**
      * Control the arduino using
      * - w (forward)
@@ -66,7 +66,7 @@ public class Main {
         );
 
 
-        ObjectGrid grid = new ObjectGrid(10, 10);
+        ObjectGrid grid = new ObjectGrid(20, 20);
 
         // define the arduino which is connected using I2C
         /*
@@ -102,7 +102,7 @@ public class Main {
                     }
                     // send the read command as a message to the arduino
                     // with a fixed speed of 20
-                    arduino.inFlow().accept(new SpeedCmdMessage(first, (byte) 20));
+                    arduino.inFlow().accept(new SpeedCmdMessage(first, 20));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

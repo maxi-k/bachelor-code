@@ -38,7 +38,6 @@ public class ObjectGrid implements Visualization<Component> {
         float scaleY = height / cellsY;
         drawGrid(g, scaleX, scaleY, height, width);
 
-
         GridObjectDrawContext context = new GridObjectDrawContext(scaleX, scaleY);
         synchronized(this.objects) {
             for (GridObject o : objects.values()) {
@@ -51,12 +50,12 @@ public class ObjectGrid implements Visualization<Component> {
         Color c = g.getColor();
         g.setColor(GRID_LINES_COLOR);
 
-        for (int i = 0; i < cellsX; ++i) {
+        for (int i = 0; i <= cellsX; ++i) {
             int x = (int) scaleX * i;
             g.drawLine(x, 0, x, height);
         }
 
-        for (int i = 0; i < cellsY; ++i) {
+        for (int i = 0; i <= cellsY; ++i) {
             int y = (int) scaleY * i;
             g.drawLine(0, y, width, y);
         }
@@ -89,14 +88,16 @@ public class ObjectGrid implements Visualization<Component> {
     }
 
     public synchronized boolean move(int x, int y, int newX, int newY) {
-        checkInRange(x, y);
-        checkInRange(newX, newY);
         if (!objects.contains(x, y) || objects.contains(newX, newY)) {
             return false;
         }
-        GridObject o = this.objects.remove(x, y);
-        o.setXY(newX, newY);
-        this.objects.put(newX, newY, o);
+        try {
+            GridObject o = this.objects.remove(x, y);
+            o.setXY(newX, newY);
+            this.objects.put(newX, newY, o);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
         return true;
     }
 
@@ -104,8 +105,8 @@ public class ObjectGrid implements Visualization<Component> {
         checkGridHasSpace(1);
         int x, y;
         do {
-            x = (int) (Math.random() * (this.cellsX - 1));
-            y = (int) (Math.random() * (this.cellsY - 1));
+            x = (int) (Math.random() * this.cellsX);
+            y = (int) (Math.random() * this.cellsY);
         } while (this.objects.contains(x, y));
         return this.putAt(x, y, o);
     }

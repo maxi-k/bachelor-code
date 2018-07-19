@@ -60,7 +60,11 @@ public abstract class QueuedDeviceConnector implements Device<Message> {
             Thread.sleep(10);
             return this.encoding.decode(retrieveMessage());
         } catch (InterruptedException | IOException e) {
-            System.out.println("Error while sending or retrieving message!");
+            System.err.println("Error while sending or retrieving message!");
+            e.printStackTrace();
+            return new ErrorMessage(e);
+        } catch (Exception e) {
+            System.err.println("Unexpected error while sending or retrieving message! ");
             e.printStackTrace();
             return new ErrorMessage(e);
         }

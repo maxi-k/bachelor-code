@@ -26,16 +26,16 @@ public class GridObject implements Visualization<GridObjectDrawContext> {
         return Color.darkGray;
     }
 
-    int getX() {
+    public int getX() {
         return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     void setX(int x) {
         this.x = x;
-    }
-
-    int getY() {
-        return y;
     }
 
     void setY(int y) {
@@ -43,7 +43,7 @@ public class GridObject implements Visualization<GridObjectDrawContext> {
     }
 
     void setXY(int x, int y) {
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
     }
 }
