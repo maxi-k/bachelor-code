@@ -21,9 +21,9 @@ public abstract class QueuedDeviceConnector implements Device<Message> {
     private final ActiveOutFlow<Message> outFlow;
 
     private final Queue<Message> messageQueue;
-    private final Encoding<Message> encoding;
-    private final PassiveInFlow<Message> next;
-    private final Supplier<Message> updateRequestMessageProvider;
+    protected final Encoding<Message> encoding;
+    protected final PassiveInFlow<Message> next;
+    protected final Supplier<Message> updateRequestMessageProvider;
 
     public QueuedDeviceConnector(Encoding<Message> encoding,
                        ScheduleProvider schedule,

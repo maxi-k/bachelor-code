@@ -5,8 +5,12 @@ import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
 import de.unia.oc.robotcontrol.device.I2CConnector;
+import de.unia.oc.robotcontrol.device.SimulatedArduino;
 import de.unia.oc.robotcontrol.message.*;
+import de.unia.oc.robotcontrol.visualization.ObjectGrid;
+import de.unia.oc.robotcontrol.visualization.VisualizingWindow;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
@@ -61,7 +65,11 @@ public class Main {
                 TimeUnit.MILLISECONDS
         );
 
+
+        ObjectGrid grid = new ObjectGrid(10, 10);
+
         // define the arduino which is connected using I2C
+        /*
         final I2CConnector arduino = new I2CConnector(
                 32,
                 1,
@@ -70,6 +78,14 @@ public class Main {
                 schedule,
                 printer.inFlow(),
                 UpdateRequestMessage::new);
+                */
+        final SimulatedArduino arduino = new SimulatedArduino(
+                ArduinoMessageTypes.ENCODING,
+                schedule,
+                printer.inFlow(),
+                UpdateRequestMessage::new,
+                grid
+        );
 
         // read user commands and send them to the arduino constantly
         console.println("Press 'q' to stop, p to print the last received message");
