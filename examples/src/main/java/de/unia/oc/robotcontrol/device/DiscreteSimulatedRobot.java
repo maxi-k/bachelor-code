@@ -16,20 +16,18 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.function.Supplier;
 
-public class SimulatedArduino extends QueuedDeviceConnector {
+public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
 
     private final ObjectGrid simulationEnvironment;
-    private byte[] lastMessage;
-    private int gridX, gridY;
     private final VisualizedRobot robot;
 
     private final VisualizingWindow window;
 
-    public SimulatedArduino(Encoding<Message> encoding,
-                            ScheduleProvider schedule,
-                            PassiveInFlow<Message> next,
-                            Supplier<Message> updateRequestMessageProvider,
-                            ObjectGrid simulationEnvironment) {
+    public DiscreteSimulatedRobot(Encoding<Message> encoding,
+                                  ScheduleProvider schedule,
+                                  PassiveInFlow<Message> next,
+                                  Supplier<Message> updateRequestMessageProvider,
+                                  ObjectGrid simulationEnvironment) {
         super(encoding, schedule, next, updateRequestMessageProvider);
         this.simulationEnvironment = simulationEnvironment;
         this.robot = new VisualizedRobot();

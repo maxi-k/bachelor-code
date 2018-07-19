@@ -4,13 +4,10 @@ package de.unia.oc.robotcontrol;
 import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
-import de.unia.oc.robotcontrol.device.I2CConnector;
-import de.unia.oc.robotcontrol.device.SimulatedArduino;
+import de.unia.oc.robotcontrol.device.DiscreteSimulatedRobot;
 import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
-import de.unia.oc.robotcontrol.visualization.VisualizingWindow;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
@@ -79,7 +76,7 @@ public class Main {
                 printer.inFlow(),
                 UpdateRequestMessage::new);
                 */
-        final SimulatedArduino arduino = new SimulatedArduino(
+        final DiscreteSimulatedRobot arduino = new DiscreteSimulatedRobot(
                 ArduinoMessageTypes.ENCODING,
                 schedule,
                 printer.inFlow(),
