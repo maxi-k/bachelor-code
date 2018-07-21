@@ -9,10 +9,10 @@ import java.awt.*;
 public class RobotGridObject extends GridObject {
 
     private RobotDrivingCommand command;
-    private int rotation;
+    private GridDirection rotation;
 
     public RobotGridObject() {
-        rotation = 0;
+        rotation = GridDirection.UP;
         command = RobotDrivingCommand.STOP;
     }
 
@@ -47,16 +47,16 @@ public class RobotGridObject extends GridObject {
     private void drawFront(Graphics g, GridObjectDrawContext c, int centerx, int centery, int padding) {
         int offsetx = 0, offsety = 0;
         switch(this.rotation) {
-            case 0:
+            case UP:
                 offsety = -(c.getHeight() / 2 - padding);
                 break;
-            case 1:
+            case RIGHT:
                 offsetx = c.getWidth() / 2 - padding;
                 break;
-            case 2:
+            case DOWN:
                 offsety = c.getHeight() / 2 - padding;
                 break;
-            case 3:
+            case LEFT:
                 offsetx = -(c.getWidth() / 2 - padding);
                 break;
         }
@@ -70,11 +70,11 @@ public class RobotGridObject extends GridObject {
         );
     }
 
-    public void setRotation(int rotation) {
-        this.rotation = Math.abs(rotation % 4);
+    public void setRotation(GridDirection rotation) {
+        this.rotation = rotation;
     }
 
-    public int getRotation() {
+    public GridDirection getRotation() {
         return rotation;
     }
 
@@ -86,28 +86,43 @@ public class RobotGridObject extends GridObject {
         return command;
     }
 
+    public void updateFromCommand(RobotDrivingCommand cmd) {
+        setCommand(command);
+        setRotation(commandToRotation(command));
+    }
+
+    private GridDirection commandToRotation(RobotDrivingCommand cmd) {
+        switch(cmd) {
+            case ROTATE:
+                return getRotation().cycle();
+            default:
+                return getRotation();
+        }
+    }
+
+
     public Tuple<Integer, Integer> getNextXY() {
         switch(this.command) {
             case FRONT:
                 switch(this.rotation) {
-                    case 0: return Tuple.create(getX(), getY() - 1);
-                    case 1: return Tuple.create(getX() + 1, getY());
-                    case 2: return Tuple.create(getX(), getY() + 1);
-                    case 3: return Tuple.create(getX() - 1, getY());
+                    case UP: return Tuple.create(getX(), getY() - 1);
+                    case RIGHT: return Tuple.create(getX() + 1, getY());
+                    case DOWN: return Tuple.create(getX(), getY() + 1);
+                    case LEFT: return Tuple.create(getX() - 1, getY());
                 }
             case LEFT:
                 switch(this.rotation) {
-                    case 0: return Tuple.create(getX() - 1, getY());
-                    case 1: return Tuple.create(getX(), getY() - 1);
-                    case 2: return Tuple.create(getX() + 1, getY());
-                    case 3: return Tuple.create(getX(), getY() + 1);
+                    case UP: return Tuple.create(getX() - 1, getY());
+                    case RIGHT: return Tuple.create(getX(), getY() - 1);
+                    case DOWN: return Tuple.create(getX() + 1, getY());
+                    case LEFT: return Tuple.create(getX(), getY() + 1);
                 }
             case RIGHT:
                 switch(this.rotation) {
-                    case 0: return Tuple.create(getX() + 1, getY());
-                    case 1: return Tuple.create(getX(), getY() + 1);
-                    case 2: return Tuple.create(getX() - 1, getY());
-                    case 3: return Tuple.create(getX(), getY() - 1);
+                    case UP: return Tuple.create(getX() + 1, getY());
+                    case RIGHT: return Tuple.create(getX(), getY() + 1);
+                    case DOWN: return Tuple.create(getX() - 1, getY());
+                    case LEFT: return Tuple.create(getX(), getY() - 1);
                 }
             default:
                 return Tuple.create(getX(), getY()) ;

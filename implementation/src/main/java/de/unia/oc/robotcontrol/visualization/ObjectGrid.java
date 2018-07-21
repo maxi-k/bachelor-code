@@ -32,8 +32,6 @@ public class ObjectGrid implements Visualization<Component> {
         final int width = c.getWidth();
         final int height = c.getHeight();
 
-        // GridObjectDrawContext context = new C
-
         float scaleX = width / cellsX;
         float scaleY = height / cellsY;
         drawGrid(g, scaleX, scaleY, height, width);

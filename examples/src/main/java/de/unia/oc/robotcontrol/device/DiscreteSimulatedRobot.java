@@ -55,14 +55,12 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
         return this.encoding.encode(new DistanceDataMessage(0, 0, 0));
     }
 
-
     private void actOnMessage(Message m) {
         if (m.getType() == ArduinoMessageTypes.SPEED_CMD) {
             SpeedCmdMessage cmd = (SpeedCmdMessage) m;
             RobotDrivingCommand command = cmd.getCommand();
             if (command == null) return;
-            this.robot.setCommand(command);
-            this.robot.setRotation(commandToRotation(command, robot));
+            this.robot.updateFromCommand(command);
             Tuple<Integer, Integer> next = robot.getNextXY();
             try {
                 this.simulationEnvironment.move(
@@ -75,15 +73,6 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
                 e.printStackTrace();
             }
         };
-    }
-
-    private int commandToRotation(RobotDrivingCommand cmd, RobotGridObject r) {
-        switch(cmd) {
-            case ROTATE:
-                return r.getRotation() + 1 % 4;
-            default:
-                return r.getRotation();
-        }
     }
 
 }
