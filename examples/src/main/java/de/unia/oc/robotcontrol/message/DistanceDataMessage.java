@@ -7,9 +7,9 @@ package de.unia.oc.robotcontrol.message;
  */
 public class DistanceDataMessage implements Message<DistanceDataMessage> {
 
-    private final int x;
-    private final int y;
-    private final int z;
+    private final int x; // front
+    private final int y; // right
+    private final int z; // left
 
     public DistanceDataMessage(int x, int y, int z) {
         this.x = x;

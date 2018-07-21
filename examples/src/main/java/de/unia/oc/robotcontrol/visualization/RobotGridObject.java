@@ -70,25 +70,25 @@ public class RobotGridObject extends GridObject {
         );
     }
 
-    public void setRotation(GridDirection rotation) {
+    public synchronized void setRotation(GridDirection rotation) {
         this.rotation = rotation;
     }
 
-    public GridDirection getRotation() {
+    public synchronized GridDirection getRotation() {
         return rotation;
     }
 
-    public void setCommand(RobotDrivingCommand cmd) {
+    public synchronized void setCommand(RobotDrivingCommand cmd) {
         this.command = cmd;
     }
 
-    public RobotDrivingCommand getCommand() {
+    public synchronized RobotDrivingCommand getCommand() {
         return command;
     }
 
     public void updateFromCommand(RobotDrivingCommand cmd) {
-        setCommand(command);
-        setRotation(commandToRotation(command));
+        setCommand(cmd);
+        setRotation(commandToRotation(cmd));
     }
 
     private GridDirection commandToRotation(RobotDrivingCommand cmd) {
@@ -102,30 +102,27 @@ public class RobotGridObject extends GridObject {
 
 
     public Tuple<Integer, Integer> getNextXY() {
+        if (command == RobotDrivingCommand.ROTATE || command == RobotDrivingCommand.STOP) {
+            return Tuple.create(getX(), getY());
+        }
+        switch(foldCommandDirection()) {
+            case UP: return Tuple.create(getX(), getY() - 1);
+            case RIGHT: return Tuple.create(getX() + 1, getY());
+            case DOWN: return Tuple.create(getX(), getY() + 1);
+            case LEFT: return Tuple.create(getX() - 1, getY());
+            default: return Tuple.create(getX(), getY());
+        }
+    }
+
+    private GridDirection foldCommandDirection() {
         switch(this.command) {
-            case FRONT:
-                switch(this.rotation) {
-                    case UP: return Tuple.create(getX(), getY() - 1);
-                    case RIGHT: return Tuple.create(getX() + 1, getY());
-                    case DOWN: return Tuple.create(getX(), getY() + 1);
-                    case LEFT: return Tuple.create(getX() - 1, getY());
-                }
-            case LEFT:
-                switch(this.rotation) {
-                    case UP: return Tuple.create(getX() - 1, getY());
-                    case RIGHT: return Tuple.create(getX(), getY() - 1);
-                    case DOWN: return Tuple.create(getX() + 1, getY());
-                    case LEFT: return Tuple.create(getX(), getY() + 1);
-                }
             case RIGHT:
-                switch(this.rotation) {
-                    case UP: return Tuple.create(getX() + 1, getY());
-                    case RIGHT: return Tuple.create(getX(), getY() + 1);
-                    case DOWN: return Tuple.create(getX() - 1, getY());
-                    case LEFT: return Tuple.create(getX(), getY() - 1);
-                }
+                return this.getRotation().cycle();
+            case LEFT:
+                return this.getRotation().cycleCC();
+            case FRONT:
             default:
-                return Tuple.create(getX(), getY()) ;
+                return this.getRotation();
         }
     }
 

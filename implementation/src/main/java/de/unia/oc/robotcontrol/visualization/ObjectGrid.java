@@ -3,6 +3,7 @@ package de.unia.oc.robotcontrol.visualization;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import de.unia.oc.robotcontrol.util.Tuple;
 
 import java.awt.*;
 import java.util.Collection;
@@ -73,6 +74,35 @@ public class ObjectGrid implements Visualization<Component> {
         return cellsY;
     }
 
+    public GridObject getObjectAt(int x, int y) {
+        return objects.get(x, y);
+    }
+
+    public GridObject getNextObjectInDirection(int x, int y, GridDirection dir) {
+        Tuple<Integer, Integer> nextCoords;
+        do {
+           nextCoords = getNextCoordsFor(x, y, dir);
+           GridObject obj = nextCoords.joinWith(this::getObjectAt);
+           if (obj != null) return obj;
+        } while (nextCoords.joinWith(this::areCoordsInRange));
+        return null;
+    }
+
+    private Tuple<Integer, Integer> getNextCoordsFor(int x, int y, GridDirection dir) {
+        switch(dir) {
+            case UP:
+                return Tuple.create(x, y - 1);
+            case RIGHT:
+                return Tuple.create(x + 1, y);
+            case DOWN:
+                return Tuple.create(x, y + 1);
+            case LEFT:
+                return Tuple.create(x - 1, y);
+            default:
+                return Tuple.create(x, y);
+        }
+    }
+
     public synchronized boolean putAt(int x, int y, GridObject o) {
         checkInRange(x, y);
         checkGridHasSpace(1);
@@ -136,6 +166,10 @@ public class ObjectGrid implements Visualization<Component> {
         if (this.objects.values().size() + amount > gridSize()) {
             throw new IllegalArgumentException("Grid is too small for this many objects!");
         }
+    }
+
+    private boolean areCoordsInRange(int x, int y) {
+        return x >= 0 && x <= cellsX && y >= 0 && y <= cellsY;
     }
 
 }

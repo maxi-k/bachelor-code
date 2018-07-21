@@ -7,8 +7,17 @@ public enum GridDirection {
     DOWN,
     LEFT;
 
-    public GridDirection cycle() {
+
+    public GridDirection add(GridDirection other) {
         GridDirection[] vals = values();
-        return vals[(this.ordinal() + 1) % vals.length];
+        return vals[(this.ordinal() + other.ordinal()) % vals.length];
+    }
+
+    public GridDirection cycle() {
+        return add(RIGHT);
+    }
+
+    public GridDirection cycleCC() {
+        return add(LEFT);
     }
 }

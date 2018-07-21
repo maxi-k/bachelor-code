@@ -14,7 +14,11 @@ import de.unia.oc.robotcontrol.visualization.*;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static de.unia.oc.robotcontrol.visualization.GridDirection.LEFT;
+import static de.unia.oc.robotcontrol.visualization.GridDirection.RIGHT;
 
 public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
 
@@ -52,7 +56,7 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
 
     @Override
     protected byte[] retrieveMessage() throws IOException {
-        return this.encoding.encode(new DistanceDataMessage(0, 0, 0));
+        return this.encoding.encode(getGridDistances());
     }
 
     private void actOnMessage(Message m) {
@@ -73,6 +77,25 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
                 e.printStackTrace();
             }
         };
+    }
+
+    private DistanceDataMessage getGridDistances() {
+        GridDirection robotRot = robot.getRotation();
+        return new DistanceDataMessage(
+                getDistanceToOther(robotRot),
+                getDistanceToOther(robotRot.cycle()),
+                getDistanceToOther(robotRot.cycleCC())
+        );
+    }
+
+    private int getDistanceToOther(GridDirection dir) {
+        int x = robot.getX();
+        int y = robot.getY();
+        GridObject other = simulationEnvironment.getNextObjectInDirection(x, y, dir);
+        if (other == null) return -1;
+        return (dir == LEFT || dir == RIGHT) ?
+                Math.abs(x - other.getX()) :
+                Math.abs(y - other.getY());
     }
 
 }
