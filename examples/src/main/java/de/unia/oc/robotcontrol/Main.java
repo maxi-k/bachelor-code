@@ -4,17 +4,23 @@ package de.unia.oc.robotcontrol;
 import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
+import de.unia.oc.robotcontrol.device.DiscreteSimulatedRobot;
 import de.unia.oc.robotcontrol.device.I2CConnector;
+import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
 import de.unia.oc.robotcontrol.message.*;
+import de.unia.oc.robotcontrol.visualization.ObjectGrid;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    static volatile Message lastMessage = null;
+    private static volatile Message lastMessage = null;
     /**
      * Control the arduino using
      * - w (forward)
@@ -23,17 +29,22 @@ public class Main {
      * - d (right)
      * - r (rotate)
      * -- p to print the last received arduino message
-     * @param args
-     * @throws IOException
+     * @param args The program arguments. Can include the following words:
+     *             - simulation | simulate: Don't try to connect to the arduino using I2C, but instead
+     *             run a simulated version within a discrete grid.
+     *
+     * @throws IOException in case the program could not connect to the arduino using I2C (Bus 1, Device 4)
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException {
+
+        final Set<String> argSet = new HashSet<>(Arrays.asList(args));
 
         // start Pi4J console wrapper/helper
         // (This is a utility class to abstract some of the boilerplate code)
         final Console console = new Console();
 
         // print program title/header
-        console.title("<-- The Pi4J Project -->", "I2C Example");
+        console.title("<-- Observer/Controller Robot-Control -->", "I2C Example");
 
         // allow for user to exit program using CTRL-C
         console.promptForExit();
@@ -61,15 +72,26 @@ public class Main {
                 TimeUnit.MILLISECONDS
         );
 
-        // define the arduino which is connected using I2C
-        final I2CConnector arduino = new I2CConnector(
-                32,
-                1,
-                (byte) 4,
-                ArduinoMessageTypes.ENCODING,
-                schedule,
-                printer.inFlow(),
-                UpdateRequestMessage::new);
+        final QueuedDeviceConnector arduino = (argSet.contains("simulate") || argSet.contains("simulation"))
+                ?
+                // define a simulated version of the arduino in a discrete grid environment
+                new DiscreteSimulatedRobot(
+                        ArduinoMessageTypes.ENCODING,
+                        schedule,
+                        printer.inFlow(),
+                        UpdateRequestMessage::new,
+                        new ObjectGrid(20, 20)
+                ) :
+
+                // define the arduino which is connected using I2C
+                new I2CConnector(
+                        32,
+                        1,
+                        (byte) 4,
+                        ArduinoMessageTypes.ENCODING,
+                        schedule,
+                        printer.inFlow(),
+                        UpdateRequestMessage::new);
 
         // read user commands and send them to the arduino constantly
         console.println("Press 'q' to stop, p to print the last received message");
@@ -84,9 +106,10 @@ public class Main {
                         console.println(lastMessage.toString());
                         continue;
                     }
-                    // send the read command as a message to the arduino
-                    // with a fixed speed of 20
-                    arduino.inFlow().accept(new SpeedCmdMessage(first, (byte) 20));
+                    // send the read command as a driving command to the arduino,
+                    // with the driving direction specified by the read character
+                    // with a fixed speed of 20 mmps
+                    arduino.inFlow().accept(new SpeedCmdMessage(first, 20));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

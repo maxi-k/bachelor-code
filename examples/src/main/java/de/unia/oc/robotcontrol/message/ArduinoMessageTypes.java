@@ -38,10 +38,10 @@ public final class ArduinoMessageTypes {
             MessageType.fromEncoding(
                     Encodings.join(
                             new CharEncoding(CONTEXT),
-                            new ByteEncoding(CONTEXT),
+                            new IntegerEncoding(CONTEXT),
                             Bijection.create(
-                                    (SpeedCmdMessage msg) -> new Tuple<>(msg.getDirection(), msg.getSpeed()),
-                                    (Tuple<Character, Byte> t) -> new SpeedCmdMessage(t.first, t.second)
+                                    (SpeedCmdMessage msg) -> new Tuple<>(msg.getCommand().getIdentifier(), msg.getSpeed()),
+                                    (Tuple<Character, Integer> t) -> new SpeedCmdMessage(t.first, t.second)
                             )
                     )
             );

@@ -9,7 +9,7 @@ public class ArduinoMessageTest {
     @Test
     void speedCommandMessageWorks() {
         char direction = 's';
-        byte speed = (byte) (Math.random() * 255);
+        int speed =  (int) (Math.random() * 1028);
 
         SpeedCmdMessage m = new SpeedCmdMessage(direction, speed);
 
