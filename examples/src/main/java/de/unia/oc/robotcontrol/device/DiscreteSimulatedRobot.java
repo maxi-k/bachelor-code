@@ -79,7 +79,7 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
         };
     }
 
-    private DistanceDataMessage getGridDistances() {
+    private synchronized DistanceDataMessage getGridDistances() {
         GridDirection robotRot = robot.getRotation();
         return new DistanceDataMessage(
                 getDistanceToOther(robotRot),

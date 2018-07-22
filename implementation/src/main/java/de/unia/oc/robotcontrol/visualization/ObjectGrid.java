@@ -79,13 +79,17 @@ public class ObjectGrid implements Visualization<Component> {
     }
 
     public GridObject getNextObjectInDirection(int x, int y, GridDirection dir) {
-        Tuple<Integer, Integer> nextCoords;
+        Tuple<Integer, Integer> nextCoords = Tuple.create(x, y);
         do {
-           nextCoords = getNextCoordsFor(x, y, dir);
+           nextCoords = getNextCoordsFor(nextCoords, dir);
            GridObject obj = nextCoords.joinWith(this::getObjectAt);
            if (obj != null) return obj;
         } while (nextCoords.joinWith(this::areCoordsInRange));
         return null;
+    }
+
+    private Tuple<Integer, Integer> getNextCoordsFor(Tuple<Integer, Integer> xy, GridDirection dir) {
+        return getNextCoordsFor(xy.first, xy.second, dir);
     }
 
     private Tuple<Integer, Integer> getNextCoordsFor(int x, int y, GridDirection dir) {
