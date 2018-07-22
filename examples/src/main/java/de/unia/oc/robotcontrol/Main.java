@@ -4,17 +4,17 @@ package de.unia.oc.robotcontrol;
 import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
-import de.unia.oc.robotcontrol.device.Device;
 import de.unia.oc.robotcontrol.device.DiscreteSimulatedRobot;
 import de.unia.oc.robotcontrol.device.I2CConnector;
 import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
-import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
-import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -29,10 +29,13 @@ public class Main {
      * - d (right)
      * - r (rotate)
      * -- p to print the last received arduino message
-     * @param args
-     * @throws IOException
+     * @param args The program arguments. Can include the following words:
+     *             - simulation | simulate: Don't try to connect to the arduino using I2C, but instead
+     *             run a simulated version within a discrete grid.
+     *
+     * @throws IOException in case the program could not connect to the arduino using I2C (Bus 1, Device 4)
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException {
 
         final Set<String> argSet = new HashSet<>(Arrays.asList(args));
 
@@ -41,7 +44,7 @@ public class Main {
         final Console console = new Console();
 
         // print program title/header
-        console.title("<-- Observer/Controller Robot-Control -->", "Example");
+        console.title("<-- Observer/Controller Robot-Control -->", "I2C Example");
 
         // allow for user to exit program using CTRL-C
         console.promptForExit();
@@ -69,19 +72,18 @@ public class Main {
                 TimeUnit.MILLISECONDS
         );
 
-
-        ObjectGrid grid = new ObjectGrid(20, 20);
-
-        // define the arduino which is connected using I2C
         final QueuedDeviceConnector arduino = (argSet.contains("simulate") || argSet.contains("simulation"))
                 ?
+                // define a simulated version of the arduino in a discrete grid environment
                 new DiscreteSimulatedRobot(
                         ArduinoMessageTypes.ENCODING,
                         schedule,
                         printer.inFlow(),
                         UpdateRequestMessage::new,
-                        grid
+                        new ObjectGrid(20, 20)
                 ) :
+
+                // define the arduino which is connected using I2C
                 new I2CConnector(
                         32,
                         1,
@@ -104,8 +106,9 @@ public class Main {
                         console.println(lastMessage.toString());
                         continue;
                     }
-                    // send the read command as a message to the arduino
-                    // with a fixed speed of 20
+                    // send the read command as a driving command to the arduino,
+                    // with the driving direction specified by the read character
+                    // with a fixed speed of 20 mmps
                     arduino.inFlow().accept(new SpeedCmdMessage(first, 20));
                 } catch (Exception e) {
                     e.printStackTrace();
