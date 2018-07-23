@@ -7,10 +7,135 @@
   <groupId>de.unia.oc.robotcontrol</groupId>
   <artifactId>unia-oc-robotcontrol</artifactId>
   <version>1.0-SNAPSHOT</version>
+
   <packaging>pom</packaging>
+
   <modules>
     <module>abstract</module>
     <module>implementation</module>
     <module>examples</module>
   </modules>
+
+  <properties>
+    <usedJdkVersion>8</usedJdkVersion>
+    <junitVersion>5.1.0</junitVersion>
+
+    <checkerFrameworkVersion>2.5.3</checkerFrameworkVersion>
+    <!-- These properties will be set by the Maven Dependency plugin -->
+    <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
+  </properties>
+
+  <!-- Dependencies that are used for all modules -->
+  <dependencies>
+    <!-- Checker Framework. https://checkerframework.org/manual/#maven -->
+    <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>checker-qual</artifactId>
+      <version>${checkerFrameworkVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>jdk8</artifactId>
+      <version>${checkerFrameworkVersion}</version>
+    </dependency>
+    <!-- Test scope -->
+    <!-- Include junit for all projects -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junitVersion}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>true</createDependencyReducedPom>
+              <dependencyReducedPomLocation>
+                ${java.io.tmpdir}/dependency-reduced-pom.xml
+              </dependencyReducedPomLocation>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.19.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junitVersion}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- These plugins are necessary for the checker framework to hook into the compiler -->
+      <!-- Modified version from the instructions at https://checkerframework.org/manual/#maven -->
+      <plugin>
+          <!-- This plugin will set properties values using dependency information -->
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <executions>
+              <execution>
+                  <goals>
+                      <goal>properties</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin>
+
+      <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.6.1</version>
+          <configuration>
+              <source>${usedJdkVersion}</source>
+              <target>${usedJdkVersion}</target>
+              <compilerArguments>
+                  <Xmaxerrs>10000</Xmaxerrs>
+                  <Xmaxwarns>10000</Xmaxwarns>
+              </compilerArguments>
+              <annotationProcessorPaths>
+                  <path>
+                      <groupId>org.checkerframework</groupId>
+                      <artifactId>checker</artifactId>
+                      <version>${checkerFrameworkVersion}</version>
+                  </path>
+              </annotationProcessorPaths>
+              <annotationProcessors>
+                  <!-- Add all the checkers you want to enable here -->
+                  <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+              </annotationProcessors>
+              <compilerArgs>
+                  <arg>-AprintErrorStack</arg>
+                  <!-- location of the annotated JDK, which comes from a Maven dependency -->
+                  <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
+                  <!-- Uncomment the following line to turn type-checking warnings into errors. -->
+                  <!-- <arg>-Awarns</arg> -->
+              </compilerArgs>
+          </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
 </project>
