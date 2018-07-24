@@ -1,5 +1,8 @@
 package de.unia.oc.robotcontrol.concurrent;
 
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,14 +15,20 @@ public interface ScheduleProvider {
      * Add a task that should be scheduled to the Schedule
      * @param runnable The task to schedule
      */
-    void submit(Runnable runnable);
+    void submit(@NonNull Runnable runnable);
 
     /**
      * Add an instance of {@link Schedulable} to the Schedule
      * @param schedulable The thing to schedule
      */
-    default void submit(Schedulable schedulable) {
-        submit(schedulable.getTask());
+    default boolean submit(@NonNull Schedulable schedulable) {
+        if (schedulable.isScheduled()) {
+            Runnable task = schedulable.getTask();
+            if (task == null) return false;
+            submit(task);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -32,7 +41,7 @@ public interface ScheduleProvider {
      * @param delay the unitless interval / delay between executions of a task
      * @param unit the time unit to be used for the {@param delay}
      */
-    void reschedule(int capacity, long delay, TimeUnit unit);
+    void reschedule(@Positive int capacity, @Positive long delay, @NonNull TimeUnit unit);
 
     /**
      * Change the schedule (interval /delay) that the tasks
@@ -41,12 +50,12 @@ public interface ScheduleProvider {
      * @param delay the unitless interval / delay between executions of a task
      * @param unit the time unit to be used for the {@param delay}
      */
-    void reschedule(long delay, TimeUnit unit);
+    void reschedule(@Positive long delay, @NonNull TimeUnit unit);
 
     /**
      * Get the currently set delay / interval (unitless)
      */
-    long getDelay();
+    @Positive long getDelay();
 
     /**
      * Get current the {@link TimeUnit} which defines the unit
@@ -74,7 +83,7 @@ public interface ScheduleProvider {
      * @return {@code true} if everything terminated orderly
      *         {@code false} if the timeout ran out before
      */
-    boolean terminate(long delay, TimeUnit unit) throws InterruptedException;
+    boolean terminate(@Positive long delay, @NonNull TimeUnit unit) throws InterruptedException;
 
     /**
      * Terminate this schedule. Do not wait until all tasks are completed.

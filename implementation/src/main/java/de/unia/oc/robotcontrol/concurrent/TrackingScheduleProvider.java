@@ -1,6 +1,13 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.concurrent;
 
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -10,22 +17,28 @@ import java.util.concurrent.TimeUnit;
 
 final class TrackingScheduleProvider implements ScheduleProvider {
 
-    private ScheduledExecutorService exec;
-    private TaskMode taskMode;
-    private long delay;
-    private TimeUnit unit;
+    private @NonNull ScheduledExecutorService exec;
+    private @NonNull TaskMode taskMode;
+    private @Positive long delay;
+    private @NonNull TimeUnit unit;
 
-    private List<Runnable> attachedTasks;
+    private @NonNull List<Runnable> attachedTasks;
 
-    private TrackingScheduleProvider(ScheduledExecutorService exec, TaskMode taskMode, long delay, TimeUnit unit, List<Runnable> tasks) {
+    private TrackingScheduleProvider(ScheduledExecutorService exec, TaskMode taskMode, @Positive long delay, TimeUnit unit, List<Runnable> tasks) {
         initialize(exec, taskMode, delay, unit, tasks);
     }
 
-    TrackingScheduleProvider(ScheduledExecutorService exec, TaskMode taskMode, long delay, TimeUnit unit) {
+    TrackingScheduleProvider(ScheduledExecutorService exec, TaskMode taskMode, @Positive long delay, TimeUnit unit) {
         this(exec, taskMode, delay, unit, new ArrayList<>());
     }
 
-    private synchronized void initialize(ScheduledExecutorService exec, TaskMode taskMode, long delay, TimeUnit unit, List<Runnable> tasks) {
+    @EnsuresNonNull({"this.exec", "this.taskMode", "this.delay", "this.unit", "this.attachedTasks"})
+    private synchronized void initialize(@UnknownInitialization TrackingScheduleProvider this,
+                                         ScheduledExecutorService exec,
+                                         TaskMode taskMode,
+                                         @Positive long delay,
+                                         TimeUnit unit,
+                                         List<Runnable> tasks) {
         this.exec = exec;
         this.taskMode = taskMode;
         this.delay = delay;
@@ -34,13 +47,17 @@ final class TrackingScheduleProvider implements ScheduleProvider {
         submitInitial();
     }
 
-    private void submitInitial() {
+    @RequiresNonNull("this.attachedTasks")
+    private void submitInitial(@UnknownInitialization TrackingScheduleProvider this) {
         for (Runnable t : attachedTasks)  {
             this.submitNonTracking(t);
         }
     }
 
-    private ScheduledFuture<?> submitNonTracking(Runnable task) {
+    private @Nullable ScheduledFuture<?> submitNonTracking(@UnknownInitialization TrackingScheduleProvider this, Runnable task) {
+        if (this.taskMode == null || this.exec == null || this.unit == null) {
+            return null;
+        }
         switch(taskMode) {
             case DELAYED:
                 return exec.scheduleWithFixedDelay(task, 0, delay, unit);
@@ -60,12 +77,7 @@ final class TrackingScheduleProvider implements ScheduleProvider {
     }
 
     @Override
-    public void submit(Schedulable schedulable) {
-        submit(schedulable.getTask());
-    }
-
-    @Override
-    public synchronized void reschedule(int size, long newDelay, TimeUnit newUnit) {
+    public synchronized void reschedule(@Positive int size, @Positive long newDelay, TimeUnit newUnit) {
         int poolSize = size <= 0 ? this.attachedTasks.size() : size;
         ScheduledExecutorService newService = Executors.newScheduledThreadPool(poolSize);
         exec.shutdown();
@@ -74,12 +86,12 @@ final class TrackingScheduleProvider implements ScheduleProvider {
     }
 
     @Override
-    public synchronized void reschedule(long delay, TimeUnit unit) {
+    public synchronized void reschedule(@Positive long delay, TimeUnit unit) {
         reschedule(-1, delay, unit);
     }
 
     @Override
-    public long getDelay() {
+    public @Positive long getDelay() {
         return delay;
     }
 

@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.coding;
 
 import de.unia.oc.robotcontrol.util.Bijection;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.function.Supplier;
 
@@ -24,7 +25,7 @@ public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
     byte[] encode(T object) throws IllegalArgumentException;
 
     @Override
-    T decode(byte[] raw) throws IllegalArgumentException;
+    @NonNull T decode(byte[] raw) throws IllegalArgumentException;
 
     /**
      * Return an encoding of type {@link T}  with its context
@@ -48,7 +49,7 @@ public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
             }
 
             @Override
-            public T decode(byte[] raw) throws IllegalArgumentException {
+            public @NonNull T decode(byte[] raw) throws IllegalArgumentException {
                 return old.decode(raw);
             }
         };
@@ -68,13 +69,13 @@ public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
             }
 
             @Override
-            public R decode(byte[] raw) throws IllegalArgumentException {
+            public @NonNull R decode(byte[] raw) throws IllegalArgumentException {
                 return top.decode(bottom.decode(raw));
             }
         };
     }
 
-    static <T> Encoding<T> nullEncoding(CodingContext context, Supplier<T> supplier) {
+    static <T> Encoding<T> nullEncoding(CodingContext context, Supplier<@NonNull T> supplier) {
         return new Encoding<T>() {
 
             @Override
@@ -88,7 +89,7 @@ public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
             }
 
             @Override
-            public T decode(byte[] raw) throws IllegalArgumentException {
+            public @NonNull T decode(byte[] raw) throws IllegalArgumentException {
                 return supplier.get();
             }
         };

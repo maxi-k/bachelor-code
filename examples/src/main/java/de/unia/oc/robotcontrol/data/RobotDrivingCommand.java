@@ -1,6 +1,10 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.data;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Optional;
+
 public enum RobotDrivingCommand {
 
     FRONT('w'),
@@ -20,12 +24,12 @@ public enum RobotDrivingCommand {
         return identifier;
     }
 
-    public static RobotDrivingCommand fromIdentifier(char id) {
+    public static Optional<@NonNull RobotDrivingCommand> fromIdentifier(char id) {
         for (RobotDrivingCommand cmd : values()) {
             if (cmd.identifier == id)
-                return cmd;
+                return Optional.of(cmd);
         }
-        return null;
+        return Optional.empty();
     }
 
     public static boolean isIdentifier(char id) {

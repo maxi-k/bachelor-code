@@ -3,6 +3,7 @@ package de.unia.oc.robotcontrol.util;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Optional;
 
@@ -26,19 +27,19 @@ public class BidirectionalRegistry<K, V> implements Registry<K, V> {
     }
 
     @Override
-    public Optional<V> getValueFor(K key) {
+    public Optional<@NonNull V> getValueFor(K key) {
         synchronized(store) {
             return store.containsKey(key) ?
-                    Optional.of(store.get(key)) :
+                    Optional.ofNullable(store.get(key)) :
                     Optional.empty();
         }
     }
 
     @Override
-    public Optional<K> getKeyFor(V value) {
+    public Optional<@NonNull K> getKeyFor(V value) {
         synchronized(store) {
             return store.containsValue(value) ?
-                    Optional.of(store.inverse().get(value)) :
+                    Optional.ofNullable(store.inverse().get(value)) :
                     Optional.empty();
         }
     }

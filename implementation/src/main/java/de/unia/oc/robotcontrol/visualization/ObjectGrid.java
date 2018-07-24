@@ -4,13 +4,15 @@ package de.unia.oc.robotcontrol.visualization;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import de.unia.oc.robotcontrol.util.Tuple;
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class ObjectGrid implements Visualization<Component> {
 
@@ -66,32 +68,38 @@ public class ObjectGrid implements Visualization<Component> {
         return cellsX * cellsY;
     }
 
-    public int gridSizeX() {
+    @Pure
+    public @Positive int gridSizeX() {
         return cellsX;
     }
 
-    public int gridSizeY() {
+    @Pure
+    public @Positive int gridSizeY() {
         return cellsY;
     }
 
-    public GridObject getObjectAt(int x, int y) {
+    @Pure
+    public @Nullable GridObject getObjectAt(int x, int y) {
         return objects.get(x, y);
     }
 
-    public GridObject getNextObjectInDirection(int x, int y, GridDirection dir) {
+    @Pure
+    public @Nullable GridObject getNextObjectInDirection(int x, int y, GridDirection dir) {
         Tuple<Integer, Integer> nextCoords = Tuple.create(x, y);
         do {
            nextCoords = getNextCoordsFor(nextCoords, dir);
-           GridObject obj = nextCoords.joinWith(this::getObjectAt);
+           @Nullable GridObject obj = nextCoords.<@Nullable GridObject>joinWith(this::getObjectAt);
            if (obj != null) return obj;
         } while (nextCoords.joinWith(this::areCoordsInRange));
         return null;
     }
 
+    @Pure
     private Tuple<Integer, Integer> getNextCoordsFor(Tuple<Integer, Integer> xy, GridDirection dir) {
         return getNextCoordsFor(xy.first, xy.second, dir);
     }
 
+    @Pure
     private Tuple<Integer, Integer> getNextCoordsFor(int x, int y, GridDirection dir) {
         switch(dir) {
             case UP:
@@ -125,6 +133,7 @@ public class ObjectGrid implements Visualization<Component> {
         }
         try {
             GridObject o = this.objects.remove(x, y);
+            if (o == null) return false;
             o.setXY(newX, newY);
             this.objects.put(newX, newY, o);
         } catch (IllegalArgumentException e) {
@@ -143,7 +152,7 @@ public class ObjectGrid implements Visualization<Component> {
         return this.putAt(x, y, o);
     }
 
-    public synchronized Collection<GridObject> fillRandomly(int amount, Function<Integer, GridObject> factory) {
+    public synchronized Collection<GridObject> fillRandomly(@Positive int amount, Function<Integer, GridObject> factory) {
         checkGridHasSpace(amount);
         Set<GridObject> result = new HashSet<>(amount);
         for (int i = 0; i < amount; ++i) {
@@ -154,24 +163,27 @@ public class ObjectGrid implements Visualization<Component> {
         return result;
     }
 
-    public synchronized Collection<GridObject> fillPercentage(float percentage, Function<Integer, GridObject> factory) {
-        int amount = (int) (percentage * gridSize());
+    public synchronized Collection<GridObject> fillPercentage(@Positive float percentage, Function<Integer, GridObject> factory) {
+        int amount = Math.min((int) (percentage * gridSize()), gridSize());
         checkGridHasSpace(amount);
         return fillRandomly(amount, factory);
     }
 
+    @Pure
     private void checkInRange(int x, int y) throws IllegalArgumentException {
         if (x >= cellsX || y >= cellsY) {
             throw new IllegalArgumentException("Tried access or put GridObject outside of grid bounds!");
         }
     }
 
+    @Pure
     private void checkGridHasSpace(int amount) throws IllegalArgumentException {
         if (this.objects.values().size() + amount > gridSize()) {
             throw new IllegalArgumentException("Grid is too small for this many objects!");
         }
     }
 
+    @Pure
     private boolean areCoordsInRange(int x, int y) {
         return x >= 0 && x <= cellsX && y >= 0 && y <= cellsY;
     }

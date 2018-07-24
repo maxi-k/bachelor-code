@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.data.RobotDrivingCommand;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A message wrapping the command sent to an arduino used for
@@ -15,7 +16,7 @@ public class SpeedCmdMessage implements Message<SpeedCmdMessage> {
     private final int speed;
 
     public SpeedCmdMessage(char command, int speed) {
-        this.command = RobotDrivingCommand.fromIdentifier(command);
+        this.command = RobotDrivingCommand.fromIdentifier(command).orElseThrow(IllegalArgumentException::new);
         this.speed = speed;
     }
 
@@ -38,7 +39,7 @@ public class SpeedCmdMessage implements Message<SpeedCmdMessage> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (!(obj instanceof SpeedCmdMessage)) {
             return false;
         }

@@ -1,6 +1,8 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.util;
 
+import org.checkerframework.dataflow.qual.Pure;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -30,6 +32,7 @@ public final class Tuple<F, S> {
      * @param <N> the Type of the transformed element
      * @return A new Tuple of Type (N, S)
      */
+    @Pure
     public <N> Tuple<N, S> mapFirst(Function<F, N> fn) {
         return new Tuple<>(fn.apply(first), second);
     }
@@ -42,6 +45,7 @@ public final class Tuple<F, S> {
      * @param <N> the type of the transformed element
      * @return A new Tuple of type (N, S)
      */
+    @Pure
     public <N> Tuple<F, N> mapSecond(Function<S, N> fn) {
         return new Tuple<>(first, fn.apply(second));
     }
@@ -57,6 +61,7 @@ public final class Tuple<F, S> {
      * @param <NS> the type of the transformed second element
      * @return A new Tuple of type (NF, NS)
      */
+    @Pure
     public <NF, NS> Tuple<NF, NS> map(Function<F, NF> fn1, Function<S, NS> fn2) {
         return new Tuple<>(fn1.apply(first), fn2.apply(second));
     }
@@ -65,10 +70,11 @@ public final class Tuple<F, S> {
      * Returns a new arbitrary value by applying the given joiner
      * function to the tuple.
      * @param joiner the function to apply to the tuple
-     * @param <R> the type of the resulting element
+     * @param <N> the type of the resulting element
      * @return Some object returned by applying the joiner function to this tuple
      */
-    public <R> R joinWith(Function<Tuple<F, S>, R> joiner) {
+    @Pure
+    public <N> N joinWith(Function<Tuple<F, S>, N> joiner) {
         return joiner.apply(this);
     }
 
@@ -79,8 +85,9 @@ public final class Tuple<F, S> {
      * @param <R> the type of the resulting element
      * @return Some object returned by applying the joiner function to the values of this tuple
      */
+    @Pure
     public <R> R joinWith(BiFunction<F, S, R> joiner) {
-        return joiner.apply(first, second) ;
+        return joiner.apply(first, second);
     }
 
     /**
@@ -94,6 +101,7 @@ public final class Tuple<F, S> {
      * @param <R> the type of the input element to be split
      * @return A tuple of type (F, S)
      */
+    @Pure
     public static <F, S, R> Tuple<F, S> split(R value, Function<R, Tuple<F, S>> splitter) {
         return splitter.apply(value);
     }
@@ -108,6 +116,7 @@ public final class Tuple<F, S> {
      * @param <S> the type of the second value of the resulting tuple
      * @return A new tuple of type (F, S)
      */
+    @Pure
     public static <F, S> Tuple<F, S> create(F first, S second) {
         return new Tuple<>(first, second);
     }

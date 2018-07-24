@@ -1,6 +1,8 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.Optional;
 
 /**
@@ -28,7 +30,7 @@ public interface Registry<K, V> {
      * @param key the key to look up
      * @return An Optional that wraps the retrieved value
      */
-    Optional<V> getValueFor(K key);
+    Optional<@NonNull V> getValueFor(K key);
 
     /**
      * Get the key for the given value,
@@ -37,7 +39,7 @@ public interface Registry<K, V> {
      * @param value the value to look up the key for
      * @return An Optional that wraps the retrieved value
      */
-    Optional<K> getKeyFor(V value);
+    Optional<@NonNull K> getKeyFor(V value);
 
     /**
      * Return a bijection that wraps this registry where

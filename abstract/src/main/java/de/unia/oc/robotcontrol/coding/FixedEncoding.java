@@ -3,6 +3,9 @@ package de.unia.oc.robotcontrol.coding;
 
 import de.unia.oc.robotcontrol.util.Bijection;
 import de.unia.oc.robotcontrol.util.Tuple;
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.NullnessUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface FixedEncoding<T> extends Encoding<T> {
 
@@ -10,12 +13,12 @@ public interface FixedEncoding<T> extends Encoding<T> {
      *
      * @return The number of bytes this Encoding needs.
      */
-    int numBytes();
+    @Positive int numBytes();
 
     default <R> FixedEncoding<R> fromEncoding(Encoding<R> encoding, int numBytes) {
         return new FixedEncoding<R>() {
             @Override
-            public int numBytes() {
+            public @Positive int numBytes() {
                 return numBytes;
             }
 
@@ -30,7 +33,7 @@ public interface FixedEncoding<T> extends Encoding<T> {
             }
 
             @Override
-            public R decode(byte[] raw) throws IllegalArgumentException {
+            public @NonNull R decode(byte[] raw) throws IllegalArgumentException {
                 return encoding.decode(raw);
             }
         };
@@ -41,7 +44,7 @@ public interface FixedEncoding<T> extends Encoding<T> {
         FixedEncoding<T> self = this;
         return new FixedEncoding<T>() {
             @Override
-            public int numBytes() {
+            public @Positive int numBytes() {
                 return self.numBytes();
             }
 
@@ -56,7 +59,7 @@ public interface FixedEncoding<T> extends Encoding<T> {
             }
 
             @Override
-            public T decode(byte[] raw) throws IllegalArgumentException {
+            public @NonNull T decode(byte[] raw) throws IllegalArgumentException {
                 return self.decode(raw);
             }
         };
@@ -84,7 +87,7 @@ public interface FixedEncoding<T> extends Encoding<T> {
         return new FixedEncoding<R>() {
 
             @Override
-            public int numBytes() {
+            public @Positive int numBytes() {
                 return first.numBytes() + second.numBytes();
             }
 
@@ -107,11 +110,14 @@ public interface FixedEncoding<T> extends Encoding<T> {
             }
 
             @Override
-            public R decode(byte[] raw) throws IllegalArgumentException {
-                return CodingUtil
-                        .splitAt(raw, first.numBytes())
-                        .map(first::decode, second::decode)
-                        .joinWith(joiner::decode);
+            // TODO: Find out why checker-framework requires casting here
+            public @NonNull R decode(byte[] raw) throws IllegalArgumentException {
+                return NullnessUtil.castNonNull(
+                        CodingUtil
+                                .splitAt(raw, first.numBytes())
+                                .map(first::decode, second::decode)
+                                .joinWith(joiner::decode)
+                );
             }
         };
     }

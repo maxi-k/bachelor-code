@@ -1,6 +1,8 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.function.Function;
 
 /**
@@ -24,7 +26,7 @@ public interface Bijection<T, F> {
      * @throws IllegalArgumentException if the object is not transformable
      * or a valid target for encoding (for example, {@code null}).
      */
-    F encode(T object) throws IllegalArgumentException;
+    @NonNull F encode(T object) throws IllegalArgumentException;
 
     /**
      * Transforms the given object of type {@link F} into
@@ -34,21 +36,21 @@ public interface Bijection<T, F> {
      * @throws IllegalArgumentException if the object is not transformable
      * or a valid target for decoding (for example, {@code null}).
      */
-    T decode(F raw) throws IllegalArgumentException;
+    @NonNull T decode(F raw) throws IllegalArgumentException;
 
     /**
      * Utility function that returns the {@link #encode} method as an
      * instance of the {@link java.util.function.Function} interface
      * @return The encoding function
      */
-    default Function<T, F> encoder() { return this::encode; }
+    default Function<T, @NonNull F> encoder() { return this::encode; }
 
     /**
      * Utility function that returns the {@link #decode} method as an
      * instance of the {@link java.util.function.Function} interface
      * @return The decoding function
      */
-    default Function<F, T> decoder() { return this::decode; }
+    default Function<F, @NonNull T> decoder() { return this::decode; }
 
     /**
      * Builds a new {@link Bijection} interface that uses
@@ -113,16 +115,16 @@ public interface Bijection<T, F> {
      * @return A new instance of {@link Bijection} (A <-> B)
      */
     static <A, B> Bijection<A, B> create(
-            Function<A, B> encoder,
-            Function<B, A> decoder) {
+            Function<A, @NonNull B> encoder,
+            Function<B, @NonNull A> decoder) {
         return new Bijection<A, B>() {
             @Override
-            public B encode(A object) throws IllegalArgumentException {
+            public @NonNull B encode(A object) throws IllegalArgumentException {
                 return encoder.apply(object);
             }
 
             @Override
-            public A decode(B raw) throws IllegalArgumentException {
+            public @NonNull A decode(B raw) throws IllegalArgumentException {
                 return decoder.apply(raw);
             }
         };

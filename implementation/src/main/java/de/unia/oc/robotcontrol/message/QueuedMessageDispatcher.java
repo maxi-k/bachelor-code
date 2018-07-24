@@ -6,6 +6,7 @@ import de.unia.oc.robotcontrol.flow.InFlows;
 import de.unia.oc.robotcontrol.flow.OutFlows;
 import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.util.BidirectionalRegistry;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class QueuedMessageDispatcher<T extends Message<T>>
     private final Executor executor;
     private final Map<Consumer<T>, Queue<T>> dispatchQueue;
 
+    @SuppressWarnings("initialization")
     public QueuedMessageDispatcher(Executor executor) {
         this.executor = executor;
         this.dispatchQueue = new HashMap<>();
@@ -69,7 +71,7 @@ public class QueuedMessageDispatcher<T extends Message<T>>
         }
     }
 
-    private T popNextItemFor(Consumer<T> recipient) {
+    private @Nullable T popNextItemFor(Consumer<T> recipient) {
         try {
             return this.getQueueFor(recipient).remove();
         } catch (NoSuchElementException e) {
