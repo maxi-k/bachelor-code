@@ -1,6 +1,8 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * A message wrapping the distance data from the
  * three arduino ultrasound sensors (x, y, z).
@@ -35,7 +37,7 @@ public class DistanceDataMessage implements Message<DistanceDataMessage> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (!(obj instanceof DistanceDataMessage)) {
             return false;
         }

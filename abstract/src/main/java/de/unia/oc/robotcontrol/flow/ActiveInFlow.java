@@ -1,6 +1,7 @@
 package de.unia.oc.robotcontrol.flow;
 
 import de.unia.oc.robotcontrol.concurrent.Schedulable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.Supplier;
 
@@ -18,4 +19,6 @@ public interface ActiveInFlow<T> extends InFlow<Supplier<OutFlow<T>>> {
         return PressureType.ACTIVE;
     }
 
+    @Override
+    @Nullable Runnable getTask();
 }

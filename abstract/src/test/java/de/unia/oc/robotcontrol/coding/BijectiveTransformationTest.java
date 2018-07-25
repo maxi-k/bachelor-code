@@ -39,25 +39,13 @@ class BijectiveTransformationTest {
 
         transforms.add(bottom.stack(top));
         transforms.add(top.supplement(bottom));
-        transforms.add(bottom.stack(top).wrap(makeIdentity('a'), makeIdentity("a")));
-        transforms.add(top.supplement(bottom).wrap(makeIdentity('a'), makeIdentity("a")));
-        transforms.add(makeIdentity(65).wrap(top, bottom));
+        transforms.add(bottom.stack(top).wrap(Bijection.identity(), Bijection.identity()));
+        transforms.add(top.supplement(bottom).wrap(Bijection.identity(), Bijection.identity()));
+        transforms.add(Bijection.<Integer>identity().wrap(top, bottom));
 
         for (Bijection<Character, String> whole : transforms) {
             assertEquals(testString, whole.encode(testChar));
             assertEquals(testChar, whole.decode(testString).charValue());
         }
     }
-
-    /**
-     * Returns an Bijection instance that does nothing. Requires unused type-parameter
-     * to prevent type erasure in call cases.
-     */
-    private <A> Bijection<A, A> makeIdentity(A type) {
-        return Bijection.create(
-                (A a)  -> a,
-                (A a) -> a
-        );
-    }
-
 }

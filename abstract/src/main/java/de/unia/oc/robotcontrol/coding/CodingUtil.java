@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.coding;
 
 import de.unia.oc.robotcontrol.util.Tuple;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Utility class that Encodings may use.
@@ -28,6 +29,7 @@ public class CodingUtil {
      * @param pos The position to split at
      * @return A tuple with the split array
      */
+    @Pure
     public static Tuple<byte[], byte[]> splitAt(byte[] input, int pos) {
         byte[] first = new byte[pos];
         byte[] rest = new byte[input.length - pos];
@@ -42,6 +44,7 @@ public class CodingUtil {
      * @param second The second part of the array
      * @return A joined array of both
      */
+    @Pure
     public static byte[] join(byte[] first, byte[] second) {
         byte[] combined = new byte[first.length + second.length];
         System.arraycopy(first, 0, combined, 0, first.length);

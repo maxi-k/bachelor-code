@@ -11,10 +11,11 @@ import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.message.SpeedCmdMessage;
 import de.unia.oc.robotcontrol.util.Tuple;
 import de.unia.oc.robotcontrol.visualization.*;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static de.unia.oc.robotcontrol.visualization.GridDirection.LEFT;
@@ -40,7 +41,8 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
         setupVisualization();
     }
 
-    private void setupVisualization() {
+    @RequiresNonNull({"this.simulationEnvironment", "this.robot", "this.window"})
+    private void setupVisualization(@UnderInitialization DiscreteSimulatedRobot this) {
         simulationEnvironment.fillPercentage(0.2f, (i) -> new GridObject());
         simulationEnvironment.putRandomly(new TargetGridObject());
         simulationEnvironment.putRandomly(robot);

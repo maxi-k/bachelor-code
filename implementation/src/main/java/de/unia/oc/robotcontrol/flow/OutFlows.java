@@ -2,6 +2,8 @@ package de.unia.oc.robotcontrol.flow;
 
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import io.reactivex.Observable;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
@@ -25,12 +27,7 @@ public final class OutFlows {
         return new ActiveOutFlow<T>() {
 
             @Override
-            public boolean isScheduled() {
-                return false;
-            }
-
-            @Override
-            public Runnable getTask() {
+            public @Nullable Runnable getTask() {
                 return null;
             }
 
@@ -46,13 +43,9 @@ public final class OutFlows {
         Consumer<InFlow<T>> pusher = (i) -> e.execute(() -> i.accept(s.apply(i)));
 
         return new ActiveOutFlow<T>() {
-            @Override
-            public boolean isScheduled() {
-                return false;
-            }
 
             @Override
-            public Runnable getTask() {
+            public @Nullable Runnable getTask() {
                 return null;
             }
 
@@ -75,6 +68,7 @@ public final class OutFlows {
             }
 
             @Override
+            @Pure
             public Runnable getTask() {
                 return () -> get().accept(next);
             }

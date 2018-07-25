@@ -1,19 +1,25 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.visualization;
 
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class VisualizingWindow {
 
-    private final Visualization<Component> toVisualize;
-    private volatile JFrame frame;
+    private final @NonNull Visualization<Component> toVisualize;
+    private volatile @Nullable JFrame frame;
 
-    public VisualizingWindow(Visualization<Component> v) {
+    @EnsuresNonNull({"toVisualize"})
+    public VisualizingWindow(@NonNull Visualization<Component> v) {
         this.toVisualize = v;
     }
 
-    public void setup() {
+    @EnsuresNonNull("frame")
+    public synchronized void setup() {
         JPanel mainPanel = new VisualizingPanel(toVisualize);
 
         JFrame frame = new JFrame("DrawRect");
@@ -27,11 +33,10 @@ public class VisualizingWindow {
     }
 
     public synchronized void update() {
-        try {
+        // frame maybe null if setup() was not called yet
+        // or frame has not been synchronized
+        if (this.frame != null) {
             this.frame.repaint();
-        } catch (NullPointerException e) {
-            // frame is not available yet (in this thread),
-            // which is ok
         }
     }
 }

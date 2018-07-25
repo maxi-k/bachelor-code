@@ -9,6 +9,7 @@ import de.unia.oc.robotcontrol.device.I2CConnector;
 import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
 import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    private static volatile Message lastMessage = null;
+    private static volatile @Nullable Message lastMessage = null;
     /**
      * Control the arduino using
      * - w (forward)
@@ -103,7 +104,7 @@ public class Main {
                     char first = read.charAt(0);
                     if (first == 'q') break;
                     if (first == 'p') {
-                        console.println(lastMessage.toString());
+                        console.println(lastMessage != null ? lastMessage.toString() : "No last Message");
                         continue;
                     }
                     // send the read command as a driving command to the arduino,

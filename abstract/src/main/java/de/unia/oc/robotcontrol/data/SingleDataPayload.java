@@ -24,7 +24,9 @@ public abstract class SingleDataPayload<T> implements DataPayload<T> {
 
     @Override
     public String toString() {
-        return getData().toString() + " @ " + Instant.ofEpochSecond(timestamp).toString();
+        T data =  getData();
+        String time = Instant.ofEpochSecond(timestamp).toString();
+        return data == null ? "null @ " + time : data.toString() + " @ " + time;
     }
 
 }

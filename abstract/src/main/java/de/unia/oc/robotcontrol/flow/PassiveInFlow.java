@@ -1,5 +1,7 @@
 package de.unia.oc.robotcontrol.flow;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Describes a passive {@link InFlow} that is also not
  * scheduled, as it only accepts items.
@@ -13,12 +15,7 @@ public interface PassiveInFlow<T> extends InFlow<T> {
     }
 
     @Override
-    default boolean isScheduled() {
-        return false;
-    }
-
-    @Override
-    default Runnable getTask() {
+    default @Nullable Runnable getTask() {
         return null;
     }
 

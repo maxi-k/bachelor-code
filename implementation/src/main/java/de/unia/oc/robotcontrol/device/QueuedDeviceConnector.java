@@ -9,6 +9,7 @@ import de.unia.oc.robotcontrol.flow.OutFlows;
 import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.ErrorMessage;
 import de.unia.oc.robotcontrol.message.Message;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
 import java.io.IOException;
 import java.util.Queue;
@@ -25,6 +26,8 @@ public abstract class QueuedDeviceConnector implements Device<Message> {
     protected final PassiveInFlow<Message> next;
     protected final Supplier<Message> updateRequestMessageProvider;
 
+    @EnsuresNonNull({"this.messageQueue", "this.encoding", "this.next", "this.updateRequestMessageProvider", "this.inFlow", "this.outFlow"})
+    @SuppressWarnings("initialization")
     public QueuedDeviceConnector(Encoding<Message> encoding,
                        ScheduleProvider schedule,
                        PassiveInFlow<Message> next,

@@ -10,6 +10,7 @@
         <artifactId>unia-oc-robotcontrol</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <dependencies>
         <dependency>
             <groupId>com.pi4j</groupId>
@@ -31,13 +32,6 @@
             <artifactId>unia-oc-robotcontrol-implementation</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- Test scope -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.1.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -45,6 +39,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -54,52 +49,7 @@
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>true</createDependencyReducedPom>
-                            <dependencyReducedPomLocation>
-                                ${java.io.tmpdir}/dependency-reduced-pom.xml
-                            </dependencyReducedPomLocation>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.1.0</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>5.1.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
-
 
 </project>

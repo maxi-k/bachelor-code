@@ -7,7 +7,9 @@ import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
 import de.unia.oc.robotcontrol.flow.InFlows;
 import de.unia.oc.robotcontrol.flow.OutFlows;
 import de.unia.oc.robotcontrol.flow.PassiveInFlow;
+import de.unia.oc.robotcontrol.message.ErrorMessage;
 import de.unia.oc.robotcontrol.message.Message;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * Mock Device which echoes the bytes it received back.
@@ -17,10 +19,11 @@ public class MockDeviceConnector implements Device<Message> {
     private final PassiveInFlow<Message> inFlow;
     private final ActiveOutFlow<Message> outFlow;
 
-    private byte[] mockMessage;
+    private byte @MonotonicNonNull [] mockMessage;
     private final Encoding<Message> encoding;
     private final PassiveInFlow<Message> next;
 
+    @SuppressWarnings("initialization")
     public MockDeviceConnector(Encoding<Message> encoding,
                                ScheduleProvider schedule,
                                PassiveInFlow<Message> next) {
@@ -45,6 +48,7 @@ public class MockDeviceConnector implements Device<Message> {
     }
 
     private Message getAnswer() {
+        if (mockMessage == null) return new ErrorMessage(new NullPointerException("No Message received yet."));
         return this.encoding.decode(mockMessage.clone());
     }
 

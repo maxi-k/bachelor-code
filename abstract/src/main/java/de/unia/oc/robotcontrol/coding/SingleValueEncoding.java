@@ -1,6 +1,9 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.coding;
 
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -32,7 +35,7 @@ public abstract class SingleValueEncoding<T> implements FixedEncoding<T> {
      *         use if encoded for the machine this is running on
      *         ({@link CodingContext#NATIVE}).
      */
-    protected abstract int nativeByteCount();
+    protected abstract @Positive int nativeByteCount();
 
     /**
      * Puts the given object into a {@link ByteBuffer},
@@ -43,7 +46,7 @@ public abstract class SingleValueEncoding<T> implements FixedEncoding<T> {
      * @return A byte buffer with the contents of the given one, with the
      *         given object added to it.
      */
-    protected abstract ByteBuffer intoByteBuffer(ByteBuffer buffer, T object);
+    protected abstract ByteBuffer intoByteBuffer(ByteBuffer buffer, @NonNull T object);
 
     /**
      * Extracts an the object to be decoded out of the given byte buffer.
@@ -52,7 +55,7 @@ public abstract class SingleValueEncoding<T> implements FixedEncoding<T> {
      * @return An instance of an object of type {@link T}, extracted out of
      *         the byte buffer.
      */
-    protected abstract T fromByteBuffer(ByteBuffer buffer);
+    protected abstract @NonNull T fromByteBuffer(ByteBuffer buffer);
 
     @Override
     public CodingContext getContext() {
@@ -60,7 +63,8 @@ public abstract class SingleValueEncoding<T> implements FixedEncoding<T> {
     }
 
     @Override
-    public T decode(byte[] raw) throws IllegalArgumentException {
+    public @NonNull T decode(byte[] raw) throws IllegalArgumentException {
+        if (raw == null) { throw new IllegalArgumentException("Passed bytes were null!"); }
         if (getContext().doReverse()) { CodingUtil.reverseBytes(raw); }
         byte[] nativeSize = Arrays.copyOf(raw, this.nativeByteCount());
         return fromByteBuffer(
@@ -70,7 +74,8 @@ public abstract class SingleValueEncoding<T> implements FixedEncoding<T> {
     }
 
     @Override
-    public byte[] encode(T object) {
+    public @NonNull byte[] encode(T object) {
+        if (object == null) { throw new IllegalArgumentException("Passed object was null!"); }
         byte[] whole = intoByteBuffer(
                 ByteBuffer
                         .allocate(nativeByteCount())
