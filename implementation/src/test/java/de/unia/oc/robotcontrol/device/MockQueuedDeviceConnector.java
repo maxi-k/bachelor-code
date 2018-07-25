@@ -5,7 +5,9 @@ import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.Message;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+import java.io.IOException;
 import java.util.function.Supplier;
 
 /**
@@ -13,7 +15,7 @@ import java.util.function.Supplier;
  */
 public class MockQueuedDeviceConnector extends QueuedDeviceConnector {
 
-    private byte[] mockMessage;
+    private byte @MonotonicNonNull [] mockMessage;
 
     public MockQueuedDeviceConnector(Encoding<Message> encoding,
                                      ScheduleProvider schedule,
@@ -28,7 +30,8 @@ public class MockQueuedDeviceConnector extends QueuedDeviceConnector {
     }
 
     @Override
-    protected byte[] retrieveMessage() {
+    protected byte[] retrieveMessage() throws IOException {
+        if (mockMessage == null) throw new IOException("No Message received that mock device could answer.");
         return mockMessage.clone();
     }
 
