@@ -15,9 +15,8 @@ import org.checkerframework.dataflow.qual.Pure;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-public abstract class QLearningController<I, O> implements Controller {
+public abstract class QLearningController<I, M extends ObservationModel<I>, O> implements Controller<I, M, O> {
 
     private final Table<String, O, Double> qMatrix;
     private final List<@NonNull O> possibleActions;
@@ -39,7 +38,7 @@ public abstract class QLearningController<I, O> implements Controller {
 
     @RequiresNonNull("this.qMatrix")
     @EnsuresNonNull({"this.lastWorldState", "this.lastAction"})
-    private void applyWorldUpdate(@NonNull I worldState) {
+    private synchronized void applyWorldUpdate(@NonNull I worldState) {
         String encoded = encodeState(worldState);
         Tuple<@NonNull O, @NonNull Double> bestAction = getBestActionFor(qMatrix.row(encoded));
 
@@ -57,7 +56,7 @@ public abstract class QLearningController<I, O> implements Controller {
         this.lastAction = bestAction.first;
     }
 
-    private @NonNull O chooseAction() {
+    private synchronized @NonNull O chooseAction() {
         if (lastWorldState == null || Math.random() < getExploreFactor()) {
             return chooseRandomAction();
         }
@@ -83,21 +82,21 @@ public abstract class QLearningController<I, O> implements Controller {
     }
 
     private @NonNull O chooseRandomAction() {
-        return this.possibleActions.get((int) (Math.random() * this.possibleActions.size()));
+        synchronized (this.possibleActions) {
+            return this.possibleActions.get((int) (Math.random() * this.possibleActions.size()));
+        }
     }
 
     private double getOrDefault(@Nullable I worldState, @Nullable O action) {
         if (worldState == null || action == null) return getDefaultReward();
-        Double val = qMatrix.get(encodeState(worldState), action);
-        return val == null ? getDefaultReward() : val;
+        synchronized (this.qMatrix) {
+            Double val = qMatrix.get(encodeState(worldState), action);
+            return val == null ? getDefaultReward() : val;
+        }
     }
 
     @Pure
     protected abstract String encodeState(@NonNull I state);
-
-    @Pure
-    @Constant
-    protected abstract Set<@NonNull O> getPossibleActions();
 
     @Pure
     @Constant

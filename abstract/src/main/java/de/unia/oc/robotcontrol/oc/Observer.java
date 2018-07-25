@@ -1,7 +1,6 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.oc;
 
-import de.unia.oc.robotcontrol.data.DataPayload;
 import de.unia.oc.robotcontrol.flow.InFlowElement;
 import de.unia.oc.robotcontrol.flow.OutFlowElement;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -11,7 +10,7 @@ public interface Observer<@NonNull T, M extends @NonNull ObservationModel<T>>
 
     M getObservationModel();
 
-    void setObservationModel();
+    void setObservationModel(M observationModel);
 
-    DataPayload<T> buildControllerState();
+    @NonNull T getModelState();
 }

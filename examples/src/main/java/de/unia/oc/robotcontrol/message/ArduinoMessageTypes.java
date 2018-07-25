@@ -25,7 +25,7 @@ public final class ArduinoMessageTypes {
                     Encodings.stack(
                             new ListEncoding<>(new IntegerEncoding(CONTEXT), 3),
                             Bijection.create(
-                                    (DistanceDataMessage msg) -> Arrays.asList( msg.getX(), msg.getY(), msg.getZ() ),
+                                    (DistanceDataMessage msg) -> Arrays.asList( msg.getFront(), msg.getRight(), msg.getLeft() ),
                                     (List<Integer> ints) -> new DistanceDataMessage(ints.get(0), ints.get(1), ints.get(2))
                             )
                     )
