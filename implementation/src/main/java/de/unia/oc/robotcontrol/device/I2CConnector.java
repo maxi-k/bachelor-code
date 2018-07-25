@@ -47,9 +47,6 @@ public class I2CConnector extends QueuedDeviceConnector {
             this.device = i2c.getDevice(DEVICE_ADDRESS);
             this.readBuffer = new byte[MAX_MESSAGE_SIZE];
         }
-
-        // System.out.println("Testing device!");
-        // pushMessage(encoding.encode(updateRequestMessageSupplier.get()));
     }
 
     @Override
