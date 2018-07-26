@@ -40,6 +40,7 @@ public class QueuedMessageDispatcher<T extends Message<T>>
     }
 
     @Override
+    // TODO: Figure out a way to generify
     public void dispatch(T msg) throws ItemNotRegisteredException {
         MessageType<T> type = msg.getType();
         MessageRecipient<T> recp = getValueFor(type).orElseThrow(ItemNotRegisteredException::new);

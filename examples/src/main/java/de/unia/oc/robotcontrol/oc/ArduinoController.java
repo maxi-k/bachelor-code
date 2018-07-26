@@ -16,6 +16,7 @@ import org.checkerframework.checker.signedness.qual.Constant;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +32,7 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
     public ArduinoController(PassiveInFlow<? super SpeedCmdMessage> next) {
         super();
         this.actuator = InFlows.createUnbuffered((RobotDrivingCommand msg) -> {
-                    System.out.println("Controller sent out driving command: " + msg);
+                    // System.out.println("Controller sent out driving command: " + msg);
                     next.accept(new SpeedCmdMessage(msg, DEFAULT_SPEED));
                 }
         );
@@ -70,7 +71,7 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
                 return -5;
             case ROTATE:
                 if (state.getFrontDist() <= minAcceptableDist) return 2;
-                return -2;
+                return -5;
             default:
                 return 0;
         }
@@ -89,8 +90,7 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
 
     @Override
     public @Constant Set<RobotDrivingCommand> getPossibleActions() {
-        Set<RobotDrivingCommand> result = Collections.emptySet();
-        result.addAll(Arrays.asList(RobotDrivingCommand.values()));
+        Set<RobotDrivingCommand> result = new HashSet<>(Arrays.asList(RobotDrivingCommand.values()));
         return Collections.unmodifiableSet(result);
     }
 

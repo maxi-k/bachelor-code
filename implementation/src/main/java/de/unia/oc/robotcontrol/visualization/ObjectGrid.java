@@ -132,6 +132,7 @@ public class ObjectGrid implements Visualization<Component> {
             return false;
         }
         try {
+            checkInRange(newX, newY);
             GridObject o = this.objects.remove(x, y);
             if (o == null) return false;
             o.setXY(newX, newY);
@@ -171,7 +172,7 @@ public class ObjectGrid implements Visualization<Component> {
 
     @Pure
     private void checkInRange(int x, int y) throws IllegalArgumentException {
-        if (x >= cellsX || y >= cellsY) {
+        if (x >= cellsX || y >= cellsY || x < 0 || y < 0) {
             throw new IllegalArgumentException("Tried access or put GridObject outside of grid bounds!");
         }
     }

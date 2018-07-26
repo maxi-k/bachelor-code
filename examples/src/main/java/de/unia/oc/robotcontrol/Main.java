@@ -16,7 +16,10 @@ import de.unia.oc.robotcontrol.visualization.ObjectGrid;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +69,10 @@ public class Main {
             lastMessage = msg;
         });
 
+        MessageDispatcher dispatcher = new QueuedMessageDispatcher<>();
+
+        dispatcher.register(ErrorMessage.errorMessageType, printer);
+
         // define a schedule for how often the raspberry pi should
         // ask for updates on the arduino
         final ScheduleProvider schedule = Scheduling.interval(
@@ -95,18 +102,21 @@ public class Main {
                         printer.inFlow(),
                         UpdateRequestMessage::new);
 
+        dispatcher.register(ArduinoMessageTypes.SPEED_CMD, arduino);
+
         if (argSet.contains("manual")) {
             setupManual(console, arduino, schedule);
         } else {
-            setupControlled(arduino);
+            setupControlled(arduino, dispatcher);
         }
 
     }
 
-    private static void setupControlled(QueuedDeviceConnector arduino) {
+    private static void setupControlled(QueuedDeviceConnector arduino, MessageDispatcher dispatcher) {
         final ArduinoController controller = new ArduinoController(arduino.inFlow());
         final ArduinoObserver<ObservationModel<ArduinoState>> observer = new ArduinoObserver<>(controller.getObservationModel());
         controller.setObserver(observer);
+        dispatcher.register(ArduinoMessageTypes.DISTANCE_DATA, observer);
     }
 
     private static void setupManual(Console console, QueuedDeviceConnector arduino, ScheduleProvider schedule) {
