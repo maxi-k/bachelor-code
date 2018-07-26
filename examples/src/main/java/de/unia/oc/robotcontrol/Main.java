@@ -8,6 +8,7 @@ import de.unia.oc.robotcontrol.data.ArduinoState;
 import de.unia.oc.robotcontrol.device.DiscreteSimulatedRobot;
 import de.unia.oc.robotcontrol.device.I2CConnector;
 import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
+import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.oc.ArduinoController;
 import de.unia.oc.robotcontrol.oc.ArduinoObserver;
@@ -66,12 +67,13 @@ public class Main {
             // console.print("Arduino: ");
             // console.print(msg.toString());
             // console.emptyLine();
+            System.out.println(msg);
             lastMessage = msg;
         });
 
         MessageDispatcher dispatcher = new QueuedMessageDispatcher<>();
 
-        dispatcher.register(ErrorMessage.errorMessageType, printer);
+        // dispatcher.register(ErrorMessage.errorMessageType, printer);
 
         // define a schedule for how often the raspberry pi should
         // ask for updates on the arduino
@@ -105,7 +107,7 @@ public class Main {
         dispatcher.register(ArduinoMessageTypes.SPEED_CMD, arduino);
 
         if (argSet.contains("manual")) {
-            setupManual(console, arduino, schedule);
+            setupManual(console, dispatcher, schedule, printer);
         } else {
             setupControlled(arduino, dispatcher);
         }
@@ -119,8 +121,10 @@ public class Main {
         dispatcher.register(ArduinoMessageTypes.DISTANCE_DATA, observer);
     }
 
-    private static void setupManual(Console console, QueuedDeviceConnector arduino, ScheduleProvider schedule) {
+    private static void setupManual(Console console, MessageDispatcher dispatcher,
+                                    ScheduleProvider schedule, MessageRecipient printer) {
         // read user commands and send them to the arduino constantly
+        dispatcher.register(ArduinoMessageTypes.DISTANCE_DATA, printer);
         console.println("Press 'q' to stop, p to print the last received message");
         try (Scanner reader = new Scanner(System.in)) {
             while (true) {
@@ -136,7 +140,7 @@ public class Main {
                     // send the read command as a driving command to the arduino,
                     // with the driving direction specified by the read character
                     // with a fixed speed of 20 mmps
-                    arduino.inFlow().accept(new SpeedCmdMessage(first, 20));
+                    ((PassiveInFlow<Message>) dispatcher.inFlow()).accept(new SpeedCmdMessage(first, 20));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

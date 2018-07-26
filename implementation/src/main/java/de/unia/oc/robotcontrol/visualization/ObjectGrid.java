@@ -95,6 +95,17 @@ public class ObjectGrid implements Visualization<Component> {
     }
 
     @Pure
+    public boolean isOnEdge(int x, int y, GridDirection dir) {
+        switch(dir) {
+            case UP: return y >= gridSizeY();
+            case RIGHT: return x >= gridSizeX();
+            case DOWN: return y == 0;
+            case LEFT: return x == 0;
+            default: return false;
+        }
+    }
+
+    @Pure
     private Tuple<Integer, Integer> getNextCoordsFor(Tuple<Integer, Integer> xy, GridDirection dir) {
         return getNextCoordsFor(xy.first, xy.second, dir);
     }
