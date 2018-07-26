@@ -30,6 +30,9 @@ public interface CodingContext {
         }
 
         @Override
+        public int getLongSize() { return Long.BYTES; }
+
+        @Override
         public int getDoubleSize() { return Double.BYTES; }
 
         @Override
@@ -52,6 +55,9 @@ public interface CodingContext {
 
         @Override
         public int getShortSize() { return 2; }
+
+        @Override
+        public int getLongSize() { return 4; }
 
         @Override
         public int getDoubleSize() { return 4; }
@@ -80,6 +86,12 @@ public interface CodingContext {
      * @return The short size of the platform (in bytes).
      */
     int getShortSize();
+
+    /**
+     * How many bytes make one {@link Long}?
+     * @return The long size of the platform (in bytes).
+     */
+    int getLongSize();
 
     /**
      * How many bytes make one {@link Double}?
