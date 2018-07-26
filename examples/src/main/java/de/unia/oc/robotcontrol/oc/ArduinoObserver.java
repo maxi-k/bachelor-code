@@ -9,8 +9,6 @@ import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
 import de.unia.oc.robotcontrol.flow.InFlows;
 import de.unia.oc.robotcontrol.flow.OutFlows;
 import de.unia.oc.robotcontrol.flow.PassiveInFlow;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.concurrent.Executors;
@@ -22,11 +20,10 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implement
     private final ActiveOutFlow<ArduinoState> outFlow;
     private final PassiveInFlow<DataPayload<?>> inFlow;
 
-    private @MonotonicNonNull T observationModel;
+    private @NonNull T observationModel;
     private long lastUpdatedTime;
     private ArduinoState lastComputedState;
 
-    @EnsuresNonNull({"this.observationModel"})
     @SuppressWarnings("initialization")
     public ArduinoObserver(@NonNull T observationModel) {
         this.observationModel = observationModel;

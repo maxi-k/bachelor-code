@@ -16,6 +16,7 @@ public class IdentityActuator<M, T extends DataPayload<M> & Message<T>> implemen
 
     private volatile @NonNull T lastReceived;
 
+    @SuppressWarnings("initialization")
     protected IdentityActuator(T initialValue) {
         this.lastReceived = initialValue;
         this.inFlow = InFlows.createUnbuffered(this::receiveData);

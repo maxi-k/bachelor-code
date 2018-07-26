@@ -16,6 +16,7 @@ public class IdentitySensor<M, T extends DataPayload<M> & Message<T>> implements
 
     private volatile @NonNull T lastReceived;
 
+    @SuppressWarnings("initialization")
     protected IdentitySensor(T initialValue) {
         this.lastReceived = initialValue;
         this.inFlow = InFlows.createUnbuffered(this::receiveMessage);

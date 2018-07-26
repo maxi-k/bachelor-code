@@ -4,18 +4,19 @@ package de.unia.oc.robotcontrol;
 import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
+import de.unia.oc.robotcontrol.data.ArduinoState;
 import de.unia.oc.robotcontrol.device.DiscreteSimulatedRobot;
 import de.unia.oc.robotcontrol.device.I2CConnector;
 import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
 import de.unia.oc.robotcontrol.message.*;
+import de.unia.oc.robotcontrol.oc.ArduinoController;
+import de.unia.oc.robotcontrol.oc.ArduinoObserver;
+import de.unia.oc.robotcontrol.oc.ObservationModel;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -94,6 +95,21 @@ public class Main {
                         printer.inFlow(),
                         UpdateRequestMessage::new);
 
+        if (argSet.contains("manual")) {
+            setupManual(console, arduino, schedule);
+        } else {
+            setupControlled(arduino);
+        }
+
+    }
+
+    private static void setupControlled(QueuedDeviceConnector arduino) {
+        final ArduinoController controller = new ArduinoController(arduino.inFlow());
+        final ArduinoObserver<ObservationModel<ArduinoState>> observer = new ArduinoObserver<>(controller.getObservationModel());
+        controller.setObserver(observer);
+    }
+
+    private static void setupManual(Console console, QueuedDeviceConnector arduino, ScheduleProvider schedule) {
         // read user commands and send them to the arduino constantly
         console.println("Press 'q' to stop, p to print the last received message");
         try (Scanner reader = new Scanner(System.in)) {

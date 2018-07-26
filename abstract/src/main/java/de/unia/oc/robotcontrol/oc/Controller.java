@@ -11,6 +11,8 @@ import java.util.Set;
 
 public interface Controller<T, M extends ObservationModel<T>, O> extends InFlowElement, OutFlowElement {
 
+    M getObservationModel();
+
     void setObserver(Observer<T, M> observer);
 
     @Pure
