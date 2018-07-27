@@ -95,6 +95,17 @@ public class ObjectGrid implements Visualization<Component> {
     }
 
     @Pure
+    public boolean isOnEdge(int x, int y, GridDirection dir) {
+        switch(dir) {
+            case UP: return y >= gridSizeY();
+            case RIGHT: return x >= gridSizeX();
+            case DOWN: return y == 0;
+            case LEFT: return x == 0;
+            default: return false;
+        }
+    }
+
+    @Pure
     private Tuple<Integer, Integer> getNextCoordsFor(Tuple<Integer, Integer> xy, GridDirection dir) {
         return getNextCoordsFor(xy.first, xy.second, dir);
     }
@@ -132,6 +143,7 @@ public class ObjectGrid implements Visualization<Component> {
             return false;
         }
         try {
+            checkInRange(newX, newY);
             GridObject o = this.objects.remove(x, y);
             if (o == null) return false;
             o.setXY(newX, newY);
@@ -171,7 +183,7 @@ public class ObjectGrid implements Visualization<Component> {
 
     @Pure
     private void checkInRange(int x, int y) throws IllegalArgumentException {
-        if (x >= cellsX || y >= cellsY) {
+        if (x >= cellsX || y >= cellsY || x < 0 || y < 0) {
             throw new IllegalArgumentException("Tried access or put GridObject outside of grid bounds!");
         }
     }

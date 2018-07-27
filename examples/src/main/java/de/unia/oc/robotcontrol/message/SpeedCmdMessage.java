@@ -1,6 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+import de.unia.oc.robotcontrol.data.DataPayload;
 import de.unia.oc.robotcontrol.data.RobotDrivingCommand;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -10,17 +11,21 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * TODO: Currently simplified to only include one command and speed parameter
  */
-public class SpeedCmdMessage implements Message<SpeedCmdMessage> {
+public class SpeedCmdMessage implements Message<SpeedCmdMessage>, DataPayload<SpeedCmdMessage> {
+
+    private final long creationTime;
 
     private final RobotDrivingCommand command;
     private final int speed;
 
     public SpeedCmdMessage(char command, int speed) {
+        this.creationTime = System.currentTimeMillis();
         this.command = RobotDrivingCommand.fromIdentifier(command).orElseThrow(IllegalArgumentException::new);
         this.speed = speed;
     }
 
     public SpeedCmdMessage(RobotDrivingCommand command, int speed) {
+        this.creationTime = System.currentTimeMillis();
         this.command = command;
         this.speed = speed;
     }
@@ -51,5 +56,15 @@ public class SpeedCmdMessage implements Message<SpeedCmdMessage> {
     @Override
     public String toString() {
         return "SpeedCmd Message: dir: " + command + " speed: " + speed;
+    }
+
+    @Override
+    public long getCreationTime() {
+        return creationTime;
+    }
+
+    @Override
+    public SpeedCmdMessage getData() {
+        return this;
     }
 }

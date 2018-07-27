@@ -93,6 +93,7 @@ public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
     private int getDistanceToOther(GridDirection dir) {
         int x = robot.getX();
         int y = robot.getY();
+        if (simulationEnvironment.isOnEdge(x, y, dir)) return 0;
         GridObject other = simulationEnvironment.getNextObjectInDirection(x, y, dir);
         if (other == null) return -1;
         return (dir == LEFT || dir == RIGHT) ?

@@ -1,22 +1,25 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+import de.unia.oc.robotcontrol.data.DataPayload;
+import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A message wrapping the distance data from the
- * three arduino ultrasound sensors (x, y, z).
+ * three arduino ultrasound sensors (front, y, z).
  */
-public class DistanceDataMessage implements Message<DistanceDataMessage> {
+public class DistanceDataMessage implements Message<DistanceDataMessage>, DataPayload<DistanceDataMessage> {
 
-    private final int x; // front
-    private final int y; // right
-    private final int z; // left
+    private final long time;
 
-    public DistanceDataMessage(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    private final @NonNegative int front, right, left; // front, right, left
+
+    public DistanceDataMessage(@NonNegative int front, @NonNegative int right, @NonNegative int left) {
+        this.time = System.currentTimeMillis();
+        this.front = front;
+        this.right = right;
+        this.left = left;
     }
 
     @Override
@@ -24,16 +27,16 @@ public class DistanceDataMessage implements Message<DistanceDataMessage> {
         return ArduinoMessageTypes.DISTANCE_DATA;
     }
 
-    public int getX() {
-        return x;
+    public int getFront() {
+        return front;
     }
 
-    public int getY() {
-        return y;
+    public int getRight() {
+        return right;
     }
 
-    public int getZ() {
-        return z;
+    public int getLeft() {
+        return left;
     }
 
     @Override
@@ -42,13 +45,23 @@ public class DistanceDataMessage implements Message<DistanceDataMessage> {
             return false;
         }
         DistanceDataMessage msg = (DistanceDataMessage) obj;
-        return msg.x == this.x
-                && msg.y == this.y
-                && msg.z == this.z;
+        return msg.front == this.front
+                && msg.right == this.right
+                && msg.left == this.left;
     }
 
     @Override
     public String toString() {
-        return "DistanceData Message: x: " + x + ", y: " + y + ", z: " + z;
+        return "DistanceData Message: front: " + front + ", right: " + right + ", left: " + left;
+    }
+
+    @Override
+    public long getCreationTime() {
+        return this.time;
+    }
+
+    @Override
+    public DistanceDataMessage getData() {
+        return this;
     }
 }
