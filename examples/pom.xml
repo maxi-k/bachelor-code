@@ -44,7 +44,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>de.unia.oc.robotcontrol.Main</mainClass>
+                            <mainClass>de.unia.oc.robotcontrol.example.arduino.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

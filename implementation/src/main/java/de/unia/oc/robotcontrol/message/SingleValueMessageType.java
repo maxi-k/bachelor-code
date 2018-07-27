@@ -22,10 +22,16 @@ public class SingleValueMessageType<T> implements MessageType<SingleValueMessage
     }
 
     public SingleValueMessage<T> produce(T value) {
+        long now = System.currentTimeMillis();
         return new SingleValueMessage<T>(value) {
             @Override
             public MessageType<SingleValueMessage<T>> getType() {
                 return SingleValueMessageType.this;
+            }
+
+            @Override
+            public long getCreationTime() {
+                return now;
             }
         };
     }

@@ -1,10 +1,10 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
-import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
-import de.unia.oc.robotcontrol.flow.InFlows;
-import de.unia.oc.robotcontrol.flow.OutFlows;
-import de.unia.oc.robotcontrol.flow.PassiveInFlow;
+import de.unia.oc.robotcontrol.flow.old.ActiveOutFlow;
+import de.unia.oc.robotcontrol.flow.old.InFlows;
+import de.unia.oc.robotcontrol.flow.old.OutFlows;
+import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.util.BidirectionalRegistry;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

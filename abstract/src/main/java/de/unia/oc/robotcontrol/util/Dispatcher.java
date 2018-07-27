@@ -1,8 +1,8 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.util;
 
-import de.unia.oc.robotcontrol.flow.InFlowElement;
-import de.unia.oc.robotcontrol.flow.OutFlowElement;
+import de.unia.oc.robotcontrol.flow.old.InFlowElement;
+import de.unia.oc.robotcontrol.flow.old.OutFlowElement;
 
 /**
  * Generic interface for a dispatcher

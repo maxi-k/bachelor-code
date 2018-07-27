@@ -1,7 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
-import de.unia.oc.robotcontrol.flow.OutFlowElement;
+import de.unia.oc.robotcontrol.flow.old.OutFlowElement;
 
 /**
  * Generic interface for some element that can send Messages

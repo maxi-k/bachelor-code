@@ -10,7 +10,7 @@ import de.unia.oc.robotcontrol.coding.Encoding;
  *
  * @param <T>
  */
-public interface MessageType<T extends Message> extends Encoding<T> {
+public interface MessageType<T extends Message<T>> extends Encoding<T> {
 
     @Override
     T decode(byte[] raw) throws IllegalArgumentException;
@@ -73,7 +73,7 @@ public interface MessageType<T extends Message> extends Encoding<T> {
      * @param <T> The type of message this encodes
      * @return An instance of {@link MessageType} that uses the given encoding
      */
-    static <T extends Message> MessageType<T> fromEncoding(Encoding<T> e) {
+    static <T extends Message<T>> MessageType<T> fromEncoding(Encoding<T> e) {
         return new MessageType<T>() {
             @Override
             public byte[] encode(T object) throws IllegalArgumentException {

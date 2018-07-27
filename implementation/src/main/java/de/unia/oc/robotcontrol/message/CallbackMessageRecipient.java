@@ -1,7 +1,7 @@
 package de.unia.oc.robotcontrol.message;
 
-import de.unia.oc.robotcontrol.flow.InFlows;
-import de.unia.oc.robotcontrol.flow.PassiveInFlow;
+import de.unia.oc.robotcontrol.flow.old.InFlows;
+import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 
 import java.util.function.Consumer;
 

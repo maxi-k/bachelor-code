@@ -2,7 +2,7 @@
 package de.unia.oc.robotcontrol.message;
 
 
-import de.unia.oc.robotcontrol.flow.InFlowElement;
+import de.unia.oc.robotcontrol.flow.old.InFlowElement;
 
 /**
  * Generic interface for some element that can receive Messages

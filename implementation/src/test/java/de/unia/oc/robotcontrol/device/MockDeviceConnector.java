@@ -3,10 +3,10 @@ package de.unia.oc.robotcontrol.device;
 
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
-import de.unia.oc.robotcontrol.flow.InFlows;
-import de.unia.oc.robotcontrol.flow.OutFlows;
-import de.unia.oc.robotcontrol.flow.PassiveInFlow;
+import de.unia.oc.robotcontrol.flow.old.ActiveOutFlow;
+import de.unia.oc.robotcontrol.flow.old.InFlows;
+import de.unia.oc.robotcontrol.flow.old.OutFlows;
+import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.ErrorMessage;
 import de.unia.oc.robotcontrol.message.Message;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
