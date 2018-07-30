@@ -5,7 +5,7 @@ import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
-public interface ProcessorProvider<Input, Output> extends SubscriberProvider<Input>, PublisherProvider<Output> {
+public interface ProcessorProvider<Input, Output> extends FlowProvider<Input, Output> {
 
     Processor<Input, Output> asProcessor();
 
@@ -18,4 +18,5 @@ public interface ProcessorProvider<Input, Output> extends SubscriberProvider<Inp
     default Subscriber<Input> asSubscriber() {
         return asProcessor();
     }
+
 }

@@ -12,7 +12,7 @@ import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
 import de.unia.oc.robotcontrol.device.I2CConnector;
-import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
+import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
 import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
@@ -86,7 +86,7 @@ public class Main {
                 TimeUnit.MILLISECONDS
         );
 
-        final QueuedDeviceConnector arduino = (argSet.contains("simulate") || argSet.contains("simulation"))
+        final LockingDeviceConnector arduino = (argSet.contains("simulate") || argSet.contains("simulation"))
                 ?
                 // define a simulated version of the arduino in a discrete grid environment
                 new DiscreteSimulatedRobot(
@@ -117,7 +117,7 @@ public class Main {
 
     }
 
-    private static void setupControlled(QueuedDeviceConnector arduino, MessageDispatcher dispatcher) {
+    private static void setupControlled(LockingDeviceConnector arduino, MessageDispatcher dispatcher) {
         final ArduinoController controller = new ArduinoController(arduino.inFlow());
         final ArduinoObserver<ObservationModel<ArduinoState>> observer = new ArduinoObserver<>(controller.getObservationModel());
         controller.setObserver(observer);

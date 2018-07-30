@@ -6,7 +6,7 @@ import de.unia.oc.robotcontrol.example.arduino.visualization.RobotGridObject;
 import de.unia.oc.robotcontrol.example.arduino.visualization.TargetGridObject;
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
+import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
 import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.example.arduino.message.ArduinoMessageTypes;
 import de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage;
@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 import static de.unia.oc.robotcontrol.visualization.GridDirection.LEFT;
 import static de.unia.oc.robotcontrol.visualization.GridDirection.RIGHT;
 
-public class DiscreteSimulatedRobot extends QueuedDeviceConnector {
+public class DiscreteSimulatedRobot extends LockingDeviceConnector {
 
     private final ObjectGrid simulationEnvironment;
     private final RobotGridObject robot;

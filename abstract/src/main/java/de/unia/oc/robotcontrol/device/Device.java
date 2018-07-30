@@ -1,6 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.device;
 
+import de.unia.oc.robotcontrol.concurrent.Terminable;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.message.MessageProcessor;
 
@@ -13,6 +14,6 @@ import de.unia.oc.robotcontrol.message.MessageProcessor;
  * @param <Output> The subtype of Messages this accepts
  */
 public interface Device<Input extends Message<Input>, Output extends Message<Output>>
-        extends MessageProcessor<Input, Output> {
+        extends MessageProcessor<Input, Output>, Terminable {
 
 }

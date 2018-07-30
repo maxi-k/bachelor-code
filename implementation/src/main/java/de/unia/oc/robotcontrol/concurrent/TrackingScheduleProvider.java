@@ -69,11 +69,19 @@ final class TrackingScheduleProvider implements ScheduleProvider {
     }
 
     @Override
-    public synchronized void submit(Runnable task) {
+    public synchronized Terminable submit(Runnable task) {
         this.attachedTasks.add(task);
         // Don't return the ScheduledFuture as it might
         // stop being relevant after reschedule().
-        submitNonTracking(task);
+        ScheduledFuture<?> handle = submitNonTracking(task);
+        if (handle == null) return Terminable.ConstantlyTerminated.create();
+        TrackingScheduleProvider self = this;
+        return Terminable.create(
+                () -> handle.isDone() || handle.isCancelled(),
+                () -> {
+                    self.attachedTasks.remove(task);
+                    handle.cancel(false);
+                });
     }
 
     @Override
@@ -106,6 +114,16 @@ final class TrackingScheduleProvider implements ScheduleProvider {
     }
 
     @Override
+    public ScheduledExecutorService getExecutor() {
+        return exec;
+    }
+
+    @Override
+    public boolean isTerminated() {
+        return this.exec.isTerminated();
+    }
+
+    @Override
     public boolean terminate(long delay, TimeUnit unit) throws InterruptedException {
         boolean orderly =  this.exec.awaitTermination(delay, unit);
         if (orderly) {
@@ -119,4 +137,5 @@ final class TrackingScheduleProvider implements ScheduleProvider {
         this.exec.shutdown();
         this.attachedTasks.clear();
     }
+
 }

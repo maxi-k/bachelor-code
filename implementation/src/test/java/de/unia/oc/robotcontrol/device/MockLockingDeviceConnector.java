@@ -2,8 +2,6 @@
 package de.unia.oc.robotcontrol.device;
 
 import de.unia.oc.robotcontrol.coding.Encoding;
-import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.Message;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
@@ -13,15 +11,14 @@ import java.util.function.Supplier;
 /**
  * Mock Device which echoes the bytes it received back.
  */
-public class MockQueuedDeviceConnector extends QueuedDeviceConnector {
+public class MockLockingDeviceConnector extends LockingDeviceConnector<Message, Message> {
 
+    private boolean isTerminated = false;
     private byte @MonotonicNonNull [] mockMessage;
 
-    public MockQueuedDeviceConnector(Encoding<Message> encoding,
-                                     ScheduleProvider schedule,
-                                     PassiveInFlow<Message> next,
-                                     Supplier<Message> updateMessageSupplier) {
-        super(encoding, schedule, next, updateMessageSupplier);
+    public MockLockingDeviceConnector(Encoding<Message> encoding,
+                                      Supplier<Message> updateMessageSupplier) {
+        super(encoding, encoding, updateMessageSupplier);
     }
 
     @Override
@@ -35,4 +32,13 @@ public class MockQueuedDeviceConnector extends QueuedDeviceConnector {
         return mockMessage.clone();
     }
 
+    @Override
+    public boolean isTerminated() {
+        return isTerminated;
+    }
+
+    @Override
+    public void terminate() {
+        isTerminated = true;
+    }
 }

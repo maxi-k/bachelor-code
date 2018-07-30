@@ -10,7 +10,7 @@ import de.unia.oc.robotcontrol.coding.Encoding;
  *
  * @param <T>
  */
-public interface MessageType<T extends Message<T>> extends Encoding<T> {
+public interface MessageType<T extends Message> extends Encoding<T> {
 
     @Override
     T decode(byte[] raw) throws IllegalArgumentException;

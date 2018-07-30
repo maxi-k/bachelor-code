@@ -1,22 +1,25 @@
 package de.unia.oc.robotcontrol.message;
 
-import de.unia.oc.robotcontrol.flow.old.InFlows;
-import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
+import org.reactivestreams.Subscriber;
+import reactor.core.publisher.BaseSubscriber;
 
 import java.util.function.Consumer;
 
-public class CallbackMessageRecipient implements MessageRecipient<Message> {
+public class CallbackMessageRecipient<T extends Message<T>> implements MessageRecipient<T> {
 
-    private final PassiveInFlow<Message> inFlow;
-    private final Consumer<Message> callback;
+    private final Subscriber<T> subscriber;
 
-    public CallbackMessageRecipient(Consumer<Message> callback) {
-        this.inFlow = InFlows.createUnbuffered(callback);
-        this.callback = callback;
+    public CallbackMessageRecipient(Consumer<? super T> callback) {
+        this.subscriber = new BaseSubscriber<T>() {
+            @Override
+            protected void hookOnNext(T value) {
+                callback.accept(value);
+            }
+        };
     }
 
     @Override
-    public PassiveInFlow<Message> inFlow() {
-        return inFlow;
+    public Subscriber<T> asSubscriber() {
+        return this.subscriber;
     }
 }

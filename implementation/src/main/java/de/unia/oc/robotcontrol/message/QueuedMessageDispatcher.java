@@ -2,11 +2,13 @@
 package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.flow.old.ActiveOutFlow;
-import de.unia.oc.robotcontrol.flow.old.InFlows;
-import de.unia.oc.robotcontrol.flow.old.OutFlows;
 import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.util.BidirectionalRegistry;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,18 +23,24 @@ public class QueuedMessageDispatcher<T extends Message<T>>
         extends BidirectionalRegistry<MessageType<T>, MessageRecipient<T>>
         implements MessageDispatcher<T> {
 
-    private final PassiveInFlow<T> inFlow;
-    private final ActiveOutFlow<T> outFlow;
-
     private final Executor executor;
-    private final Map<Consumer<T>, Queue<T>> dispatchQueue;
+    // private final Map<Consumer<T>, Queue<T>> dispatchQueue;
+
+    private final Flux<T> publisher;
+    private final Subscriber<T> subscriber;
+
 
     @SuppressWarnings("initialization")
     public QueuedMessageDispatcher(Executor executor) {
         this.executor = executor;
-        this.dispatchQueue = new HashMap<>();
-        this.inFlow = InFlows.createUnbuffered(this::dispatch);
-        this.outFlow = OutFlows.createOnDemand(this.executor, this::popNextItemFor);
+        // this.dispatchQueue = new HashMap<>();
+        // this.inFlow = InFlows.createUnbuffered(this::dispatch); //passive
+        // this.outFlow = OutFlows.createOnDemand(this.executor, this::popNextItemFor); //active
+        this.publisher = Flux.push((emitter) -> {
+
+        })
+                .switchMap()
+                .publishOn(Schedulers.elastic());
     }
 
     public QueuedMessageDispatcher() {
@@ -48,16 +56,7 @@ public class QueuedMessageDispatcher<T extends Message<T>>
 
         this.getQueueFor(inFlow).add(msg);
         this.outFlow().get().accept(inFlow);
-    }
-
-    @Override
-    public PassiveInFlow<T> inFlow() {
-        return inFlow;
-    }
-
-    @Override
-    public ActiveOutFlow<T> outFlow() {
-        return outFlow;
+        this.publisher.
     }
 
     private Queue<T> getQueueFor(Consumer<T> recipient) {
@@ -82,5 +81,15 @@ public class QueuedMessageDispatcher<T extends Message<T>>
 
     private Queue<T> createQueue() {
         return new LinkedBlockingQueue<>();
+    }
+
+    @Override
+    public Publisher<T> asPublisher() {
+        return null;
+    }
+
+    @Override
+    public Subscriber<T> asSubscriber() {
+        return null;
     }
 }

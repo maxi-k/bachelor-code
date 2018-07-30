@@ -3,32 +3,32 @@ package de.unia.oc.robotcontrol.concurrent;
 import org.checkerframework.checker.index.qual.Positive;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Describes something that provides a schedule for Tasks to be
  * executed in, that is, run with a certain delay or in a certain interval.
  */
-public interface ScheduleProvider {
+public interface ScheduleProvider extends Terminable.TimedTerminable {
 
     /**
      * Add a task that should be scheduled to the Schedule
      * @param runnable The task to schedule
      */
-    void submit(@NonNull Runnable runnable);
+    Terminable submit(@NonNull Runnable runnable);
 
     /**
      * Add an instance of {@link Schedulable} to the Schedule
      * @param schedulable The thing to schedule
      */
-    default boolean submit(@NonNull Schedulable schedulable) {
+    default Terminable submit(@NonNull Schedulable schedulable) {
         if (schedulable.isScheduled()) {
             Runnable task = schedulable.getTask();
-            if (task == null) return false;
-            submit(task);
-            return true;
+            if (task == null) return Terminable.ConstantlyTerminated.create();
+            return submit(task);
         }
-        return false;
+        return Terminable.ConstantlyTerminated.create();
     }
 
     /**
@@ -71,6 +71,11 @@ public interface ScheduleProvider {
     TaskMode getTaskMode();
 
     /**
+     * @return The executor Service the tasks for this ScheduleProvider are running on
+     */
+    ExecutorService getExecutor();
+
+    /**
      * Terminate this schedule and all tasks running on it,
      * blocking until all tasks have completed or the timeout has run out.
      * Like {@link java.util.concurrent.ScheduledExecutorService#awaitTermination(long, TimeUnit)}
@@ -83,11 +88,13 @@ public interface ScheduleProvider {
      * @return {@code true} if everything terminated orderly
      *         {@code false} if the timeout ran out before
      */
+    @Override
     boolean terminate(@Positive long delay, @NonNull TimeUnit unit) throws InterruptedException;
 
     /**
      * Terminate this schedule. Do not wait until all tasks are completed.
      * Also frees the list of tasks associated with this ScheduleProvider.
      */
+    @Override
     void terminate();
 }

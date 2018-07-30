@@ -1,9 +1,7 @@
 package de.unia.oc.robotcontrol.flow.old;
 
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import io.reactivex.Observer;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -13,10 +11,6 @@ public final class InFlows {
 
     public static <T> PassiveInFlow<T> createUnbuffered(Consumer<T> consumer) {
         return consumer::accept;
-    }
-
-    public static <T> PassiveInFlow<T> createFromObserver(Observer<T> observer) {
-        return observer::onNext;
     }
 
     public static <T> PassiveInFlow<T> multiplex(PassiveInFlow<T>... recipients) {
@@ -52,7 +46,6 @@ public final class InFlows {
             }
 
             @Override
-            @Pure
             public Runnable getTask() {
                 return () -> accept(() -> supplier);
             }

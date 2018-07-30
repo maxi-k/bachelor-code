@@ -5,10 +5,7 @@ import de.unia.oc.robotcontrol.coding.CodingContext;
 import de.unia.oc.robotcontrol.coding.IntegerEncoding;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
-import de.unia.oc.robotcontrol.message.CallbackMessageRecipient;
-import de.unia.oc.robotcontrol.message.Message;
-import de.unia.oc.robotcontrol.message.SingleValueMessage;
-import de.unia.oc.robotcontrol.message.SingleValueMessageType;
+import de.unia.oc.robotcontrol.message.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class QueuedDeviceConnectorTest {
+public class LockingDeviceConnectorTest {
 
     @Test
     void sendsAndRetrievesMessages() throws InterruptedException {
@@ -32,9 +29,9 @@ public class QueuedDeviceConnectorTest {
         );
 
         int sentValue = 42;
-        List<Message> received = new ArrayList<>(5);
+        List<Message<SingleValueMessage<Integer>>> received = new ArrayList<>(5);
 
-        CallbackMessageRecipient recipient = new CallbackMessageRecipient((m) -> {
+        CallbackMessageRecipient<? extends Message> recipient = new CallbackMessageRecipient<>((Message m) -> {
             SingleValueMessage<Integer> msg = msgType.cast(m);
             // System.out.println("Received message: " + m);
             received.add(msg);
@@ -44,10 +41,8 @@ public class QueuedDeviceConnectorTest {
 
         // Mock Device which echoes back the last value sent
         // on the schedule provides by the TrackingScheduleProvider
-        MockQueuedDeviceConnector connector = new MockQueuedDeviceConnector(
+        MockLockingDeviceConnector<Message, Message> connector = new MockLockingDeviceConnector(
                 msgType.asEncoding(),
-                schedule,
-                recipient.inFlow(),
                 () -> msgType.produce(42));
 
         // Sent the connector a first value
@@ -56,6 +51,6 @@ public class QueuedDeviceConnectorTest {
         Thread.sleep(120);
         Assertions.assertTrue(received.size() >= 5);
 
-        connector.inFlow().accept(msgType.produce(sentValue));
+        connector.asSubscriber().onNext(msgType.produce(sentValue));
     }
 }

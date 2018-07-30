@@ -1,7 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
-import de.unia.oc.robotcontrol.flow.ProcessorProvider;
+import de.unia.oc.robotcontrol.flow.FlowProvider;
 
 /**
  * Generic interface for some element that can process Messages,
@@ -10,5 +10,5 @@ import de.unia.oc.robotcontrol.flow.ProcessorProvider;
  * @param <Output> The subclass of messages this can send
  */
 public interface MessageProcessor<Input extends Message<Input>, Output extends Message<Output>>
-        extends ProcessorProvider<Input, Output> {
+        extends FlowProvider<Input, Output> {
 }

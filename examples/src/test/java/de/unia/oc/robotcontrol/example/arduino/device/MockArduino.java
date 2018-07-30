@@ -5,7 +5,7 @@ import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.coding.IntegerEncoding;
 import de.unia.oc.robotcontrol.coding.ListEncoding;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.device.QueuedDeviceConnector;
+import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
 import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.Message;
 
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class MockArduino extends QueuedDeviceConnector {
+public class MockArduino extends LockingDeviceConnector {
 
     private final Encoding<List<Integer>> mockAnswerEncoding;
 

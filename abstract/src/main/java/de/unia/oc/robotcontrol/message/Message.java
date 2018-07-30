@@ -7,7 +7,7 @@ package de.unia.oc.robotcontrol.message;
  * from bytes when it was received from a device.
  * @param <T> The type of the message instance returned / used by encoding / decoding
  */
-public interface Message<T extends Message<T>> {
+public interface Message<T extends Message> {
 
     /**
      *
