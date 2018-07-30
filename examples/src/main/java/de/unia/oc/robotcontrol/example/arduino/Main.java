@@ -74,7 +74,7 @@ public class Main {
             lastMessage = msg;
         });
 
-        MessageDispatcher dispatcher = new QueuedMessageDispatcher<>();
+        MessageDispatcher dispatcher = new PublishingMessageDispatcher<>();
 
         // dispatcher.register(ErrorMessage.errorMessageType, printer);
 

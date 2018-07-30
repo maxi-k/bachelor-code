@@ -2,7 +2,7 @@
 package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.util.Dispatcher;
-import de.unia.oc.robotcontrol.util.Registry;
+import de.unia.oc.robotcontrol.util.MultiRegistry;
 
 /**
  * Dispatcher that can associates MessageTypes with Recipients.
@@ -11,9 +11,9 @@ import de.unia.oc.robotcontrol.util.Registry;
 public interface MessageDispatcher<T extends Message<T>>
         extends
         MessageProcessor<T, T>,
-        Registry<MessageType<T>, MessageRecipient<T>>,
+        MultiRegistry<MessageType<T>, MessageRecipient<T>>,
         Dispatcher<T>
 {
     @Override
-    void dispatch(T msg) throws ItemNotRegisteredException;
+    void dispatch(T msg) throws IllegalArgumentException;
 }

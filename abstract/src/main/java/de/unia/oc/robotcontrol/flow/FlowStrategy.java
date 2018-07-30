@@ -1,11 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
-public interface FlowStrategy<Input, Output> {
-
-    FlowStrategyType getType();
-
-    enum FlowStrategyType {
+public enum FlowStrategy {
 
     /**
      * When the recipient is not able to receive a message, don't send it.
@@ -53,6 +49,4 @@ public interface FlowStrategy<Input, Output> {
      * pattern known from reduce / fold functions, that is (reduced, new) -> reduced.
      */
     REDUCE;
-}
-
 }

@@ -28,7 +28,7 @@ public final class Messaging {
     }
 
     public static MessageDispatcher createDispatcher(Executor executor) {
-        return new QueuedMessageDispatcher(executor);
+        return new PublishingMessageDispatcher(executor);
     }
 
 }

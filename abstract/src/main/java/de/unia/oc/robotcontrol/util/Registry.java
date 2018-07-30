@@ -9,6 +9,9 @@ import java.util.Optional;
  * Defines a general interface for a (bidirectional) registry,
  * which can store and retrieve values.
  *
+ * The created association is one-to-one, that is, one key can
+ * have one value and vice versa.
+ *
  * @param <K> the type of the key elements
  * @param <V> the type of the value elements
  */
