@@ -1,14 +1,13 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.util;
 
-import de.unia.oc.robotcontrol.flow.old.InFlowElement;
-import de.unia.oc.robotcontrol.flow.old.OutFlowElement;
+import de.unia.oc.robotcontrol.flow.ProcessorProvider;
 
 /**
  * Generic interface for a dispatcher
  * @param <T> the type of element to dispatch
  */
-public interface Dispatcher<T> extends InFlowElement, OutFlowElement {
+public interface Dispatcher<T> extends ProcessorProvider<T, T> {
 
     /**
      * Dispatches the given element.

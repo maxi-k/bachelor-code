@@ -10,8 +10,7 @@ import de.unia.oc.robotcontrol.util.Registry;
  */
 public interface MessageDispatcher<T extends Message<T>>
         extends
-        MessageSender<T>,
-        MessageRecipient<T>,
+        MessageProcessor<T, T>,
         Registry<MessageType<T>, MessageRecipient<T>>,
         Dispatcher<T>
 {

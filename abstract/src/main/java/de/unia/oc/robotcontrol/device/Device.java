@@ -2,17 +2,17 @@
 package de.unia.oc.robotcontrol.device;
 
 import de.unia.oc.robotcontrol.message.Message;
-import de.unia.oc.robotcontrol.message.MessageRecipient;
-import de.unia.oc.robotcontrol.message.MessageSender;
+import de.unia.oc.robotcontrol.message.MessageProcessor;
 
 /**
  * An interface that describes a device, an abstraction
  * for an actual hardware this connects to, which can send
  * and receive messages
  *
- * @param <T> The subtype of Messages this accepts or sends
+ * @param <Input> The subtype of Messages this accepts
+ * @param <Output> The subtype of Messages this accepts
  */
-public interface Device<T extends Message>
-        extends MessageSender<T>, MessageRecipient<T> {
+public interface Device<Input extends Message<Input>, Output extends Message<Output>>
+        extends MessageProcessor<Input, Output> {
 
 }
