@@ -7,9 +7,9 @@ import de.unia.oc.robotcontrol.flow.FlowableMulticast;
  * Dispatcher that can associates MessageTypes with Recipients.
  * @param <T>
  */
-public interface MessageMulticaster extends FlowableMulticast<MessageType, Message> {
+public interface MessageMulticast<T extends Message> extends FlowableMulticast<MessageType<T>, T> {
 
-    default void multicast(Message msg) {
+    default void multicast(T msg) {
         multicast(msg.getType(), msg);
     }
 }

@@ -9,11 +9,11 @@ import reactor.core.scheduler.Schedulers;
 
 import java.util.concurrent.Executor;
 
-public class EmittingMessageMulticast
-    extends EmittingMulticast<MessageType, Message>
-        implements MessageMulticaster {
+public class EmittingMessageMulticast<T extends Message>
+    extends EmittingMulticast<MessageType<T>, T>
+        implements MessageMulticast<T> {
 
-    private final FlowStrategy<Message, Message> flowStrategy = LatestFlowStrategy.create();
+    private final FlowStrategy<T, T> flowStrategy = LatestFlowStrategy.create();
 
     public EmittingMessageMulticast(Scheduler scheduler) {
         super(scheduler);
@@ -33,7 +33,7 @@ public class EmittingMessageMulticast
     }
 
     @Override
-    public FlowStrategy<Message, Message> getFlowStrategy() {
+    public FlowStrategy<T, T> getFlowStrategy() {
         return flowStrategy;
     }
 }

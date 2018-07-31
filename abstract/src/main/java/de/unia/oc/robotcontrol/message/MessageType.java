@@ -66,6 +66,31 @@ public interface MessageType<T extends Message> extends Encoding<T> {
         };
     }
 
+    default MessageType<Message> asSimpleType() {
+        MessageType<T> self = this;
+       return new MessageType<Message>() {
+           @Override
+           public Message decode(byte[] raw) throws IllegalArgumentException {
+               return self.decode(raw);
+           }
+
+           @Override
+           @SuppressWarnings("unchecked")
+           public byte[] encode(Message object) throws IllegalArgumentException {
+               try {
+                   return self.encode((T) object);
+               } catch (ClassCastException e) {
+                   throw new IllegalArgumentException("Argument was of wrong class");
+               }
+           }
+
+           @Override
+           public CodingContext getContext() {
+               return self.getContext();
+           }
+       };
+    }
+
     /**
      * Construct a {@link MessageType} instance from an existing encoding
      *

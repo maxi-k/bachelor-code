@@ -37,7 +37,7 @@ public class DispatcherTest {
         });
 
         Executor exec = Executors.newSingleThreadExecutor();
-        MessageMulticaster dispatcher = Messaging.createDispatcher(exec);
+        MessageMulticast dispatcher = Messaging.createDispatcher(exec);
 
         dispatcher.register(msgType1, rec1);
         dispatcher.register(msgType2, rec2);

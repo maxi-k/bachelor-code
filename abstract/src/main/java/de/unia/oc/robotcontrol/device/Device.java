@@ -10,10 +10,9 @@ import de.unia.oc.robotcontrol.message.MessageProcessor;
  * for an actual hardware this connects to, which can send
  * and receive messages
  *
- * @param <Input> The subtype of Messages this accepts
  * @param <Output> The subtype of Messages this accepts
  */
-public interface Device<Input extends Message<Input>, Output extends Message<Output>>
-        extends MessageProcessor<Input, Output>, Terminable {
+public interface Device<Output extends Message>
+        extends MessageProcessor<Message, Output>, Terminable {
 
 }
