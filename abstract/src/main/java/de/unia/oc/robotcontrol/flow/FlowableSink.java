@@ -3,7 +3,8 @@ package de.unia.oc.robotcontrol.flow;
 
 import org.reactivestreams.Subscriber;
 
-public interface SubscriberProvider<T> {
+public interface FlowableSink<Input> {
 
-    Subscriber<T> asSubscriber();
+    Subscriber<Input> asSubscriber();
+
 }
