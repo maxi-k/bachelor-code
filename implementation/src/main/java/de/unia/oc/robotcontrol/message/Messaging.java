@@ -27,8 +27,8 @@ public final class Messaging {
         return reg;
     }
 
-    public static MessageDispatcher createDispatcher(Executor executor) {
-        return new PublishingMessageDispatcher(executor);
+    public static MessageMulticaster createDispatcher(Executor executor) {
+        return new EmittingMessageMulticast(executor);
     }
 
 }

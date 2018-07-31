@@ -74,7 +74,7 @@ public class Main {
             lastMessage = msg;
         });
 
-        MessageDispatcher dispatcher = new PublishingMessageDispatcher<>();
+        MessageMulticaster dispatcher = new EmittingMessageMulticast<>();
 
         // dispatcher.register(ErrorMessage.errorMessageType, printer);
 
@@ -117,14 +117,14 @@ public class Main {
 
     }
 
-    private static void setupControlled(LockingDeviceConnector arduino, MessageDispatcher dispatcher) {
+    private static void setupControlled(LockingDeviceConnector arduino, MessageMulticaster dispatcher) {
         final ArduinoController controller = new ArduinoController(arduino.inFlow());
         final ArduinoObserver<ObservationModel<ArduinoState>> observer = new ArduinoObserver<>(controller.getObservationModel());
         controller.setObserver(observer);
         dispatcher.register(ArduinoMessageTypes.DISTANCE_DATA, observer);
     }
 
-    private static void setupManual(Console console, MessageDispatcher dispatcher,
+    private static void setupManual(Console console, MessageMulticaster dispatcher,
                                     ScheduleProvider schedule, MessageRecipient printer) {
         // read user commands and send them to the arduino constantly
         dispatcher.register(ArduinoMessageTypes.DISTANCE_DATA, printer);

@@ -1,12 +1,14 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
-import de.unia.oc.robotcontrol.flow.PublisherProvider;
+import de.unia.oc.robotcontrol.flow.FlowableSource;
 
 /**
- * Generic interface for some element that can send Messages
- * @param <T>
+ * Generic interface for some element that can send Messages.
+ * For elements that both send and receive messages, it is recommended
+ * to use the {@link MessageProcessor} interface instead.
+ * @param <T> The (sub)type of Messages this sends
  */
-public interface MessageSender<T extends Message<T>> extends PublisherProvider<T> {
+public interface MessageSender<T extends Message<T>> extends FlowableSource<T> {
 
 }

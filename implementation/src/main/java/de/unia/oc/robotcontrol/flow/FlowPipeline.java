@@ -21,16 +21,6 @@ public class FlowPipeline<Input, Output> {
             return this;
         }
 
-        public Builder<Input, Output> dispatchWith(Dispatcher<Output> dispatcher) {
-            if (outputPublisher == null) {
-                this.outputPublisher = Flux.merge(dispatcher.asPublisher());
-            } else {
-                this.outputPublisher.subscribeWith(dispatcher.asSubscriber());
-                this.outputPublisher = Flux.from(dispatcher.asPublisher());
-            }
-            return this;
-        }
-
         public FlowPipeline build() {
             // return new FlowPipeline();
             return null;
