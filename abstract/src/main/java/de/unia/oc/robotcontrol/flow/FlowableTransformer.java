@@ -3,10 +3,8 @@ package de.unia.oc.robotcontrol.flow;
 
 import org.reactivestreams.Publisher;
 
-import java.util.function.Function;
-
 public interface FlowableTransformer<Input, Output>
-        extends Flowable, Function<Publisher<Input>, Publisher<Output>> {
+        extends Flowable, PublisherTransformer<Input, Output> {
 
     @Override
     FlowStrategy<Input, Output> getFlowStrategy();

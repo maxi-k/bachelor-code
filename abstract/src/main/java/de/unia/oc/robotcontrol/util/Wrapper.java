@@ -13,13 +13,13 @@ import java.util.function.Function;
 @Deprecated
 public final class Wrapper<I, O> {
 
-    private final Function<I, O> constructor;
+    private final Function<? super I, O> constructor;
 
-    private Wrapper(Function<I, O> constructor) {
+    private Wrapper(Function<? super I, O> constructor) {
         this.constructor = constructor;
     }
 
-    public <N> Wrapper<I, N> with(Function<O, N> next) {
+    public <N> Wrapper<I, N> with(Function<? super O, N> next) {
         return new Wrapper<>(constructor.andThen(next));
     }
 

@@ -17,7 +17,7 @@ public final class Scheduling {
         return new TrackingScheduleProvider(exec, TaskMode.DELAYED, delay, unit);
     }
 
-    public static <T> Flux<T> emitOn(ScheduleProvider provider, Supplier<T> messageSupplier) {
+    public static <T> Flux<T> emitOn(ScheduleProvider provider, Supplier<? extends T> messageSupplier) {
         return Flux.create((downstream) -> {
             Terminable handle = provider.submit(() -> {
                 T value = null;

@@ -1,6 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
@@ -14,11 +15,12 @@ import java.util.concurrent.Executor;
 
 abstract class MapMulticast<Topic, Value> implements FlowableMulticast<Topic, Value> {
 
-    private final ConcurrentMap<Topic, FluxProcessor<Value, Value>> multicastMap;
-    private final FluxProcessor<Value, Value> mainProcessor;
-    private final Flux<Value> sideEffect;
+    private final ConcurrentMap<@NonNull Topic, FluxProcessor<@NonNull Value, @NonNull Value>> multicastMap;
+    private final FluxProcessor<@NonNull Value, @NonNull Value> mainProcessor;
+    private final Flux<@NonNull Value> sideEffect;
     private final Scheduler scheduler;
 
+    @SuppressWarnings("initialization")
     protected MapMulticast(Scheduler scheduler) {
         this.scheduler = scheduler;
         this.multicastMap = createMulticastMap();
@@ -43,11 +45,11 @@ abstract class MapMulticast<Topic, Value> implements FlowableMulticast<Topic, Va
     }
 
     @Override
-    public Processor<Value, Value> asProcessor() {
+    public Processor<@NonNull Value, @NonNull Value> asProcessor() {
         return mainProcessor;
     }
 
-    protected void dispatch(Value value) {
+    protected void dispatch(@NonNull Value value) {
         Topic topic = topicFromValue(value);
         synchronized (multicastMap) {
             if (multicastMap.containsKey(topic)) {
@@ -56,13 +58,13 @@ abstract class MapMulticast<Topic, Value> implements FlowableMulticast<Topic, Va
         }
     }
 
-    protected ConcurrentMap<Topic, FluxProcessor<Value, Value>> createMulticastMap() {
+    protected ConcurrentMap<@NonNull Topic, FluxProcessor<@NonNull Value, @NonNull Value>> createMulticastMap() {
         return new ConcurrentHashMap<>();
     }
 
-    protected abstract Topic topicFromValue(Value value);
+    protected abstract @NonNull Topic topicFromValue(Value value);
 
-    protected abstract FluxProcessor<Value, Value> createMainProcessor();
+    protected abstract FluxProcessor<@NonNull Value, @NonNull Value> createMainProcessor();
 
-    protected abstract FluxProcessor<Value, Value> createTopicProcessor();
+    protected abstract FluxProcessor<@NonNull Value, @NonNull Value> createTopicProcessor();
 }

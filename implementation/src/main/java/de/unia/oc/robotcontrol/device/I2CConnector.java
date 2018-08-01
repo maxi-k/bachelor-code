@@ -5,13 +5,14 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 import de.unia.oc.robotcontrol.coding.Encoding;
+import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.message.Message;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-public class I2CConnector<Input extends Message<Input>, Output extends Message<Output>>
+public class I2CConnector<Input extends Message, Output extends Message>
         extends LockingDeviceConnector<Input, Output> {
 
     private final int MAX_MESSAGE_SIZE; // = 32;
@@ -22,6 +23,7 @@ public class I2CConnector<Input extends Message<Input>, Output extends Message<O
     private final I2CDevice device;
 
     private boolean isTerminated = false;
+
     private volatile int lastRead;
     private final byte[] readBuffer;
 
@@ -77,5 +79,15 @@ public class I2CConnector<Input extends Message<Input>, Output extends Message<O
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getDeviceName() {
+        return "I2CDevice";
+    }
+
+    @Override
+    public ClockType getClockType() {
+        return ClockType.INTERNAL;
     }
 }

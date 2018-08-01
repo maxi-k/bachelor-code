@@ -7,7 +7,6 @@ import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.message.EmittingMessageMulticast;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.message.MessageType;
-import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -34,7 +33,7 @@ public class RobotControl<
     private final EmittingMessageMulticast<Message> multicast;
     private final Flux<? extends Message> deviceInFlow;
 
-    private final Flux<? extends Message> resultingFlow;
+    // private final Flux<? extends Message> resultingFlow;
 
     RobotControl(OCObserver observer,
                  OCController controller,
@@ -67,12 +66,16 @@ public class RobotControl<
                 .map(MessageType::asSimpleType)
                 .map(multicast::subscribeTo)
                 .collect(Collectors.toList())
-        ).subscribe(key.asSubscriber()::onNext));
+        ));
+        //         .subscribe((msg) -> {
+        //     if (key.canAcceptMessage(msg))
+        //         key.asSubscriber().onNext(msg);
+        // });
 
         // Pass messages from devices to the multicast
         deviceInFlow.subscribe(multicast.asSubscriber());
 
-       this.resultingFlow.subscribeOn(Schedulers.newSingle("Robot Control"));
+       // this.resultingFlow.subscribeOn(Schedulers.newSingle("Robot Control"));
     }
 
     @Override
@@ -90,10 +93,6 @@ public class RobotControl<
 
     public static Builder build() {
         return new Builder();
-    }
-
-    private Publisher<Message> apply(MessageType<? extends Message> mt) {
-        return multicast.subscribeTo(mt);
     }
 
     public static final class Builder {

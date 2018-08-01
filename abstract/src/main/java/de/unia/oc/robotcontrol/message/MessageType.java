@@ -3,6 +3,7 @@ package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.coding.CodingContext;
 import de.unia.oc.robotcontrol.coding.Encoding;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * An interface that defines the type of a message by
@@ -13,7 +14,7 @@ import de.unia.oc.robotcontrol.coding.Encoding;
 public interface MessageType<T extends Message> extends Encoding<T> {
 
     @Override
-    T decode(byte[] raw) throws IllegalArgumentException;
+    @NonNull T decode(byte[] raw) throws IllegalArgumentException;
 
     @Override
     byte[] encode(T object) throws IllegalArgumentException;

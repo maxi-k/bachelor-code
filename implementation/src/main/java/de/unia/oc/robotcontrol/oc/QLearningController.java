@@ -3,10 +3,6 @@ package de.unia.oc.robotcontrol.oc;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import de.unia.oc.robotcontrol.flow.old.ActiveOutFlow;
-import de.unia.oc.robotcontrol.flow.old.InFlows;
-import de.unia.oc.robotcontrol.flow.old.OutFlows;
-import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.util.Tuple;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signedness.qual.Constant;
@@ -24,16 +20,10 @@ public abstract class QLearningController<I, M extends ObservationModel<I>, O> i
     private volatile @MonotonicNonNull O lastAction;
     private volatile @MonotonicNonNull I lastWorldState;
 
-    private final PassiveInFlow<I> inFlow;
-    private final ActiveOutFlow<O> outFlow;
-
     @SuppressWarnings("initialization")
     public QLearningController() {
         this.qMatrix = HashBasedTable.create(getApproximateStateSpaceSize(), getPossibleActions().size()) ;
         this.possibleActions = new ArrayList<>(getPossibleActions());
-
-        this.inFlow = InFlows.createUnbuffered(this::applyWorldUpdate);
-        this.outFlow = OutFlows.createOnDemand(this::chooseAction);
     }
 
     @RequiresNonNull("this.qMatrix")
@@ -123,15 +113,5 @@ public abstract class QLearningController<I, M extends ObservationModel<I>, O> i
     @Pure
     protected double getExploreFactor() {
         return 0.2;
-    }
-
-    @Override
-    public PassiveInFlow<I> inFlow() {
-        return inFlow;
-    }
-
-    @Override
-    public ActiveOutFlow<O> outFlow() {
-        return outFlow;
     }
 }

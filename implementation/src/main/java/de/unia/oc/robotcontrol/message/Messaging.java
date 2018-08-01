@@ -1,6 +1,7 @@
 package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.util.Tuple;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
@@ -11,7 +12,7 @@ public final class Messaging {
     @SafeVarargs
     public static <I> MessageTypeRegistry<I> createRegistry(
             MessageIdentifier<I> identifier,
-            Tuple<I, MessageType>... entries) {
+            Tuple<@NonNull I, MessageType>... entries) {
         MapMessageTypeRegistry<I> reg = new MapMessageTypeRegistry<>(identifier);
         for (Tuple<I, MessageType> e : entries) {
             reg.register(e.first, e.second);
@@ -21,7 +22,7 @@ public final class Messaging {
 
     public static <I> MessageTypeRegistry<I> createRegistry(
             MessageIdentifier<I> identifier,
-            Consumer<BiFunction<I, MessageType, Boolean>> registration) {
+            Consumer<BiFunction<@NonNull I, MessageType, Boolean>> registration) {
         MapMessageTypeRegistry<I> reg = new MapMessageTypeRegistry<>(identifier);
         registration.accept(reg::register);
         return reg;

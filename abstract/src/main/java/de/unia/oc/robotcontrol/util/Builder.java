@@ -24,7 +24,7 @@ public final class Builder<T> {
      * @param <M> the type of the resulting value held in the new builder
      * @return A builder which holds the transformed value
      */
-    public <M> Builder<M> map(Function<T, M> mapper) {
+    public <M> Builder<M> map(Function<? super T, M> mapper) {
         return Builder.start(mapper.apply(this.value));
     }
 

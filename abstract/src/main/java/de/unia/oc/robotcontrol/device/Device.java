@@ -12,7 +12,9 @@ import de.unia.oc.robotcontrol.message.MessageProcessor;
  *
  * @param <Output> The subtype of Messages this accepts
  */
-public interface Device<Output extends Message>
-        extends MessageProcessor<Message, Output>, Terminable {
+public interface Device<Input extends Message, Output extends Message>
+        extends MessageProcessor<Input, Output>, Terminable {
+
+    String getDeviceName();
 
 }

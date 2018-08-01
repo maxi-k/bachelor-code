@@ -9,6 +9,6 @@ import de.unia.oc.robotcontrol.flow.FlowableSource;
  * to use the {@link MessageTransformer} interface instead.
  * @param <T> The (sub)type of Messages this sends
  */
-public interface MessageSender<T extends Message<T>> extends FlowableSource<T> {
+public interface MessageSender<T extends Message> extends FlowableSource<T> {
 
 }

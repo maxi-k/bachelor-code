@@ -78,12 +78,10 @@ public class ObjectGrid implements Visualization<Component> {
         return cellsY;
     }
 
-    @Pure
     public @Nullable GridObject getObjectAt(int x, int y) {
         return objects.get(x, y);
     }
 
-    @Pure
     public @Nullable GridObject getNextObjectInDirection(int x, int y, GridDirection dir) {
         Tuple<Integer, Integer> nextCoords = Tuple.create(x, y);
         do {

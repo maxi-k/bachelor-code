@@ -32,7 +32,7 @@ public final class Tuple<F, S> {
      * @param <N> the Type of the transformed element
      * @return A new Tuple of Type (N, S)
      */
-    public <N> Tuple<N, S> mapFirst(Function<F, N> fn) {
+    public <N> Tuple<N, S> mapFirst(Function<? super F, N> fn) {
         return new Tuple<>(fn.apply(first), second);
     }
 
@@ -44,7 +44,7 @@ public final class Tuple<F, S> {
      * @param <N> the type of the transformed element
      * @return A new Tuple of type (N, S)
      */
-    public <N> Tuple<F, N> mapSecond(Function<S, N> fn) {
+    public <N> Tuple<F, N> mapSecond(Function<? super S, N> fn) {
         return new Tuple<>(first, fn.apply(second));
     }
 
@@ -59,7 +59,7 @@ public final class Tuple<F, S> {
      * @param <NS> the type of the transformed second element
      * @return A new Tuple of type (NF, NS)
      */
-    public <NF, NS> Tuple<NF, NS> map(Function<F, NF> fn1, Function<S, NS> fn2) {
+    public <NF, NS> Tuple<NF, NS> map(Function<? super F, NF> fn1, Function<? super S, NS> fn2) {
         return new Tuple<>(fn1.apply(first), fn2.apply(second));
     }
 
@@ -81,7 +81,7 @@ public final class Tuple<F, S> {
      * @param <R> the type of the resulting element
      * @return Some object returned by applying the joiner function to the values of this tuple
      */
-    public <R> R joinWith(BiFunction<F, S, R> joiner) {
+    public <R> R joinWith(BiFunction<? super F, ? super S, R> joiner) {
         return joiner.apply(first, second);
     }
 
@@ -96,7 +96,7 @@ public final class Tuple<F, S> {
      * @param <R> the type of the input element to be split
      * @return A tuple of type (F, S)
      */
-    public static <F, S, R> Tuple<F, S> split(R value, Function<R, Tuple<F, S>> splitter) {
+    public static <F, S, R> Tuple<F, S> split(R value, Function<? super R, Tuple<F, S>> splitter) {
         return splitter.apply(value);
     }
 

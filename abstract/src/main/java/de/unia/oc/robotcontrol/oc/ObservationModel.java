@@ -5,7 +5,7 @@ import de.unia.oc.robotcontrol.concurrent.Timespan;
 
 import java.util.function.Consumer;
 
-public interface ObservationModel<T> extends Consumer<T> {
+public interface ObservationModel<WorldState> extends Consumer<WorldState> {
 
     Timespan getTargetUpdateTime();
 }

@@ -8,13 +8,14 @@ import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.Set;
 
-public interface Controller<T, M extends ObservationModel<T>, O> extends FlowableTransformer<T, O> {
+public interface Controller<WorldState, Model extends ObservationModel<WorldState>, Command>
+        extends FlowableTransformer<WorldState, Command> {
 
-    @NonNull M getObservationModel();
+    @NonNull Model getObservationModel();
 
-    void setObserver(Observer<T, M> observer);
+    void setObserver(Observer<? extends WorldState, ? super Model> observer);
 
     @Pure
     @Constant
-    Set<@NonNull O> getPossibleActions();
+    Set<@NonNull ? extends Command> getPossibleActions();
 }
