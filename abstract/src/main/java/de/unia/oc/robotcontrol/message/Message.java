@@ -13,7 +13,7 @@ public interface Message<T extends Message> {
      *
      * @return The {@link MessageType} of this Message
      */
-    MessageType<? super T> getType();
+    MessageType<T> getType();
 
     /**
      * Returns the creation time of this message, see

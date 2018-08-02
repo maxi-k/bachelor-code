@@ -4,6 +4,7 @@ package de.unia.oc.robotcontrol.message;
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.util.Registry;
 import de.unia.oc.robotcontrol.util.Tuple;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A generic interface for a Registry that associates a MessageIdentifier
@@ -12,7 +13,7 @@ import de.unia.oc.robotcontrol.util.Tuple;
  *
  * @param <I> The element used as an identifier
  */
-public interface MessageTypeRegistry<I>
+public interface MessageTypeRegistry<I extends Object>
         extends Registry<I, MessageType>, Encoding<Message> {
 
     /**

@@ -8,7 +8,7 @@ import de.unia.oc.robotcontrol.flow.FlowableMulticast;
  * @param <T>
  */
 public interface MessageMulticast<T extends Message>
-        extends FlowableMulticast<MessageType<T>, T> {
+        extends FlowableMulticast<MessageType<? extends T>, T> {
 
     @SuppressWarnings("unchecked")
     default void multicast(T msg) {

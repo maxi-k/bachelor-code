@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.function.Function;
 
-public class BufferFlowStrategy<T> implements FlowStrategy<T, T> {
+public class BufferFlowStrategy<T extends Object> implements FlowStrategy<T, T> {
 
     private final Function<Flux<T>, Flux<T>> transformer;
 

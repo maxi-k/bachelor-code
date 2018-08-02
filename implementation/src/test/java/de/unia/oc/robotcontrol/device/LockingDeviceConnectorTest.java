@@ -41,7 +41,7 @@ public class LockingDeviceConnectorTest {
 
         // Mock Device which echoes back the last value sent
         // on the schedule provides by the TrackingScheduleProvider
-        MockLockingDeviceConnector<Message, Message> connector = new MockLockingDeviceConnector(
+        MockLockingDeviceConnector connector = new MockLockingDeviceConnector(
                 msgType.asEncoding(),
                 () -> msgType.produce(42));
 

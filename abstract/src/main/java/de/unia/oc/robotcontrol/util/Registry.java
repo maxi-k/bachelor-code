@@ -15,7 +15,7 @@ import java.util.Optional;
  * @param <K> the type of the key elements
  * @param <V> the type of the value elements
  */
-public interface Registry<K, V> {
+public interface Registry<K extends Object, V extends Object> {
 
     /**
      * Register a the given value for the given key
@@ -33,7 +33,7 @@ public interface Registry<K, V> {
      * @param key the key to look up
      * @return An Optional that wraps the retrieved value
      */
-    Optional<@NonNull V> getValueFor(K key);
+    Optional<V> getValueFor(K key);
 
     /**
      * Get the key for the given value,
@@ -42,7 +42,7 @@ public interface Registry<K, V> {
      * @param value the value to look up the key for
      * @return An Optional that wraps the retrieved value
      */
-    Optional<@NonNull K> getKeyFor(V value);
+    Optional<K> getKeyFor(V value);
 
     /**
      * Return a bijection that wraps this registry where

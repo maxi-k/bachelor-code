@@ -10,9 +10,9 @@ import java.util.function.Consumer;
 public final class Messaging {
 
     @SafeVarargs
-    public static <I> MessageTypeRegistry<I> createRegistry(
+    public static <I extends Object> MessageTypeRegistry<I> createRegistry(
             MessageIdentifier<I> identifier,
-            Tuple<@NonNull I, MessageType>... entries) {
+            Tuple<I, MessageType>... entries) {
         MapMessageTypeRegistry<I> reg = new MapMessageTypeRegistry<>(identifier);
         for (Tuple<I, MessageType> e : entries) {
             reg.register(e.first, e.second);
@@ -20,9 +20,9 @@ public final class Messaging {
         return reg;
     };
 
-    public static <I> MessageTypeRegistry<I> createRegistry(
+    public static <I extends Object> MessageTypeRegistry<I> createRegistry(
             MessageIdentifier<I> identifier,
-            Consumer<BiFunction<@NonNull I, MessageType, Boolean>> registration) {
+            Consumer<BiFunction<I, MessageType, Boolean>> registration) {
         MapMessageTypeRegistry<I> reg = new MapMessageTypeRegistry<>(identifier);
         registration.accept(reg::register);
         return reg;

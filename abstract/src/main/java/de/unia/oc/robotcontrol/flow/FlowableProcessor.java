@@ -1,11 +1,12 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
-public interface FlowableProcessor<Input, Output>
+public interface FlowableProcessor<Input extends Object, Output extends Object>
         extends FlowableSink<Input>, FlowableSource<Output>, FlowableTransformer<Input, Output> {
 
     Processor<Input, Output> asProcessor();
@@ -26,4 +27,5 @@ public interface FlowableProcessor<Input, Output>
         publisher.subscribe(p);
         return p;
     }
+
 }

@@ -23,10 +23,10 @@ import java.util.function.Supplier;
 public abstract class LockingDeviceConnector<Input extends Message, Output extends Message>
         implements Device<Input, Output> {
 
-    protected final Encoding<? super Input> inputEncoding;
-    protected final Encoding<? extends Output> outputEncoding;
+    protected final Encoding<Input> inputEncoding;
+    protected final Encoding<Output> outputEncoding;
 
-    protected final Supplier<? extends Input> updateRequestMessageProvider;
+    protected final Supplier<Input> updateRequestMessageProvider;
 
     protected final Object deviceLock;
 
@@ -36,9 +36,9 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
 
     @SuppressWarnings("initialization")
     public LockingDeviceConnector(
-            Encoding<? super Input> inputEncoding,
-            Encoding<? extends Output> outputEncoding,
-            Supplier<? extends Input> updateRequestMessageProvider) {
+            Encoding<Input> inputEncoding,
+            Encoding<Output> outputEncoding,
+            Supplier<Input> updateRequestMessageProvider) {
         this.inputEncoding = inputEncoding;
         this.outputEncoding = outputEncoding;
         this.deviceLock = new Object();

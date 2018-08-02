@@ -2,54 +2,64 @@
 package de.unia.oc.robotcontrol.device;
 
 import de.unia.oc.robotcontrol.coding.Encoding;
+import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.flow.old.ActiveOutFlow;
-import de.unia.oc.robotcontrol.flow.old.InFlows;
-import de.unia.oc.robotcontrol.flow.old.OutFlows;
-import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
-import de.unia.oc.robotcontrol.message.ErrorMessage;
+import de.unia.oc.robotcontrol.flow.FlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy;
 import de.unia.oc.robotcontrol.message.Message;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.reactivestreams.Processor;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.EmitterProcessor;
 
 /**
  * Mock Device which echoes the bytes it received back.
  */
-public class MockDeviceConnector implements Device<Message> {
+public class MockDeviceConnector implements Device<Message, Message> {
 
-    private final PassiveInFlow<Message> inFlow;
-    private final ActiveOutFlow<Message> outFlow;
-
-    private byte @MonotonicNonNull [] mockMessage;
     private final Encoding<Message> encoding;
-    private final PassiveInFlow<Message> next;
+    private final EmitterProcessor<Message> processor;
+    private boolean isTerminated = false;
 
     @SuppressWarnings("initialization")
     public MockDeviceConnector(Encoding<Message> encoding,
-                               ScheduleProvider schedule,
-                               PassiveInFlow<Message> next) {
+                               ScheduleProvider schedule) {
         this.encoding = encoding;
-        this.next = next;
-        this.inFlow = InFlows.createUnbuffered(this::pushMessage);
-        this.outFlow = OutFlows.createScheduled(schedule, this::getAnswer, next);
+        this.processor = EmitterProcessor.create();
     }
 
     @Override
-    public PassiveInFlow<Message> inFlow() {
-        return inFlow;
+    public String getDeviceName() {
+        return "Mock Device";
     }
 
     @Override
-    public ActiveOutFlow<Message> outFlow() {
-        return outFlow;
+    public boolean isTerminated() {
+        return isTerminated;
     }
 
-    private synchronized void pushMessage(Message m) {
-        this.mockMessage = encoding.encode(m);
+    @Override
+    public void terminate() {
+        processor.onComplete();
+        isTerminated = true;
     }
 
-    private Message getAnswer() {
-        if (mockMessage == null) return new ErrorMessage(new NullPointerException("No Message received yet."));
-        return this.encoding.decode(mockMessage.clone());
+    @Override
+    public Processor<Message, Message> asProcessor() {
+        return processor;
     }
 
+    @Override
+    public Publisher<Message> asPublisher() {
+        return processor.map(encoding::encode).map(encoding::decode);
+    }
+
+    @Override
+    public FlowStrategy<Message, Message> getFlowStrategy() {
+        return TransparentFlowStrategy.create();
+    }
+
+    @Override
+    public ClockType getClockType() {
+        return ClockType.UNCLOCKED;
+    }
 }

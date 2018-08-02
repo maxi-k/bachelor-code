@@ -7,6 +7,10 @@ import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.message.EmittingMessageMulticast;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.message.MessageType;
+import de.unia.oc.robotcontrol.util.Logger;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -16,11 +20,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RobotControl<
-        WoldState,
-        ControllerAction,
+        ObserverMessage extends Message,
+        WoldState extends Object,
+        ControllerAction extends Object,
         ObserverModel extends ObservationModel<WoldState>,
-        OCObserver extends Observer<WoldState, ObserverModel>,
-        OCController extends Controller<WoldState, ObserverModel, ControllerAction>> implements Terminable, Runnable {
+        OCObserver extends Observer<ObserverMessage, WoldState, ObserverModel>,
+        OCController extends Controller<WoldState, ObserverModel, ControllerAction>>
+        implements Terminable, Runnable {
 
     private volatile boolean isTerminated = false;
 
@@ -32,6 +38,8 @@ public class RobotControl<
     private final Scheduler ioScheduler;
     private final EmittingMessageMulticast<Message> multicast;
     private final Flux<? extends Message> deviceInFlow;
+
+    private @MonotonicNonNull List<Disposable> deviceSubscriptions;
 
     // private final Flux<? extends Message> resultingFlow;
 
@@ -58,19 +66,27 @@ public class RobotControl<
     }
 
     @Override
+    @EnsuresNonNull({"this.deviceSubscriptions"})
     public void run() {
         // Subscribe each device to the message types as defined
         // by the device map
-        deviceMap.forEach((key, value) -> Flux.merge(value
+        deviceSubscriptions = deviceMap
+                .entrySet()
                 .stream()
-                .map(MessageType::asSimpleType)
-                .map(multicast::subscribeTo)
-                .collect(Collectors.toList())
-        ));
-        //         .subscribe((msg) -> {
-        //     if (key.canAcceptMessage(msg))
-        //         key.asSubscriber().onNext(msg);
-        // });
+                .map((entry) -> Flux.merge(
+                        entry.getValue()
+                                .stream()
+                                .map(MessageType::asSimpleType)
+                                .map(multicast::subscribeTo)
+                                .collect(Collectors.toList())
+                        ).subscribe((msg) -> {
+                            if(!entry.getKey().castOnNext(msg)) {
+                                Logger.instance().debugException(
+                                        new IllegalArgumentException("Message could not be cast to the recipients input: [msg, recp]: " + msg + " " + entry.getKey())
+                                );
+                            }
+                        })
+                ).collect(Collectors.toList());
 
         // Pass messages from devices to the multicast
         deviceInFlow.subscribe(multicast.asSubscriber());
@@ -87,6 +103,11 @@ public class RobotControl<
     public synchronized void terminate() {
         for (Device d : deviceMap.keySet()) {
             d.terminate();
+        }
+        if (deviceSubscriptions != null) {
+            for (Disposable d : deviceSubscriptions) {
+                d.dispose();
+            }
         }
         isTerminated = true;
     }

@@ -3,13 +3,14 @@ package de.unia.oc.robotcontrol.flow.strategy;
 
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.FlowStrategyType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class ReducerFlowStrategy<T, R> implements FlowStrategy<T, R> {
+public class ReducerFlowStrategy<T extends Object, R extends Object> implements FlowStrategy<T, R> {
 
     private final BiFunction<R, T, R> reducer;
     private final Supplier<R> initialValueSupplier;

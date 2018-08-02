@@ -7,7 +7,8 @@ import reactor.core.scheduler.Scheduler;
 
 import java.util.concurrent.Executor;
 
-public abstract class EmittingMulticast<Topic, Value> extends MapMulticast<Topic, Value>  {
+public abstract class EmittingMulticast<Topic extends Object, Value extends Object>
+        extends MapMulticast<Topic, Value>  {
 
     protected EmittingMulticast(Scheduler scheduler) {
         super(scheduler);

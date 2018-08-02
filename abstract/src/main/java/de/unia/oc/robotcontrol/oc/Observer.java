@@ -5,12 +5,13 @@ import de.unia.oc.robotcontrol.flow.FlowableTransformer;
 import de.unia.oc.robotcontrol.message.Message;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public interface Observer<@NonNull WorldState, Model extends @NonNull ObservationModel<WorldState>>
-        extends FlowableTransformer<Message, WorldState> {
+public interface Observer<Incoming extends Message, WorldState extends Object,
+        Model extends @NonNull ObservationModel<WorldState>>
+        extends FlowableTransformer<Incoming, WorldState> {
 
     Model getObservationModel();
 
     void setObservationModel(Model observationModel);
 
-    @NonNull WorldState getModelState();
+    WorldState getModelState();
 }

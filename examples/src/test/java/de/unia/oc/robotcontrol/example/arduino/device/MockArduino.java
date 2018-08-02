@@ -4,24 +4,22 @@ package de.unia.oc.robotcontrol.example.arduino.device;
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.coding.IntegerEncoding;
 import de.unia.oc.robotcontrol.coding.ListEncoding;
-import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
+import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
-import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
 import de.unia.oc.robotcontrol.message.Message;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class MockArduino extends LockingDeviceConnector {
+public class MockArduino extends LockingDeviceConnector<Message, Message> {
 
     private final Encoding<List<Integer>> mockAnswerEncoding;
+    private boolean isTerminated = false;
 
     public MockArduino(Encoding<Message> encoding,
-                       ScheduleProvider schedule,
-                       PassiveInFlow<Message> next,
                        Supplier<Message> updateRequestMessageProvider) {
-        super(encoding, schedule, next, updateRequestMessageProvider);
+        super(encoding, encoding, updateRequestMessageProvider);
         this.mockAnswerEncoding = new ListEncoding<>(new IntegerEncoding(encoding.getContext()), 3);
     }
 
@@ -39,4 +37,23 @@ public class MockArduino extends LockingDeviceConnector {
         ));
     }
 
+    @Override
+    public String getDeviceName() {
+        return "Mock Arduino";
+    }
+
+    @Override
+    public ClockType getClockType() {
+        return ClockType.INTERNAL;
+    }
+
+    @Override
+    public boolean isTerminated() {
+        return isTerminated;
+    }
+
+    @Override
+    public void terminate() {
+        isTerminated = true;
+    }
 }

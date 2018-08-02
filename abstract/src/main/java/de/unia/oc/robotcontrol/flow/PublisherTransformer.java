@@ -8,7 +8,8 @@ import org.reactivestreams.Subscription;
 
 import java.util.function.Function;
 
-public interface PublisherTransformer<T, R> extends Function<Publisher<T>, Publisher<R>> {
+public interface PublisherTransformer<T, R>
+        extends Function<Publisher<T>, Publisher<R>> {
 
     static <T, R> Publisher<R> mapPublisher(
             Publisher<T> publisher,

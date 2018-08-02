@@ -124,7 +124,7 @@
               <annotationProcessors>
                   <!-- Add all the checkers you want to enable here -->
                   <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
-                  <annotationProcessor>org.checkerframework.checker.lock.LockChecker</annotationProcessor>
+                  <!-- <annotationProcessor>org.checkerframework.checker.lock.LockChecker</annotationProcessor> -->
               </annotationProcessors>
               <compilerArgs>
                   <arg>-AprintErrorStack</arg>

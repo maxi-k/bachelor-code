@@ -3,12 +3,13 @@ package de.unia.oc.robotcontrol.flow.strategy;
 
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.FlowStrategyType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 
 import java.util.function.BiFunction;
 
-public class FolderFlowStrategy<T> implements FlowStrategy<T, T> {
+public class FolderFlowStrategy<T extends Object> implements FlowStrategy<T, T> {
 
     private final BiFunction<T, T, T> folder;
 

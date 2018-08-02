@@ -6,7 +6,7 @@ import de.unia.oc.robotcontrol.flow.FlowStrategyType;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 
-public class IgnoringFlowStrategy<T> implements FlowStrategy<T, T> {
+public class IgnoringFlowStrategy<T extends Object> implements FlowStrategy<T, T> {
 
     private IgnoringFlowStrategy() {}
 

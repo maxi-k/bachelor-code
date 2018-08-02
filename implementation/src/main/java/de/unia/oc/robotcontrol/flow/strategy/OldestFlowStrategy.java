@@ -7,7 +7,7 @@ import org.reactivestreams.Publisher;
 import reactor.core.publisher.BufferOverflowStrategy;
 import reactor.core.publisher.Flux;
 
-public class OldestFlowStrategy<T> implements FlowStrategy<T, T> {
+public class OldestFlowStrategy<T extends Object> implements FlowStrategy<T, T> {
 
     private OldestFlowStrategy() {}
 

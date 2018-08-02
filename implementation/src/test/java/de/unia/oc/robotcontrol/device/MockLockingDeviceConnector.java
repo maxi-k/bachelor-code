@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.device;
 
 import de.unia.oc.robotcontrol.coding.Encoding;
+import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.message.Message;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
@@ -40,5 +41,15 @@ public class MockLockingDeviceConnector extends LockingDeviceConnector<Message, 
     @Override
     public void terminate() {
         isTerminated = true;
+    }
+
+    @Override
+    public String getDeviceName() {
+        return "Mock Locking Device";
+    }
+
+    @Override
+    public ClockType getClockType() {
+        return ClockType.INTERNAL;
     }
 }

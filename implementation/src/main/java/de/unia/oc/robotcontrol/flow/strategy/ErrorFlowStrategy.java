@@ -3,10 +3,11 @@ package de.unia.oc.robotcontrol.flow.strategy;
 
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.FlowStrategyType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 
-public class ErrorFlowStrategy<T> implements FlowStrategy<T, T> {
+public class ErrorFlowStrategy<T extends Object> implements FlowStrategy<T, T> {
 
     private ErrorFlowStrategy() {}
 

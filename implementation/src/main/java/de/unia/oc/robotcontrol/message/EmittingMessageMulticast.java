@@ -10,7 +10,7 @@ import reactor.core.scheduler.Schedulers;
 import java.util.concurrent.Executor;
 
 public class EmittingMessageMulticast<T extends Message>
-    extends EmittingMulticast<MessageType<T>, T>
+    extends EmittingMulticast<MessageType<? extends T>, T>
         implements MessageMulticast<T> {
 
     private final FlowStrategy<T, T> flowStrategy = LatestFlowStrategy.create();
@@ -28,7 +28,8 @@ public class EmittingMessageMulticast<T extends Message>
     }
 
     @Override
-    protected MessageType topicFromValue(Message message) {
+    @SuppressWarnings("unchecked")
+    protected MessageType topicFromValue(T message) {
         return message.getType();
     }
 

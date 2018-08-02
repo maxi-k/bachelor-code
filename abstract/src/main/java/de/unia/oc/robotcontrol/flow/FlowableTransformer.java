@@ -3,7 +3,7 @@ package de.unia.oc.robotcontrol.flow;
 
 import org.reactivestreams.Publisher;
 
-public interface FlowableTransformer<Input, Output>
+public interface FlowableTransformer<Input extends Object, Output extends Object>
         extends Flowable, PublisherTransformer<Input, Output> {
 
     @Override

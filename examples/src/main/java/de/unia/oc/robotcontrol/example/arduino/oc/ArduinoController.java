@@ -3,43 +3,25 @@ package de.unia.oc.robotcontrol.example.arduino.oc;
 
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
 import de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand;
-import de.unia.oc.robotcontrol.concurrent.Timespan;
-import de.unia.oc.robotcontrol.flow.old.InFlows;
-import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
-import de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
-import de.unia.oc.robotcontrol.oc.Observer;
 import de.unia.oc.robotcontrol.oc.QLearningController;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signedness.qual.Constant;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class ArduinoController extends QLearningController<ArduinoState, ObservationModel<ArduinoState>, RobotDrivingCommand> {
 
-    private ObservationModel<ArduinoState> model;
-    private @MonotonicNonNull Observer<ArduinoState, ObservationModel<ArduinoState>> observer;
-
     private final static int DEFAULT_SPEED = 20;
-    private final PassiveInFlow<RobotDrivingCommand> actuator;
 
-    @EnsuresNonNull({"this.model", "this.actuator"})
-    public ArduinoController(PassiveInFlow<? super SpeedCmdMessage> next) {
-        super();
-        this.actuator = InFlows.createUnbuffered((RobotDrivingCommand msg) -> {
-                    // System.out.println("Controller sent out driving command: " + msg);
-                    next.accept(new SpeedCmdMessage(msg, DEFAULT_SPEED));
-                }
-        );
-        this.model = createObservationModel();
+    @Override
+    protected int getCommandBufferSize() {
+        return 32;
     }
 
     @Override
@@ -81,14 +63,18 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
     }
 
     @Override
-    public ObservationModel<ArduinoState> getObservationModel() {
-        return this.model;
+    protected int getTargetTickFreqMs(@UnderInitialization ArduinoController this) {
+        return 40;
     }
 
     @Override
-    public void setObserver(Observer<ArduinoState, ObservationModel<ArduinoState>> observer) {
-        this.observer = observer;
-        this.observer.setObservationModel(model);
+    protected ObservationModel<ArduinoState> createObservationModel(@UnderInitialization ArduinoController this) {
+        return new ObservationModel<ArduinoState>() {
+            @Override
+            public Duration getTargetUpdateTime() {
+                return Duration.ofMillis(getTargetTickFreqMs());
+            }
+        };
     }
 
     @Override
@@ -97,22 +83,4 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
         return Collections.unmodifiableSet(result);
     }
 
-    @RequiresNonNull({"this.actuator"})
-    private ObservationModel<ArduinoState> createObservationModel(@UnderInitialization(QLearningController.class) ArduinoController this) {
-        ArduinoController self = this;
-        return new ObservationModel<ArduinoState>() {
-
-            @Override
-            public Timespan getTargetUpdateTime() {
-                return Timespan.create(40, TimeUnit.MILLISECONDS);
-            }
-
-            @Override
-            @SuppressWarnings("initialization")
-            public void accept(ArduinoState arduinoState) {
-                self.inFlow().accept(arduinoState);
-                self.outFlow().get().accept(actuator);
-            }
-        };
-    }
 }

@@ -5,7 +5,7 @@ import reactor.core.publisher.BaseSubscriber;
 
 import java.util.function.Consumer;
 
-public class CallbackMessageRecipient<T extends Message<T>> implements MessageRecipient<T> {
+public class CallbackMessageRecipient<T extends Message> implements MessageRecipient<T> {
 
     private final Subscriber<T> subscriber;
 

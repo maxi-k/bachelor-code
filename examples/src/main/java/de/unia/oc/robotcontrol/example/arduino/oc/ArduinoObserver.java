@@ -1,30 +1,36 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.example.arduino.oc;
 
+import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
-import de.unia.oc.robotcontrol.flow.old.ActiveOutFlow;
-import de.unia.oc.robotcontrol.flow.old.InFlows;
-import de.unia.oc.robotcontrol.flow.old.OutFlows;
-import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
+import de.unia.oc.robotcontrol.flow.FlowStrategy;
+import de.unia.oc.robotcontrol.flow.PublisherTransformer;
+import de.unia.oc.robotcontrol.flow.strategy.LatestFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.TimedFlowStrategy;
 import de.unia.oc.robotcontrol.message.SensorMessage;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
 import de.unia.oc.robotcontrol.oc.Observer;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import reactor.core.publisher.UnicastProcessor;
 
+import java.time.Duration;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implements Observer<ArduinoState, T> {
-
+public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implements Observer<SensorMessage, ArduinoState, T> {
 
     private final ScheduleProvider schedule;
-    private final ActiveOutFlow<ArduinoState> outFlow;
-    private final PassiveInFlow<SensorMessage> inFlow;
 
     private @NonNull T observationModel;
     private long lastUpdatedTime;
+
+    private final FlowStrategy<SensorMessage, ArduinoState> flowStrategy;
+
     private ArduinoState lastComputedState;
+    private final UnicastProcessor<Duration> timeSupplier;
 
     @SuppressWarnings("initialization")
     public ArduinoObserver(@NonNull T observationModel) {
@@ -32,19 +38,26 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implement
         this.lastComputedState = ArduinoState.createEmpty();
         this.lastUpdatedTime = System.currentTimeMillis();
 
+        this.timeSupplier = UnicastProcessor.create();
         this.schedule = Scheduling.interval(
                 Executors.newScheduledThreadPool(1),
-                this.observationModel.getTargetUpdateTime().getTime(),
-                this.observationModel.getTargetUpdateTime().getUnit()
+                observationModel.getTargetUpdateTime().toMillis(),
+                TimeUnit.MILLISECONDS
         );
 
-        this.outFlow = OutFlows.createScheduled(schedule, this::getModelState, InFlows.createUnbuffered(observationModel));
-        this.inFlow = InFlows.createUnbuffered(this::acceptData);
+        timeSupplier.onNext(observationModel.getTargetUpdateTime());
+
+        this.flowStrategy = LatestFlowStrategy
+                .<SensorMessage>create()
+                .chain(SchedulingFlowStrategy.create(schedule.getExecutor()))
+                .chain(PublisherTransformer.liftPublisher(this::acceptData))
+                .chain(TimedFlowStrategy.createDurational(timeSupplier));
     }
 
-    private void acceptData(SensorMessage data) {
+    private ArduinoState acceptData(SensorMessage data) {
         this.lastComputedState.updateWith(data);
         this.lastUpdatedTime = System.currentTimeMillis();
+        return lastComputedState;
     }
 
     @Override
@@ -55,6 +68,7 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implement
     @Override
     public synchronized void setObservationModel(T model) {
         this.observationModel = model;
+        timeSupplier.onNext(model.getTargetUpdateTime());
     }
 
     @Override
@@ -62,17 +76,17 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implement
         return lastComputedState;
     }
 
-    @Override
-    public PassiveInFlow<SensorMessage> inFlow() {
-        return this.inFlow;
-    }
-
-    @Override
-    public ActiveOutFlow<ArduinoState> outFlow() {
-        return this.outFlow;
-    }
-
     public ScheduleProvider getSchedule() {
         return schedule;
+    }
+
+    @Override
+    public FlowStrategy<SensorMessage, ArduinoState> getFlowStrategy() {
+        return flowStrategy;
+    }
+
+    @Override
+    public ClockType getClockType() {
+        return ClockType.INTERNAL;
     }
 }

@@ -1,19 +1,21 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.example.arduino.device;
 
-import de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand;
-import de.unia.oc.robotcontrol.example.arduino.visualization.RobotGridObject;
-import de.unia.oc.robotcontrol.example.arduino.visualization.TargetGridObject;
 import de.unia.oc.robotcontrol.coding.Encoding;
-import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
+import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
-import de.unia.oc.robotcontrol.flow.old.PassiveInFlow;
+import de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand;
 import de.unia.oc.robotcontrol.example.arduino.message.ArduinoMessageTypes;
 import de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage;
-import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage;
+import de.unia.oc.robotcontrol.example.arduino.visualization.RobotGridObject;
+import de.unia.oc.robotcontrol.example.arduino.visualization.TargetGridObject;
+import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.util.Tuple;
-import de.unia.oc.robotcontrol.visualization.*;
+import de.unia.oc.robotcontrol.visualization.GridDirection;
+import de.unia.oc.robotcontrol.visualization.GridObject;
+import de.unia.oc.robotcontrol.visualization.ObjectGrid;
+import de.unia.oc.robotcontrol.visualization.VisualizingWindow;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
@@ -24,7 +26,7 @@ import java.util.function.Supplier;
 import static de.unia.oc.robotcontrol.visualization.GridDirection.LEFT;
 import static de.unia.oc.robotcontrol.visualization.GridDirection.RIGHT;
 
-public class DiscreteSimulatedRobot extends LockingDeviceConnector {
+public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Message> {
 
     private final ObjectGrid simulationEnvironment;
     private final RobotGridObject robot;
@@ -32,11 +34,9 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector {
     private final VisualizingWindow window;
 
     public DiscreteSimulatedRobot(Encoding<Message> encoding,
-                                  ScheduleProvider schedule,
-                                  PassiveInFlow<Message> next,
                                   Supplier<Message> updateRequestMessageProvider,
                                   ObjectGrid simulationEnvironment) {
-        super(encoding, schedule, next, updateRequestMessageProvider);
+        super(encoding, encoding, updateRequestMessageProvider);
         this.simulationEnvironment = simulationEnvironment;
         this.robot = new RobotGridObject();
         this.window = new VisualizingWindow(simulationEnvironment);
@@ -54,14 +54,14 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector {
 
     @Override
     protected void pushMessage(byte[] message) throws IOException {
-        Message m = this.encoding.decode(message);
+        Message m = this.inputEncoding.decode(message);
         actOnMessage(m);
         this.window.update();
     }
 
     @Override
     protected byte[] retrieveMessage() throws IOException {
-        return this.encoding.encode(getGridDistances());
+        return this.outputEncoding.encode(getGridDistances());
     }
 
     private void actOnMessage(Message m) {
@@ -104,4 +104,23 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector {
                 Math.abs(y - other.getY());
     }
 
+    @Override
+    public String getDeviceName() {
+        return "Discrete Simulated Robot";
+    }
+
+    @Override
+    public boolean isTerminated() {
+        return false;
+    }
+
+    @Override
+    public void terminate() {
+        // nothing to terminate
+    }
+
+    @Override
+    public ClockType getClockType() {
+        return ClockType.EXTERNAL;
+    }
 }

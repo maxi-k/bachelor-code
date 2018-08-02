@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.concurrent;
 
 public enum ClockType {
+    UNCLOCKED,
     INTERNAL,
     EXTERNAL;
 }

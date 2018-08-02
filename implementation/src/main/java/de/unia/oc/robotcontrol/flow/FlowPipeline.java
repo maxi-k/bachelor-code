@@ -5,6 +5,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 
+@Deprecated
 public class FlowPipeline<Input, Output> {
 
     public static final class Builder<Input, Output> {
@@ -22,8 +23,7 @@ public class FlowPipeline<Input, Output> {
         }
 
         public FlowPipeline build() {
-            // return new FlowPipeline();
-            return null;
+            return new FlowPipeline();
         }
 
     }

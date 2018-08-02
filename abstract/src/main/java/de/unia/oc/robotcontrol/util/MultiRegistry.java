@@ -15,7 +15,7 @@ import java.util.Collection;
  * @param <K> the type of the key elements
  * @param <V> the type of the value elements
  */
-public interface MultiRegistry<K, V> {
+public interface MultiRegistry<K extends Object, V extends Object> {
 
     /**
      * Register a the given value for the given key
@@ -24,7 +24,7 @@ public interface MultiRegistry<K, V> {
      *
      * @return whether the value was registered or not
      */
-    boolean register(@NonNull K key, @NonNull V value);
+    boolean register(K key, V value);
 
     /**
      * Get the values associated with the given key,
@@ -33,7 +33,7 @@ public interface MultiRegistry<K, V> {
      * @param key the key to look up
      * @return A (possibly empty, immutable) collection associated with the given value
      */
-    Collection<@NonNull V> getValuesFor(K key);
+    Collection<V> getValuesFor(K key);
 
     /**
      * Get the keys associated with the given value,
@@ -42,5 +42,5 @@ public interface MultiRegistry<K, V> {
      * @param value the value to look up the keys for
      * @return A (possibly empty, immutable) collection associated with the given value
      */
-    Collection<@NonNull K> getKeysFor(V value);
+    Collection<K> getKeysFor(V value);
 }

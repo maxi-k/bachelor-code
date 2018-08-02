@@ -5,10 +5,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class BidirectionalRegistry<K, V> implements Registry<K, V> {
+public class BidirectionalRegistry<K extends Object, V extends Object>
+        implements Registry<K, V> {
 
     private final BiMap<K, V> store;
 
@@ -17,7 +17,7 @@ public class BidirectionalRegistry<K, V> implements Registry<K, V> {
     }
 
     @Override
-    public boolean register(@NonNull K key, @NonNull V value) {
+    public boolean register(K key, V value) {
         synchronized(store) {
             if (store.containsKey(key)) {
                 return false;
@@ -28,7 +28,8 @@ public class BidirectionalRegistry<K, V> implements Registry<K, V> {
     }
 
     @Override
-    public Optional<@NonNull V> getValueFor(@NonNull K key) {
+    public Optional<V> getValueFor(K key) {
+        if (key == null) return Optional.empty();
         synchronized(store) {
             return store.containsKey(key) ?
                     Optional.ofNullable(store.get(key)) :
@@ -37,7 +38,8 @@ public class BidirectionalRegistry<K, V> implements Registry<K, V> {
     }
 
     @Override
-    public Optional<@NonNull K> getKeyFor(@Nonnull V value) {
+    public Optional<K> getKeyFor(V value) {
+        if (value == null) return Optional.empty();
         synchronized(store) {
             return store.containsValue(value) ?
                     Optional.ofNullable(store.inverse().get(value)) :

@@ -5,10 +5,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.*;
 
-public class MultiBiRegistry<K, V> implements MultiRegistry<K, V> {
+public class MultiBiRegistry<K extends Object, V extends Object>
+        implements MultiRegistry<K, V> {
 
-    private final Map<@NonNull K, Set<@NonNull V>> keyMap;
-    private final Map<@NonNull V, Set<@NonNull K>> valueMap;
+    private final Map<K, Set<V>> keyMap;
+    private final Map<V, Set<K>> valueMap;
 
     public MultiBiRegistry() {
         this.keyMap = new HashMap<>();
@@ -16,7 +17,7 @@ public class MultiBiRegistry<K, V> implements MultiRegistry<K, V> {
     }
 
     @Override
-    public synchronized boolean register(@NonNull K key, @NonNull V value) {
+    public synchronized boolean register(K key, V value) {
         if (keyMap.containsKey(key) && keyMap.get(key).contains(value)) {
             return false;
         }
@@ -24,7 +25,8 @@ public class MultiBiRegistry<K, V> implements MultiRegistry<K, V> {
     }
 
     @Override
-    public Collection<@NonNull V> getValuesFor(@NonNull K key) {
+    public Collection<V> getValuesFor(K key) {
+        if (key == null) return Collections.emptySet();
         synchronized (keyMap) {
             if (keyMap.containsKey(key)) {
                 return Collections.unmodifiableSet(keyMap.get(key));
@@ -34,7 +36,8 @@ public class MultiBiRegistry<K, V> implements MultiRegistry<K, V> {
     }
 
     @Override
-    public Collection<@NonNull K> getKeysFor(@NonNull V value) {
+    public Collection<K> getKeysFor(V value) {
+        if (value == null) return Collections.emptySet();
         synchronized (valueMap) {
             if (valueMap.containsKey(value)) {
                 return Collections.unmodifiableSet(valueMap.get(value));
@@ -43,7 +46,7 @@ public class MultiBiRegistry<K, V> implements MultiRegistry<K, V> {
         }
     }
 
-    private static <A, B> boolean putOrMerge(Map<A, Set<B>> map, @NonNull A key, @NonNull B value) {
+    private static <A, B> boolean putOrMerge(Map<A, Set<B>> map, A key, B value) {
         if (map.containsKey(key)) {
             return map.get(key).add(value);
         } else {

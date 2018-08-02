@@ -5,13 +5,14 @@ import org.reactivestreams.Publisher;
 
 import java.util.function.Function;
 
-public interface FlowStrategy<T, R> extends PublisherTransformer<T, R> {
+public interface FlowStrategy<T extends Object, R extends Object>
+        extends PublisherTransformer<T, R> {
 
     String PROPERTY_NAME = "flowStrategy";
 
     FlowStrategyType getType();
 
-    default <S> FlowStrategy<T, S> chain(Function<? super Publisher<R>, ? extends Publisher<S>> other) {
+    default <S extends Object> FlowStrategy<T, S> chain(Function<? super Publisher<R>, ? extends Publisher<S>> other) {
         FlowStrategy<T, R> self = this;
         return new FlowStrategy<T, S>() {
             @Override
