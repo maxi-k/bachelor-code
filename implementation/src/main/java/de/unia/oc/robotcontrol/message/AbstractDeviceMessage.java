@@ -5,6 +5,7 @@ import de.unia.oc.robotcontrol.device.ModifiableDeviceTarget;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class AbstractDeviceMessage<T extends Message>
@@ -24,11 +25,10 @@ public abstract class AbstractDeviceMessage<T extends Message>
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public boolean equals(@Nullable Object o) {
         if (!(o instanceof AbstractDeviceMessage)) return false;
         AbstractDeviceMessage m = (AbstractDeviceMessage) o;
-        return m == this
-                || super.equals(o)
-                && deviceUUID == m.deviceUUID;
+        return m == this || (Objects.equals(deviceUUID, m.deviceUUID));
     }
 }
