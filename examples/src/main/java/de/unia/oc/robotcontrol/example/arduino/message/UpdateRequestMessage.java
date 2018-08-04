@@ -2,9 +2,7 @@
 package de.unia.oc.robotcontrol.example.arduino.message;
 
 import de.unia.oc.robotcontrol.message.AbstractActuatorMessage;
-import de.unia.oc.robotcontrol.message.ActuatorMessage;
 import de.unia.oc.robotcontrol.message.MessageType;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

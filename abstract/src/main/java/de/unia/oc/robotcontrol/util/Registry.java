@@ -1,8 +1,6 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.util;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Optional;
 
 /**

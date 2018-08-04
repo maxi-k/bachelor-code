@@ -1,7 +1,6 @@
 package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.util.Tuple;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;

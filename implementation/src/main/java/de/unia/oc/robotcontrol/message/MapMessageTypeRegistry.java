@@ -3,7 +3,6 @@ package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.coding.CodingContext;
 import de.unia.oc.robotcontrol.util.BidirectionalRegistry;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 class MapMessageTypeRegistry<I extends Object>
         extends BidirectionalRegistry<I, MessageType>

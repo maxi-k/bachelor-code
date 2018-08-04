@@ -3,7 +3,6 @@ package de.unia.oc.robotcontrol.flow;
 
 import de.unia.oc.robotcontrol.flow.function.SubscriberTransformation;
 import de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy;
-import de.unia.oc.robotcontrol.message.ErrorMessage;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;

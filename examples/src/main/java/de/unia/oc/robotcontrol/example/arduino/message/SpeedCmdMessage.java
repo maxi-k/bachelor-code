@@ -3,11 +3,8 @@ package de.unia.oc.robotcontrol.example.arduino.message;
 
 import de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand;
 import de.unia.oc.robotcontrol.message.AbstractActuatorMessage;
-import de.unia.oc.robotcontrol.message.ActuatorMessage;
 import de.unia.oc.robotcontrol.message.MessageType;
 import org.checkerframework.checker.nullness.qual.Nullable;
-
-import java.util.UUID;
 
 /**
  * A message wrapping the command sent to an arduino used for

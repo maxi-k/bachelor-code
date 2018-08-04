@@ -4,7 +4,6 @@ package de.unia.oc.robotcontrol.device;
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.device.Device;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy;
 import de.unia.oc.robotcontrol.message.Message;

@@ -5,7 +5,6 @@ import de.unia.oc.robotcontrol.concurrent.Terminable;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.message.MessageProcessor;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.UUID;
 

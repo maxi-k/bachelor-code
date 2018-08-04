@@ -3,7 +3,6 @@ package de.unia.oc.robotcontrol.util;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Optional;
 
