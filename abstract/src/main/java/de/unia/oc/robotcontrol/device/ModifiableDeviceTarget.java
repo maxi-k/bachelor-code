@@ -5,5 +5,5 @@ import java.util.UUID;
 
 public interface ModifiableDeviceTarget extends DeviceTarget {
 
-    DeviceTarget setDeviceUUID(UUID uuid);
+    void setDeviceUUID(UUID uuid);
 }

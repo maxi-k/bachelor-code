@@ -7,6 +7,7 @@ import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
 import de.unia.oc.robotcontrol.message.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class LockingDeviceConnectorTest {
 
     @Test
+    // TODO: Apply Reactive Streams flow system
+    @Disabled
     void sendsAndRetrievesMessages() throws InterruptedException {
 
         SingleValueMessageType<Integer> msgType = new SingleValueMessageType<>(new IntegerEncoding(CodingContext.ARDUINO));

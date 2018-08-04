@@ -1,6 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.device;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.UUID;
@@ -8,10 +9,12 @@ import java.util.UUID;
 public interface DeviceTarget {
 
     @Pure
-    UUID getDeviceUUID();
+    @Nullable UUID getDeviceUUID();
 
     @Pure
     default String getDeviceName() {
-        return getDeviceUUID().toString();
+        return getDeviceUUID() == null
+                ? "Unidentified Device"
+                : getDeviceUUID().toString();
     }
 }

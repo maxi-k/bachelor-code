@@ -2,9 +2,12 @@
 package de.unia.oc.robotcontrol.example.arduino.message;
 
 import de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand;
+import de.unia.oc.robotcontrol.message.AbstractActuatorMessage;
 import de.unia.oc.robotcontrol.message.ActuatorMessage;
 import de.unia.oc.robotcontrol.message.MessageType;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.UUID;
 
 /**
  * A message wrapping the command sent to an arduino used for
@@ -12,21 +15,17 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * TODO: Currently simplified to only include one command and speed parameter
  */
-public class SpeedCmdMessage implements ActuatorMessage<SpeedCmdMessage> {
-
-    private final long creationTime;
+public class SpeedCmdMessage extends AbstractActuatorMessage<SpeedCmdMessage> {
 
     private final RobotDrivingCommand command;
     private final int speed;
 
     public SpeedCmdMessage(char command, int speed) {
-        this.creationTime = System.currentTimeMillis();
         this.command = RobotDrivingCommand.fromIdentifier(command).orElseThrow(IllegalArgumentException::new);
         this.speed = speed;
     }
 
     public SpeedCmdMessage(RobotDrivingCommand command, int speed) {
-        this.creationTime = System.currentTimeMillis();
         this.command = command;
         this.speed = speed;
     }
@@ -50,8 +49,10 @@ public class SpeedCmdMessage implements ActuatorMessage<SpeedCmdMessage> {
             return false;
         }
         SpeedCmdMessage msg = (SpeedCmdMessage) obj;
-        return msg.command == this.command &&
-                msg.speed == this.speed;
+        return obj == this
+                || super.equals(msg)
+                && msg.command == this.command
+                && msg.speed == this.speed;
     }
 
     @Override
@@ -59,8 +60,4 @@ public class SpeedCmdMessage implements ActuatorMessage<SpeedCmdMessage> {
         return "SpeedCmd Message: dir: " + command + " speed: " + speed;
     }
 
-    @Override
-    public long getCreationTime() {
-        return creationTime;
-    }
 }

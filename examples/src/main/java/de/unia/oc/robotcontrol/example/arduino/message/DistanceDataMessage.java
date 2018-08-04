@@ -1,6 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.example.arduino.message;
 
+import de.unia.oc.robotcontrol.message.AbstractDeviceMessage;
 import de.unia.oc.robotcontrol.message.MessageType;
 import de.unia.oc.robotcontrol.message.SensorMessage;
 import org.checkerframework.checker.index.qual.NonNegative;
@@ -10,7 +11,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * A message wrapping the distance data from the
  * three arduino ultrasound sensors (front, y, z).
  */
-public class DistanceDataMessage implements SensorMessage<DistanceDataMessage> {
+public class DistanceDataMessage
+        extends AbstractDeviceMessage<DistanceDataMessage>
+        implements SensorMessage<DistanceDataMessage> {
 
     private final long time;
 
@@ -46,7 +49,9 @@ public class DistanceDataMessage implements SensorMessage<DistanceDataMessage> {
             return false;
         }
         DistanceDataMessage msg = (DistanceDataMessage) obj;
-        return msg.front == this.front
+        return msg == this
+                || super.equals(msg)
+                && msg.front == this.front
                 && msg.right == this.right
                 && msg.left == this.left;
     }
