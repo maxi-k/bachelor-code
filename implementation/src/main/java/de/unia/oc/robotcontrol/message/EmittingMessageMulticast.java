@@ -24,12 +24,12 @@ public class EmittingMessageMulticast<T extends Message>
     }
 
     public EmittingMessageMulticast() {
-        super(Schedulers.newParallel("parallelMessageMulticaster"));
+        super(Schedulers.newParallel("parallelMessageMulticast"));
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected MessageType topicFromValue(T message) {
+    public MessageType topicFromValue(T message) {
         return message.getType();
     }
 

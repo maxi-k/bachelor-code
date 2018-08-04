@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.flow;
 
 import de.unia.oc.robotcontrol.flow.function.SubscriberTransformation;
+import de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy;
 import de.unia.oc.robotcontrol.message.ErrorMessage;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
@@ -17,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
 
 public abstract class ReemittingMulticast<Topic extends Object, Value extends Object>
-        implements FlowableMulticast<Topic, Value> {
+        implements ValueBoundMulticast<Topic, Value> {
 
     private final ConcurrentMap<Topic, FluxProcessor<Value, Value>> multicastMap;
     private final FluxProcessor<Value, Value> mainProcessor;
@@ -60,7 +61,7 @@ public abstract class ReemittingMulticast<Topic extends Object, Value extends Ob
 
     @Override
     public Publisher<Value> asPublisher() {
-        return mainProcessor.retry();
+        return getFlowStrategy().apply(mainProcessor.retry());
     }
 
     @Override
@@ -68,6 +69,11 @@ public abstract class ReemittingMulticast<Topic extends Object, Value extends Ob
         return SubscriberTransformation.unboundedSubscription(
                 SubscriberTransformation.anonymizeSubscription(mainProcessor)
         );
+    }
+
+    @Override
+    public FlowStrategy<Value, Value> getFlowStrategy() {
+        return SchedulingFlowStrategy.create(this.scheduler);
     }
 
     protected void dispatch(Value value) {
@@ -82,8 +88,6 @@ public abstract class ReemittingMulticast<Topic extends Object, Value extends Ob
     protected ConcurrentMap<Topic, FluxProcessor<Value, Value>> createMulticastMap() {
         return new ConcurrentHashMap<>();
     }
-
-    protected abstract Topic topicFromValue(Value value);
 
     protected FluxProcessor<Value, Value> createMainProcessor() {
         return EmitterProcessor.create();
