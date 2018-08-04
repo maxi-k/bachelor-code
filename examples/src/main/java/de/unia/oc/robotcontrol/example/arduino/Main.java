@@ -2,8 +2,6 @@
 package de.unia.oc.robotcontrol.example.arduino;
 
 import com.pi4j.util.Console;
-import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.concurrent.Scheduling;
 import de.unia.oc.robotcontrol.device.I2CConnector;
 import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
@@ -14,15 +12,11 @@ import de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage;
 import de.unia.oc.robotcontrol.example.arduino.message.UpdateRequestMessage;
 import de.unia.oc.robotcontrol.example.arduino.oc.ArduinoController;
 import de.unia.oc.robotcontrol.example.arduino.oc.ArduinoObserver;
-import de.unia.oc.robotcontrol.flow.strategy.CastMapFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.TypeFilterFlowStrategy;
 import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
-import de.unia.oc.robotcontrol.util.Logger;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
@@ -30,8 +24,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -85,14 +77,6 @@ public class Main {
 
         // dispatcher.register(ErrorMessage.errorMessageType, printer);
 
-        // define a schedule for how often the raspberry pi should
-        // ask for updates on the arduino
-        final ScheduleProvider schedule = Scheduling.interval(
-                Executors.newScheduledThreadPool(1),
-                40,
-                TimeUnit.MILLISECONDS
-        );
-
         final LockingDeviceConnector<Message, Message> arduino = (argSet.contains("simulate") || argSet.contains("simulation"))
                 ?
                 // define a simulated version of the arduino in a discrete grid environment
@@ -126,36 +110,12 @@ public class Main {
         final ArduinoController controller = new ArduinoController();
         final ArduinoObserver<ObservationModel<ArduinoState>> observer = new ArduinoObserver<>(controller.getObservationModel());
         controller.setObserver(observer);
-        Flux.from(dispatcher
-                .subscribeTo(ArduinoMessageTypes.DISTANCE_DATA))
-                .transform(CastMapFlowStrategy.create(SensorMessage.class))
+        Flux.from(dispatcher.subscribeToAll())
+                .transform(TypeFilterFlowStrategy.create(SensorMessage.class))
                 .<ArduinoState>transform(observer::apply)
                 .<RobotDrivingCommand>transform(controller::apply)
                 .map((c) -> new SpeedCmdMessage(c, DEFAULT_SPEED))
-                .subscribe(new Subscriber<SpeedCmdMessage>() {
-                    private @MonotonicNonNull Subscription s;
-                    @Override
-                    public void onSubscribe(Subscription s) {
-                        this.s = s;
-                        s.request(1);
-                    }
-
-                    @Override
-                    public void onNext(SpeedCmdMessage speedCmdMessage) {
-                        Logger.instance().debug("SpeedCmdMessage: " + speedCmdMessage);
-                        if (s != null) s.request(1);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        Logger.instance().logException(t);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        s = null;
-                    }
-                });
+                .subscribe(dispatcher.asSubscriber());
     }
 
     private static void setupManual(Console console, MessageMulticast<Message> dispatcher,

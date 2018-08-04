@@ -1,8 +1,10 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
+import de.unia.oc.robotcontrol.flow.function.SubscriberTransformation;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxProcessor;
 import reactor.core.scheduler.Scheduler;
@@ -48,6 +50,13 @@ abstract class MapMulticast<Topic extends Object, Value extends Object>
     @Override
     public Processor<Value, Value> asProcessor() {
         return mainProcessor;
+    }
+
+    @Override
+    public Subscriber<Value> asSubscriber() {
+        return SubscriberTransformation.unboundedSubscription(
+                SubscriberTransformation.anonymizeSubscription(mainProcessor)
+        );
     }
 
     protected void dispatch(Value value) {

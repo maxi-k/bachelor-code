@@ -1,10 +1,11 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
+import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
 import org.reactivestreams.Publisher;
 
 public interface FlowableTransformer<Input extends Object, Output extends Object>
-        extends Flowable, PublisherTransformer<Input, Output> {
+        extends Flowable, PublisherTransformation<Input, Output> {
 
     @Override
     FlowStrategy<Input, Output> getFlowStrategy();

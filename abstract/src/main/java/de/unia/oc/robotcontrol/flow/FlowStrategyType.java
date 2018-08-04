@@ -48,6 +48,11 @@ public enum FlowStrategyType {
      */
     REDUCE,
 
+	/**
+	 * Do not change the Flow Strategy already existing on the Publisher.
+	 */
+	TRANSPARENT,
+
     /**
      * Any flow strategy that is not expressible using these types.
 	 */

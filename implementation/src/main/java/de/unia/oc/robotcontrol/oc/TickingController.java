@@ -51,8 +51,8 @@ public abstract class TickingController<WorldState extends Object,
     public FlowStrategy<WorldState, Command> getFlowStrategy() {
         return BufferFlowStrategy
                 .<WorldState>create(getCommandBufferSize(), BufferOverflowStrategy.DROP_OLDEST)
-                .chain(SchedulingFlowStrategy.create(scheduler))
-                .chain(TimedFlowStrategy.createDurational(getObservationModel().getTargetUpdateTime(),
+                .with(SchedulingFlowStrategy.create(scheduler))
+                .with(TimedFlowStrategy.createDurational(getObservationModel().getTargetUpdateTime(),
                         (l, s) -> tick(s))
                 );
     }

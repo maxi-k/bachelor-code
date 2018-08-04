@@ -43,7 +43,7 @@ public class TimedFlowStrategy<Input extends Object, Output extends Object> impl
 
     @Override
     public FlowStrategyType getType() {
-        return FlowStrategyType.UNDEFINED;
+        return FlowStrategyType.TRANSPARENT;
     }
 
     @Override

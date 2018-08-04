@@ -3,7 +3,9 @@ package de.unia.oc.robotcontrol.device;
 
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
-import de.unia.oc.robotcontrol.flow.PublisherTransformer;
+import de.unia.oc.robotcontrol.flow.function.ProcessorTransformation;
+import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
+import de.unia.oc.robotcontrol.flow.function.SubscriberTransformation;
 import de.unia.oc.robotcontrol.flow.strategy.BufferFlowStrategy;
 import de.unia.oc.robotcontrol.message.Message;
 import org.checkerframework.checker.signedness.qual.Constant;
@@ -46,11 +48,15 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
         this.updateRequestMessageProvider = updateRequestMessageProvider;
 
         this.inputProcessor = createProcessor();
-        this.input = inputProcessor;
+        this.input = wrapSubscriber(inputProcessor);
         this.output = Flux
                 .from(inputProcessor)
                 .publishOn(Schedulers.newSingle("deviceConnector_" + this.getDeviceName()))
                 .transform(getFlowStrategy());
+
+        // ScheduleProvider s = Scheduling
+        //         .interval(Executors.newScheduledThreadPool(1), 20, TimeUnit.MILLISECONDS);
+        // s.submit(() -> this.input.onNext(updateRequestMessageProvider.get()));
     }
 
     @Override
@@ -87,9 +93,16 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
         return EmitterProcessor.create();
     }
 
+    protected Subscriber<Input> wrapSubscriber(Subscriber<Input> processor) {
+        return SubscriberTransformation.unboundedSubscription(
+                SubscriberTransformation.anonymizeSubscription(
+                        processor
+                ));
+    }
+
     @Override
     public Processor<Input, Output> asProcessor() {
-        return PublisherTransformer
+        return ProcessorTransformation
                 .liftProcessor(Function.<Input>identity(), this::sendAndReceive)
                 .apply(inputProcessor);
     }
@@ -98,7 +111,7 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
     public FlowStrategy<Input, Output> getFlowStrategy() {
         return BufferFlowStrategy
                 .<Input>create(getInputBufferSize(), BufferOverflowStrategy.DROP_OLDEST)
-                .chain(PublisherTransformer.liftPublisher(this::sendAndReceive));
+                .with(PublisherTransformation.liftPublisher(this::sendAndReceive));
     }
 
     @Pure

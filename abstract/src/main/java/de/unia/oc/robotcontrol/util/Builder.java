@@ -30,7 +30,7 @@ public final class Builder<T> {
 
     /**
      * Extract the value from the Builder instance.
-     * Used at the end of the build chain to get the actual
+     * Used at the end of the build with to get the actual
      * desired value.
      *
      * @return The {@link Builder#value} this Builder holds

@@ -1,18 +1,19 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
+import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
 import org.reactivestreams.Publisher;
 
 import java.util.function.Function;
 
 public interface FlowStrategy<T extends Object, R extends Object>
-        extends PublisherTransformer<T, R> {
+        extends PublisherTransformation<T, R> {
 
     String PROPERTY_NAME = "flowStrategy";
 
     FlowStrategyType getType();
 
-    default <S extends Object> FlowStrategy<T, S> chain(Function<? super Publisher<R>, ? extends Publisher<S>> other) {
+    default <S extends Object> FlowStrategy<T, S> with(Function<? super Publisher<R>, ? extends Publisher<S>> other) {
         FlowStrategy<T, R> self = this;
         return new FlowStrategy<T, S>() {
             @Override

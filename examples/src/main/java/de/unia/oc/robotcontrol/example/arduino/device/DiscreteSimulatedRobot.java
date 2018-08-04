@@ -56,7 +56,9 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
     protected void pushMessage(byte[] message) throws IOException {
         Message m = this.inputEncoding.decode(message);
         actOnMessage(m);
-        this.window.update();
+        synchronized (this.window) {
+            this.window.update();
+        }
     }
 
     @Override
@@ -64,7 +66,7 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
         return this.outputEncoding.encode(getGridDistances());
     }
 
-    private void actOnMessage(Message m) {
+    private synchronized void actOnMessage(Message m) {
         if (m.getType() == ArduinoMessageTypes.SPEED_CMD) {
             SpeedCmdMessage cmd = (SpeedCmdMessage) m;
             RobotDrivingCommand command = cmd.getCommand();

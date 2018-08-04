@@ -6,7 +6,7 @@ import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.concurrent.Scheduling;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
-import de.unia.oc.robotcontrol.flow.PublisherTransformer;
+import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
 import de.unia.oc.robotcontrol.flow.strategy.LatestFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TimedFlowStrategy;
@@ -49,9 +49,9 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implement
 
         this.flowStrategy = LatestFlowStrategy
                 .<SensorMessage>create()
-                .chain(SchedulingFlowStrategy.create(schedule.getExecutor()))
-                .chain(PublisherTransformer.liftPublisher(this::acceptData))
-                .chain(TimedFlowStrategy.createDurational(timeSupplier));
+                .with(SchedulingFlowStrategy.create(schedule.getExecutor()))
+                .with(PublisherTransformation.liftPublisher(this::acceptData))
+                .with(TimedFlowStrategy.createDurational(timeSupplier));
     }
 
     private ArduinoState acceptData(SensorMessage data) {

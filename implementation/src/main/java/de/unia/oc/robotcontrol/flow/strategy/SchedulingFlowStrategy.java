@@ -29,7 +29,7 @@ public class SchedulingFlowStrategy<T extends Object> implements FlowStrategy<T,
 
     @Override
     public FlowStrategyType getType() {
-        return FlowStrategyType.UNDEFINED;
+        return FlowStrategyType.TRANSPARENT;
     }
 
     @Override

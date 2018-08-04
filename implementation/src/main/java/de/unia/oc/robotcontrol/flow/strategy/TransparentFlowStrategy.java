@@ -14,8 +14,8 @@ public class TransparentFlowStrategy<T extends Object> implements FlowStrategy<T
     }
 
     @Override
-    public FlowStrategyType getType() {
-        return FlowStrategyType.UNDEFINED;
+    public FlowStrategyType getType(){
+        return FlowStrategyType.TRANSPARENT;
     }
 
     @Override
