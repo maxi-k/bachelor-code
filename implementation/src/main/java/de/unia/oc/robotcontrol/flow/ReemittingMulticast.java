@@ -2,9 +2,11 @@
 package de.unia.oc.robotcontrol.flow;
 
 import de.unia.oc.robotcontrol.flow.function.SubscriberTransformation;
+import de.unia.oc.robotcontrol.message.ErrorMessage;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
+import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxProcessor;
 import reactor.core.scheduler.Scheduler;
@@ -14,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
 
-abstract class MapMulticast<Topic extends Object, Value extends Object>
+public abstract class ReemittingMulticast<Topic extends Object, Value extends Object>
         implements FlowableMulticast<Topic, Value> {
 
     private final ConcurrentMap<Topic, FluxProcessor<Value, Value>> multicastMap;
@@ -23,7 +25,7 @@ abstract class MapMulticast<Topic extends Object, Value extends Object>
     private final Scheduler scheduler;
 
     @SuppressWarnings("initialization")
-    protected MapMulticast(Scheduler scheduler) {
+    public ReemittingMulticast(Scheduler scheduler) {
         this.scheduler = scheduler;
         this.multicastMap = createMulticastMap();
         this.mainProcessor = createMainProcessor();
@@ -33,8 +35,12 @@ abstract class MapMulticast<Topic extends Object, Value extends Object>
         this.sideEffect.subscribe();
     }
 
-    protected MapMulticast(Executor executor) {
+    public ReemittingMulticast(Executor executor) {
         this(Schedulers.fromExecutor(executor));
+    }
+
+    public ReemittingMulticast() {
+        this(Schedulers.parallel());
     }
 
     @Override
@@ -50,6 +56,11 @@ abstract class MapMulticast<Topic extends Object, Value extends Object>
     @Override
     public Processor<Value, Value> asProcessor() {
         return mainProcessor;
+    }
+
+    @Override
+    public Publisher<Value> asPublisher() {
+        return mainProcessor.retry();
     }
 
     @Override
@@ -74,7 +85,11 @@ abstract class MapMulticast<Topic extends Object, Value extends Object>
 
     protected abstract Topic topicFromValue(Value value);
 
-    protected abstract FluxProcessor<Value,  Value> createMainProcessor();
+    protected FluxProcessor<Value, Value> createMainProcessor() {
+        return EmitterProcessor.create();
+    }
 
-    protected abstract FluxProcessor<Value,  Value> createTopicProcessor();
+    protected FluxProcessor<Value, Value> createTopicProcessor() {
+        return EmitterProcessor.create();
+    }
 }

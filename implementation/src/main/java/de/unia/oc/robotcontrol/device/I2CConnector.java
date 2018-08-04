@@ -10,6 +10,7 @@ import de.unia.oc.robotcontrol.message.Message;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class I2CConnector<Input extends Message, Output extends Message>
@@ -82,12 +83,13 @@ public class I2CConnector<Input extends Message, Output extends Message>
     }
 
     @Override
+    public ClockType getClockType() {
+        return ClockType.INTERNAL;
+    }
+
+    @Override
     public String getDeviceName() {
         return "I2CDevice";
     }
 
-    @Override
-    public ClockType getClockType() {
-        return ClockType.INTERNAL;
-    }
 }

@@ -3,6 +3,7 @@ package de.unia.oc.robotcontrol.util;
 
 import org.checkerframework.dataflow.qual.Pure;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -22,6 +23,14 @@ public final class Tuple<F, S> {
     public Tuple(F first, S second) {
         this.first = first;
         this.second = second;
+    }
+
+    @Override
+    @SuppressWarnings("nullness")
+    public boolean equals(Object o) {
+        if (! (o instanceof Tuple)) return false;
+        Tuple t = (Tuple) o;
+        return this == t || Objects.equals(first, t.first) && Objects.equals(second, t.second);
     }
 
     /**

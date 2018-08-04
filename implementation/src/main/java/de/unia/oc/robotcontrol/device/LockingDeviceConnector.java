@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -31,6 +32,8 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
     protected final Supplier<Input> updateRequestMessageProvider;
 
     protected final Object deviceLock;
+
+    private final UUID uuid;
 
     private final Processor<Input, Input> inputProcessor;
     private final Flux<Output> output;
@@ -53,6 +56,8 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
                 .from(inputProcessor)
                 .publishOn(Schedulers.newSingle("deviceConnector_" + this.getDeviceName()))
                 .transform(getFlowStrategy());
+
+        this.uuid = UUID.randomUUID();
 
         // ScheduleProvider s = Scheduling
         //         .interval(Executors.newScheduledThreadPool(1), 20, TimeUnit.MILLISECONDS);
@@ -112,6 +117,11 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
         return BufferFlowStrategy
                 .<Input>create(getInputBufferSize(), BufferOverflowStrategy.DROP_OLDEST)
                 .with(PublisherTransformation.liftPublisher(this::sendAndReceive));
+    }
+
+    @Override
+    public UUID getDeviceUUID() {
+        return this.uuid;
     }
 
     @Pure

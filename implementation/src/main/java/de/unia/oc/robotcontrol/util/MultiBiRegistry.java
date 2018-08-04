@@ -46,7 +46,7 @@ public class MultiBiRegistry<K extends Object, V extends Object>
         }
     }
 
-    private static <A, B> boolean putOrMerge(Map<A, Set<B>> map, A key, B value) {
+    private static <A extends Object, B extends Object> boolean putOrMerge(Map<A, Set<B>> map, A key, B value) {
         if (map.containsKey(key)) {
             return map.get(key).add(value);
         } else {

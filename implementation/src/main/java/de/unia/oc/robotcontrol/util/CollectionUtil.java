@@ -20,10 +20,11 @@ public class CollectionUtil {
 
     public static String joinWith(@Nullable String sep, String... values) {
         StringBuilder builder = new StringBuilder();
+        String separator = sep == null ? "" : sep;
         int length = 0;
         for (String val : values) {
             builder.append(val);
-            builder.append(sep);
+            builder.append(separator);
             length += val.length();
         }
         builder.delete(length, builder.length());
