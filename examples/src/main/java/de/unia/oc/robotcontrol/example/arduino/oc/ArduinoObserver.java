@@ -89,4 +89,9 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implement
     public ClockType getClockType() {
         return ClockType.INTERNAL;
     }
+
+    @Override
+    public Class<SensorMessage> getAcceptedClass() {
+        return SensorMessage.class;
+    }
 }

@@ -6,8 +6,7 @@ import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.util.Bijection;
 import de.unia.oc.robotcontrol.util.Tuple;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public final class ArduinoMessageTypes {
 
@@ -50,6 +49,17 @@ public final class ArduinoMessageTypes {
     public static final MessageType<UpdateRequestMessage> UPDATE_REQUEST =
             MessageType.fromEncoding(
                     Encodings.nullEncoding(CONTEXT, UpdateRequestMessage::new)
+            );
+
+
+    /**
+     * List of all basic Message Types
+     */
+    public static final Set<MessageType<? extends Message>> messageTypeList =
+            Collections.unmodifiableSet(
+                    new HashSet<>(
+                            Arrays.asList(DISTANCE_DATA, SPEED_CMD, UPDATE_REQUEST)
+                    )
             );
 
     /**

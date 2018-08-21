@@ -21,16 +21,24 @@ public class Logger {
         return _instance;
     }
 
-    public <T extends Throwable> void logException(T e) {
+    public synchronized <T extends Throwable> void logException(T e) {
         e.printStackTrace(errStream);
     }
 
-    public void debug(String message) {
+    public synchronized void debug(String message) {
         outStream.println(message);
     }
 
-    public <T extends Throwable> void debugException(T e, String... messages) {
+    public synchronized <T extends Throwable> void debugException(T e, String... messages) {
         outStream.println(Arrays.toString(messages)) ;
         e.printStackTrace(errStream);
+    }
+
+    public synchronized void println(String s) {
+       outStream.println(s);
+    }
+
+    public synchronized void print(String s) {
+        outStream.print(s);
     }
 }

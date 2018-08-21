@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.example.arduino;
 
 import com.pi4j.util.Console;
+import de.unia.oc.robotcontrol.device.Device;
 import de.unia.oc.robotcontrol.device.I2CConnector;
 import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
@@ -12,9 +13,13 @@ import de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage;
 import de.unia.oc.robotcontrol.example.arduino.message.UpdateRequestMessage;
 import de.unia.oc.robotcontrol.example.arduino.oc.ArduinoController;
 import de.unia.oc.robotcontrol.example.arduino.oc.ArduinoObserver;
+import de.unia.oc.robotcontrol.flow.strategy.IgnoringFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.LatestFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TypeFilterFlowStrategy;
 import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
+import de.unia.oc.robotcontrol.oc.RobotControl;
+import de.unia.oc.robotcontrol.util.Logger;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import reactor.core.publisher.Flux;
@@ -30,13 +35,6 @@ public class Main {
     private static final int DEFAULT_SPEED = 20;
     private static volatile @Nullable Message lastMessage = null;
     /**
-     * Control the arduino using
-     * - w (forward)
-     * - a (left)
-     * - s (stop)
-     * - d (right)
-     * - r (rotate)
-     * -- p to print the last received arduino message
      * @param args The program arguments. Can include the following words:
      *             - simulation | simulate: Don't try to connect to the arduino using I2C, but instead
      *             run a simulated version within a discrete grid.
@@ -44,23 +42,55 @@ public class Main {
      * @throws IOException in case the program could not connect to the arduino using I2C (Bus 1, Device 4)
      */
     public static void main(String[] args) throws IOException {
-
         final Set<String> argSet = new HashSet<>(Arrays.asList(args));
+        final boolean simulate = argSet.contains("simulate") || argSet.contains("simulation");
+        final boolean manual = argSet.contains("manual");
 
-        // start Pi4J console wrapper/helper
-        // (This is a utility class to abstract some of the boilerplate code)
-        final Console console = new Console();
+        // startWithoutFacade(simulate, manual);
+        startWithFacade(simulate, manual);
+    }
 
-        // print program title/header
-        console.title("<-- Observer/Controller Robot-Control -->", "I2C Example");
+    private static void startWithFacade(boolean simulate, boolean manual) throws IOException {
+        // RobotControl<> control =
+        final ArduinoController controller = new ArduinoController();
+        final ArduinoObserver<ObservationModel<ArduinoState>> observer = new ArduinoObserver<>(controller.getObservationModel());
 
-        // allow for user to exit program using CTRL-C
-        console.promptForExit();
+        RobotControl
+                .build(observer, controller)
+                .withActionInterpreter((c) -> new SpeedCmdMessage(c, 20))
+                .withDevice(createDevice(simulate), ArduinoMessageTypes.SPEED_CMD)
+                .registerObserverMessages(ArduinoMessageTypes.DISTANCE_DATA)
+                .withMessageStrategy(ArduinoMessageTypes.DISTANCE_DATA, LatestFlowStrategy.create())
+                .withMessageStrategy(ArduinoMessageTypes.SPEED_CMD, LatestFlowStrategy.create())
+                .withMessageStrategy(ArduinoMessageTypes.UPDATE_REQUEST, IgnoringFlowStrategy.create())
+                .create()
+                .run();
+    }
 
+    private static void startWithoutFacade(boolean simulate, boolean manual) throws IOException {
 
         // Define a recipient for the arduino messages
         // which executes the given callback
-        final CallbackMessageRecipient<Message> printer = new CallbackMessageRecipient<>((msg) -> {
+        final MessageRecipient<Message> printer = createPrinter();
+
+        MessageMulticast<Message> dispatcher = new EmittingMessageMulticast<>();
+
+        // dispatcher.register(ErrorMessage.errorMessageType, printer);
+
+        final Device<Message, Message> arduino = createDevice(simulate);
+        arduino.asPublisher().subscribe(dispatcher.asSubscriber());
+        dispatcher.subscribe(ArduinoMessageTypes.SPEED_CMD, arduino.asSubscriber());
+
+        if (manual) {
+            setupManual(dispatcher, printer);
+        } else {
+            setupControlled(dispatcher);
+        }
+
+    }
+
+    private static MessageRecipient<Message> createPrinter() {
+        return new CallbackMessageRecipient<>((msg) -> {
             // ∂t ist konsistent zwischen 6 und 7 millisekunden
             // außer bei der ersten kommunikation (~400ms).
             // vermutung: i2c protokoll *oder* jvm optimierung der
@@ -72,12 +102,10 @@ public class Main {
             System.out.println(msg);
             lastMessage = msg;
         });
+    }
 
-        MessageMulticast<Message> dispatcher = new EmittingMessageMulticast<>();
-
-        // dispatcher.register(ErrorMessage.errorMessageType, printer);
-
-        final LockingDeviceConnector<Message, Message> arduino = (argSet.contains("simulate") || argSet.contains("simulation"))
+    private static Device<Message, Message> createDevice(boolean simulate) throws IOException {
+        return simulate
                 ?
                 // define a simulated version of the arduino in a discrete grid environment
                 new DiscreteSimulatedRobot(
@@ -94,16 +122,6 @@ public class Main {
                         ArduinoMessageTypes.ENCODING,
                         ArduinoMessageTypes.ENCODING,
                         UpdateRequestMessage::new);
-
-        arduino.asPublisher().subscribe(dispatcher.asSubscriber());
-        dispatcher.subscribe(ArduinoMessageTypes.SPEED_CMD, arduino.asSubscriber());
-
-        if (argSet.contains("manual")) {
-            setupManual(console, dispatcher, printer);
-        } else {
-            setupControlled(dispatcher);
-        }
-
     }
 
     private static void setupControlled(MessageMulticast<Message> dispatcher) {
@@ -118,20 +136,29 @@ public class Main {
                 .subscribe(dispatcher.asSubscriber());
     }
 
-    private static void setupManual(Console console, MessageMulticast<Message> dispatcher,
-                                                   MessageRecipient<Message> printer) {
+    /**
+     * Control the arduino using
+     * - w (forward)
+     * - a (left)
+     * - s (stop)
+     * - d (right)
+     * - r (rotate)
+     * -- p to print the last received arduino message
+     **/
+    private static void setupManual(MessageMulticast<Message> dispatcher,
+                                    MessageRecipient<Message> printer) {
         // read user commands and send them to the arduino constantly
         dispatcher.subscribe(ArduinoMessageTypes.DISTANCE_DATA, printer.asSubscriber());
-        console.println("Press 'q' to stop, p to print the last received message");
+        Logger.instance().println("Press 'q' to stop, p to print the last received message");
         try (Scanner reader = new Scanner(System.in)) {
             while (true) {
                 try {
-                    console.println("Enter a message: ");
+                    Logger.instance().println("Enter a message: ");
                     String read = reader.next();
                     char first = read.charAt(0);
                     if (first == 'q') break;
                     if (first == 'p') {
-                        console.println(lastMessage != null ? lastMessage.toString() : "No last Message");
+                        Logger.instance().println(lastMessage != null ? lastMessage.toString() : "No last Message");
                         continue;
                     }
                     // send the read command as a driving command to the arduino,
