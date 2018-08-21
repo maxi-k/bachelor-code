@@ -83,7 +83,7 @@ public class I2CConnector<Input extends Message, Output extends Message>
 
     @Override
     public ClockType getClockType() {
-        return ClockType.INTERNAL;
+        return ClockType.UNCLOCKED;
     }
 
     @Override

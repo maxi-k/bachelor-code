@@ -15,14 +15,18 @@ import de.unia.oc.robotcontrol.oc.ObservationModel;
 import de.unia.oc.robotcontrol.oc.Observer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import reactor.core.publisher.UnicastProcessor;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implements Observer<SensorMessage, ArduinoState, T> {
+public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
+        implements Observer<SensorMessage, ArduinoState, T> {
 
-    private final ScheduleProvider schedule;
+    private final Scheduler executor;
 
     private @NonNull T observationModel;
     private long lastUpdatedTime;
@@ -39,17 +43,13 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implement
         this.lastUpdatedTime = System.currentTimeMillis();
 
         this.timeSupplier = UnicastProcessor.create();
-        this.schedule = Scheduling.interval(
-                Executors.newScheduledThreadPool(1),
-                observationModel.getTargetUpdateTime().toMillis(),
-                TimeUnit.MILLISECONDS
-        );
+        this.executor = Schedulers.newSingle("Observer Executor");
 
         timeSupplier.onNext(observationModel.getTargetUpdateTime());
 
         this.flowStrategy = LatestFlowStrategy
                 .<SensorMessage>create()
-                .with(SchedulingFlowStrategy.create(schedule.getExecutor()))
+                .with(SchedulingFlowStrategy.create(executor))
                 .with(PublisherTransformation.liftPublisher(this::acceptData))
                 .with(TimedFlowStrategy.createDurational(timeSupplier));
     }
@@ -74,10 +74,6 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>> implement
     @Override
     public synchronized ArduinoState getModelState() {
         return lastComputedState;
-    }
-
-    public ScheduleProvider getSchedule() {
-        return schedule;
     }
 
     @Override
