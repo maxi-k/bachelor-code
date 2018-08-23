@@ -4,7 +4,6 @@ package de.unia.oc.robotcontrol.example.arduino.device;
 import de.unia.oc.robotcontrol.coding.Encoding;
 import de.unia.oc.robotcontrol.coding.IntegerEncoding;
 import de.unia.oc.robotcontrol.coding.ListEncoding;
-import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
 import de.unia.oc.robotcontrol.message.Message;
 

@@ -6,22 +6,6 @@ import org.opentest4j.AssertionFailedError;
 
 public class SchedulingTest {
 
-    private void assertInRange(long actual, long expected, long hysteresis) {
-        try {
-            Assertions.assertTrue(
-                    actual > (expected - hysteresis) &&
-                            actual < (expected + hysteresis)
-            );
-        } catch(AssertionFailedError e) {
-            throw new AssertionFailedError(
-                    "Assertion Failed: Value was not in range: " +
-                    expected  + " +/- " + hysteresis + " vs. " + actual,
-                    expected  + " +/- " + hysteresis,
-                    actual
-            );
-        }
-    }
-
    // TODO: Redo with new Flow mechanics
    // @Test
    // void testScheduling() throws InterruptedException

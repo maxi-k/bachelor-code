@@ -1,10 +1,8 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.example.arduino;
 
-import com.pi4j.util.Console;
 import de.unia.oc.robotcontrol.device.Device;
 import de.unia.oc.robotcontrol.device.I2CConnector;
-import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
 import de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand;
 import de.unia.oc.robotcontrol.example.arduino.device.DiscreteSimulatedRobot;

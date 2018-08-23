@@ -1,7 +1,6 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.oc;
 
-import de.unia.oc.robotcontrol.concurrent.ClockType;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.BufferFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy;
@@ -55,11 +54,6 @@ public abstract class TickingController<WorldState extends Object,
                 .with(TimedFlowStrategy.createDurational(getObservationModel().getTargetUpdateTime(),
                         (l, s) -> tick(s))
                 );
-    }
-
-    @Override
-    public ClockType getClockType() {
-        return ClockType.INTERNAL;
     }
 
     protected abstract Model createObservationModel(@UnderInitialization TickingController<WorldState, Model, Command> this);

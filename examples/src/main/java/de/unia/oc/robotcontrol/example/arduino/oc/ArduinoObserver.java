@@ -1,9 +1,6 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.example.arduino.oc;
 
-import de.unia.oc.robotcontrol.concurrent.ClockType;
-import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
-import de.unia.oc.robotcontrol.concurrent.Scheduling;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
@@ -19,9 +16,6 @@ import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
         implements Observer<SensorMessage, ArduinoState, T> {
@@ -79,11 +73,6 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
     @Override
     public FlowStrategy<SensorMessage, ArduinoState> getFlowStrategy() {
         return flowStrategy;
-    }
-
-    @Override
-    public ClockType getClockType() {
-        return ClockType.INTERNAL;
     }
 
     @Override

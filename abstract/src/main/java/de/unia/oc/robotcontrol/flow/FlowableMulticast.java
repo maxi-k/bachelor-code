@@ -1,7 +1,6 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
-import de.unia.oc.robotcontrol.concurrent.ClockType;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
