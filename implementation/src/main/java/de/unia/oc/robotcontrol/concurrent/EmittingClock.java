@@ -33,18 +33,6 @@ public class EmittingClock implements Clock {
         this.durationProcessor.onNext(interval);
     }
 
-    public static EmittingClock create(Duration interval) {
-        return new EmittingClock(interval, Schedulers.newSingle("EmittingClock Thread"));
-    }
-
-    public static EmittingClock create(Duration interval, Scheduler scheduler) {
-        return new EmittingClock(interval, scheduler);
-    }
-
-    public static EmittingClock create(Duration interval, Executor executor) {
-        return new EmittingClock(interval, Schedulers.fromExecutor(executor));
-    }
-
     @Override
     public void setInterval(Duration interval) {
         INTERVAL.set(this, interval);
@@ -59,5 +47,17 @@ public class EmittingClock implements Clock {
     @Override
     public Duration getCurrentInterval() {
         return interval;
+    }
+
+    public static EmittingClock create(Duration interval, Scheduler scheduler) {
+        return new EmittingClock(interval, scheduler);
+    }
+
+    public static EmittingClock create(Duration interval) {
+        return create(interval, Schedulers.newSingle("EmittingClock Thread"));
+    }
+
+    public static EmittingClock create(Duration interval, Executor executor) {
+        return create(interval, Schedulers.fromExecutor(executor));
     }
 }

@@ -19,7 +19,6 @@ public class TimedFlowStrategy<Input extends Object, Output extends Object> impl
         this.mergingFunction = mergingFunction;
     }
 
-
     public static <I, O> TimedFlowStrategy<I, O> createTimed(Publisher<Long> timer,
                                                         BiFunction<Long, I, O> mergingFunction) {
         return new TimedFlowStrategy<>(timer, mergingFunction);

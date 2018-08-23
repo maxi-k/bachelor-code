@@ -37,7 +37,7 @@ public interface Clockable extends Concurrent {
         INTERNAL,
 
         /**
-         * A (possibly dynamic) execution schedule is provided by the system.
+         * A (possibly changing) execution schedule is provided by the system.
          */
         EXTERNAL;
     }
