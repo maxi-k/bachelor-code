@@ -1,6 +1,9 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.example.arduino.oc;
 
+import de.unia.oc.robotcontrol.concurrent.Clock;
+import de.unia.oc.robotcontrol.concurrent.EmittingClock;
+import de.unia.oc.robotcontrol.concurrent.TimeProvider;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
@@ -11,6 +14,7 @@ import de.unia.oc.robotcontrol.message.SensorMessage;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
 import de.unia.oc.robotcontrol.oc.Observer;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.UnicastProcessor;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -28,7 +32,7 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
     private final FlowStrategy<SensorMessage, ArduinoState> flowStrategy;
 
     private ArduinoState lastComputedState;
-    private final UnicastProcessor<Duration> timeSupplier;
+    private final Clock timeSupplier;
 
     @SuppressWarnings("initialization")
     public ArduinoObserver(@NonNull T observationModel) {
@@ -36,16 +40,16 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
         this.lastComputedState = ArduinoState.createEmpty();
         this.lastUpdatedTime = System.currentTimeMillis();
 
-        this.timeSupplier = UnicastProcessor.create();
+        this.timeSupplier = EmittingClock.create(observationModel.getTargetUpdateTime());
         this.executor = Schedulers.newSingle("Observer Executor");
 
-        timeSupplier.onNext(observationModel.getTargetUpdateTime());
+        timeSupplier.setInterval(observationModel.getTargetUpdateTime());
 
         this.flowStrategy = LatestFlowStrategy
                 .<SensorMessage>create()
                 .with(SchedulingFlowStrategy.create(executor))
                 .with(PublisherTransformation.liftPublisher(this::acceptData))
-                .with(TimedFlowStrategy.createDurational(timeSupplier));
+                .with(TimedFlowStrategy.createTimed(timeSupplier.getTicks()));
     }
 
     private ArduinoState acceptData(SensorMessage data) {
@@ -62,12 +66,17 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
     @Override
     public synchronized void setObservationModel(T model) {
         this.observationModel = model;
-        timeSupplier.onNext(model.getTargetUpdateTime());
+        timeSupplier.setInterval(model.getTargetUpdateTime());
     }
 
     @Override
     public synchronized ArduinoState getModelState() {
         return lastComputedState;
+    }
+
+    @Override
+    public TimeProvider getTimeProvider() {
+        return this.timeSupplier;
     }
 
     @Override

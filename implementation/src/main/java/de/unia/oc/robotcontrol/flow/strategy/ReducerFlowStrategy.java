@@ -14,7 +14,7 @@ public class ReducerFlowStrategy<T extends Object, R extends Object> implements 
     private final BiFunction<R, T, R> reducer;
     private final Supplier<R> initialValueSupplier;
 
-    private ReducerFlowStrategy(Supplier<R> initialValueSupplier, BiFunction<R, T, R> reducer) {
+    protected ReducerFlowStrategy(Supplier<R> initialValueSupplier, BiFunction<R, T, R> reducer) {
         this.reducer = reducer;
         this.initialValueSupplier = initialValueSupplier;
     }

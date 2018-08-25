@@ -47,8 +47,4 @@ public class MockLockingDeviceConnector extends LockingDeviceConnector<Message, 
         return "Mock Locking Device";
     }
 
-    @Override
-    public ClockType getClockType() {
-        return ClockType.INTERNAL;
-    }
 }

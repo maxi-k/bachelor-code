@@ -2,6 +2,8 @@
 package de.unia.oc.robotcontrol.device;
 
 import de.unia.oc.robotcontrol.coding.Encoding;
+import de.unia.oc.robotcontrol.concurrent.ClockState;
+import de.unia.oc.robotcontrol.concurrent.ProcessingClockState;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.function.ProcessorTransformation;
 import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
@@ -39,6 +41,8 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
     private final Flux<Output> output;
     private final Subscriber<Input> input;
 
+    protected final ClockState<Input, Input> clockState;
+
     @SuppressWarnings("initialization")
     public LockingDeviceConnector(
             Encoding<Input> inputEncoding,
@@ -49,6 +53,7 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
         this.deviceLock = new Object();
 
         this.updateRequestMessageProvider = updateRequestMessageProvider;
+        this.clockState = createClockState();
 
         this.inputProcessor = createProcessor();
         this.input = wrapSubscriber(inputProcessor);
@@ -112,7 +117,23 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
     public FlowStrategy<Input, Output> getFlowStrategy() {
         return BufferFlowStrategy
                 .<Input>create(getInputBufferSize(), BufferOverflowStrategy.DROP_OLDEST)
+                .with(clockState.getFlowStrategy())
                 .with(PublisherTransformation.liftPublisher(this::sendAndReceive));
+    }
+
+    protected ProcessingClockState<Input, Input> createClockState() {
+        return ProcessingClockState.create((l, m) -> {
+            System.out.println(l + " ; " + m);
+            if (m.getCreationTime() < l) {
+                return m;
+            }
+            return updateRequestMessageProvider.get();
+        });
+    }
+
+    @Override
+    public final ClockType getClockType() {
+        return clockState.getClockType();
     }
 
     @Override

@@ -2,7 +2,6 @@
 package de.unia.oc.robotcontrol.example.arduino.device;
 
 import de.unia.oc.robotcontrol.coding.Encoding;
-import de.unia.oc.robotcontrol.concurrent.ClockState;
 import de.unia.oc.robotcontrol.device.LockingDeviceConnector;
 import de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand;
 import de.unia.oc.robotcontrol.example.arduino.message.ArduinoMessageTypes;
@@ -10,7 +9,6 @@ import de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage;
 import de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage;
 import de.unia.oc.robotcontrol.example.arduino.visualization.RobotGridObject;
 import de.unia.oc.robotcontrol.example.arduino.visualization.TargetGridObject;
-import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.util.Tuple;
 import de.unia.oc.robotcontrol.visualization.GridDirection;
@@ -33,7 +31,6 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
     private final RobotGridObject robot;
 
     private final VisualizingWindow window;
-    private final ClockState<Message> clockState;
 
     public DiscreteSimulatedRobot(Encoding<Message> encoding,
                                   Supplier<Message> updateRequestMessageProvider,
@@ -44,7 +41,6 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
         this.window = new VisualizingWindow(simulationEnvironment);
 
         setupVisualization();
-        clockState = ClockState.create();
     }
 
     @RequiresNonNull({"this.simulationEnvironment", "this.robot", "this.window"})
@@ -122,18 +118,5 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
     @Override
     public void terminate() {
         // nothing to terminate
-    }
-
-    @Override
-    public FlowStrategy<Message, Message> getFlowStrategy() {
-        return FlowStrategy.concat(
-                super.getFlowStrategy(),
-                clockState.getFlowStrategy()
-        );
-    }
-
-    @Override
-    public ClockType getClockType() {
-        return clockState.getClockType();
     }
 }

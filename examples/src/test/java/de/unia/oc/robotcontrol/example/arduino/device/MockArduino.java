@@ -42,11 +42,6 @@ public class MockArduino extends LockingDeviceConnector<Message, Message> {
     }
 
     @Override
-    public ClockType getClockType() {
-        return ClockType.INTERNAL;
-    }
-
-    @Override
     public boolean isTerminated() {
         return isTerminated;
     }

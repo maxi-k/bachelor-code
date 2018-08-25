@@ -5,23 +5,10 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 import de.unia.oc.robotcontrol.coding.Encoding;
-import de.unia.oc.robotcontrol.concurrent.ClockState;
-import de.unia.oc.robotcontrol.concurrent.TimeProvider;
-import de.unia.oc.robotcontrol.flow.Flow;
-import de.unia.oc.robotcontrol.flow.FlowStrategy;
-import de.unia.oc.robotcontrol.flow.strategy.FlatteningFlowStrategy;
-import de.unia.oc.robotcontrol.flow.strategy.MappingFlowStrategy;
-import de.unia.oc.robotcontrol.flow.strategy.TimedFlowStrategy;
 import de.unia.oc.robotcontrol.message.Message;
-import de.unia.oc.robotcontrol.util.Tuple;
-import org.reactivestreams.Processor;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Flux;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.util.Arrays;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class I2CConnector<Input extends Message, Output extends Message>
@@ -38,8 +25,6 @@ public class I2CConnector<Input extends Message, Output extends Message>
 
     private volatile int lastRead;
     private final byte[] readBuffer;
-
-    private final ClockState<Output> clockState;
 
     public I2CConnector(
             int messageSize,
@@ -60,7 +45,6 @@ public class I2CConnector<Input extends Message, Output extends Message>
         }
         this.device = i2c.getDevice(DEVICE_ADDRESS);
         this.readBuffer = new byte[MAX_MESSAGE_SIZE];
-        clockState = ClockState.create();
     }
 
     @Override
@@ -92,19 +76,6 @@ public class I2CConnector<Input extends Message, Output extends Message>
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public FlowStrategy<Input, Output> getFlowStrategy() {
-        return FlowStrategy.concat(
-                super.getFlowStrategy(),
-                clockState.getFlowStrategy()
-        );
-    }
-
-    @Override
-    public ClockType getClockType() {
-        return clockState.getClockType();
     }
 
     @Override

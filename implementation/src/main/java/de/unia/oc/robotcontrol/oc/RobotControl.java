@@ -1,7 +1,9 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.oc;
 
+import de.unia.oc.robotcontrol.concurrent.Clock;
 import de.unia.oc.robotcontrol.concurrent.Terminable;
+import de.unia.oc.robotcontrol.concurrent.TimeProvider;
 import de.unia.oc.robotcontrol.device.Device;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy;
@@ -63,6 +65,7 @@ public class RobotControl<
         this.observer.setObservationModel(controller.getObservationModel());
         this.controller.setObserver(observer);
 
+
         this.observerMessageTypes = Collections.unmodifiableSet(observerMessageTypes);
         this.messageStrategies = Collections.unmodifiableMap(messageStrategies);
         deviceMap.replaceAll((device, mts) -> Collections.unmodifiableCollection(mts));
@@ -86,6 +89,9 @@ public class RobotControl<
         isStarting = true;
         // Subscribe each device to the message types as defined
         // by the device map
+        TimeProvider observerClock = this.observer.getTimeProvider();
+        deviceMap.forEach((d, mt) -> d.getClockType().runOn(observerClock));
+
         deviceSubscriptions = deviceMap
                 .entrySet()
                 .stream()
