@@ -7,6 +7,7 @@ import de.unia.oc.robotcontrol.flow.strategy.*;
 import org.reactivestreams.Processor;
 
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 public class ProcessingClockState<T extends Object, R extends Object>
         implements ClockState<T, R> {
@@ -16,7 +17,7 @@ public class ProcessingClockState<T extends Object, R extends Object>
     private final Clockable.ClockType clockType;
 
     @SuppressWarnings("initialization")
-    private ProcessingClockState(BiFunction<Long, T, R> mergingFunction) {
+    private ProcessingClockState(Supplier<T> initialInput, BiFunction<Long, T, R> mergingFunction) {
         this.timerPublisher = Flow.withProcessor(
                 MappingFlowStrategy
                         .create(TimeProvider::getTicks)
@@ -25,16 +26,20 @@ public class ProcessingClockState<T extends Object, R extends Object>
                 )
         );
 
-        this.strategy = TimedFlowStrategy.createTimed(timerPublisher, mergingFunction);
+        this.strategy = TimedFlowStrategy
+                .createTimed(timerPublisher, initialInput, mergingFunction)
+                .with(CallbackFlowStrategy.create((m) -> System.out.println("ClockState: " + m)));
         this.clockType = Clockable.ClockType.createClocked(this::setTimer);
     }
 
-    public static <T extends Object, R extends Object> ProcessingClockState<T, R> create(BiFunction<Long, T, R> mergingFunction) {
-        return new ProcessingClockState<>(mergingFunction);
+    public static <T extends Object, R extends Object> ProcessingClockState<T, R> create(
+            Supplier<T> initialInput,
+            BiFunction<Long, T, R> mergingFunction) {
+        return new ProcessingClockState<>(initialInput, mergingFunction);
     }
 
-    public static <T extends Object> ProcessingClockState<T, T> createReplaying() {
-        return new ProcessingClockState<>((l, t) -> t);
+    public static <T extends Object> ProcessingClockState<T, T> createReplaying(Supplier<T> initialInput) {
+        return new ProcessingClockState<>(initialInput, (l, t) -> t);
     }
 
     public FlowStrategy<T, R> getFlowStrategy() {

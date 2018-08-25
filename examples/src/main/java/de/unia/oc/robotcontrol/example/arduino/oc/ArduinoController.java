@@ -78,6 +78,11 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
     }
 
     @Override
+    protected ArduinoState getInitialState() {
+        return ArduinoState.createEmpty();
+    }
+
+    @Override
     public @Constant Set<RobotDrivingCommand> getPossibleActions() {
         Set<RobotDrivingCommand> result = new HashSet<>(Arrays.asList(RobotDrivingCommand.values()));
         return Collections.unmodifiableSet(result);

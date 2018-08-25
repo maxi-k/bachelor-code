@@ -52,12 +52,14 @@ public abstract class TickingController<WorldState extends Object,
                 .<WorldState>create(getCommandBufferSize(), BufferOverflowStrategy.DROP_OLDEST)
                 .with(SchedulingFlowStrategy.create(scheduler))
                 .with(TimedFlowStrategy.createDurational(getObservationModel().getTargetUpdateTime(),
+                        this::getInitialState,
                         (l, s) -> tick(s))
                 );
     }
 
     protected abstract Model createObservationModel(@UnderInitialization TickingController<WorldState, Model, Command> this);
 
+    protected abstract WorldState getInitialState();
 
     @Override
     public Model getObservationModel() {

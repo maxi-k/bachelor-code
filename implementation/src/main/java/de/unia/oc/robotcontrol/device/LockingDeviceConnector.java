@@ -8,14 +8,13 @@ import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.function.ProcessorTransformation;
 import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
 import de.unia.oc.robotcontrol.flow.function.SubscriberTransformation;
-import de.unia.oc.robotcontrol.flow.strategy.BufferFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy;
 import de.unia.oc.robotcontrol.message.Message;
 import org.checkerframework.checker.signedness.qual.Constant;
 import org.checkerframework.dataflow.qual.Pure;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
-import reactor.core.publisher.BufferOverflowStrategy;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
@@ -113,22 +112,27 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
                 .apply(inputProcessor);
     }
 
-   @Override
+    @Override
     public FlowStrategy<Input, Output> getFlowStrategy() {
-        return BufferFlowStrategy
+/*        return BufferFlowStrategy
                 .<Input>create(getInputBufferSize(), BufferOverflowStrategy.DROP_OLDEST)
                 .with(clockState.getFlowStrategy())
-                .with(PublisherTransformation.liftPublisher(this::sendAndReceive));
+                .with(PublisherTransformation.liftPublisher(this::sendAndReceive));*/
+            return TransparentFlowStrategy
+                    .<Input>create()
+                    // .with(clockState.getFlowStrategy())
+                    .with(PublisherTransformation.liftPublisher(this::sendAndReceive));
     }
 
     protected ProcessingClockState<Input, Input> createClockState() {
-        return ProcessingClockState.create((l, m) -> {
-            System.out.println(l + " ; " + m);
-            if (m.getCreationTime() < l) {
-                return m;
-            }
-            return updateRequestMessageProvider.get();
-        });
+        return ProcessingClockState.create(updateRequestMessageProvider::get,
+                (l, m) -> {
+                    System.out.println(l + " ; " + m);
+                    if (m.getCreationTime() < l) {
+                        return m;
+                    }
+                    return updateRequestMessageProvider.get();
+                });
     }
 
     @Override

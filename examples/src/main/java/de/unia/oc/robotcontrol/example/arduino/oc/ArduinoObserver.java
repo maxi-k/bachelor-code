@@ -5,6 +5,7 @@ import de.unia.oc.robotcontrol.concurrent.Clock;
 import de.unia.oc.robotcontrol.concurrent.EmittingClock;
 import de.unia.oc.robotcontrol.concurrent.TimeProvider;
 import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
+import de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
 import de.unia.oc.robotcontrol.flow.strategy.LatestFlowStrategy;
@@ -49,7 +50,7 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
                 .<SensorMessage>create()
                 .with(SchedulingFlowStrategy.create(executor))
                 .with(PublisherTransformation.liftPublisher(this::acceptData))
-                .with(TimedFlowStrategy.createTimed(timeSupplier.getTicks()));
+                .with(TimedFlowStrategy.createTimed(timeSupplier.getTicks(), () -> lastComputedState));
     }
 
     private ArduinoState acceptData(SensorMessage data) {
