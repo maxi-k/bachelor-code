@@ -27,4 +27,11 @@ public interface FlowStrategy<T extends Object, R extends Object>
             }
         };
     }
+
+    static <S extends Object, T extends Object, R extends Object> FlowStrategy<S, R> concat(
+            FlowStrategy<S, T> first,
+            FlowStrategy<T, R> second
+    ) {
+            return first.with(second);
+    }
 }

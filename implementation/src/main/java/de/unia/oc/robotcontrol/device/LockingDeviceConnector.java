@@ -58,10 +58,6 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
                 .transform(getFlowStrategy());
 
         this.uuid = UUID.randomUUID();
-
-        // ScheduleProvider s = Scheduling
-        //         .interval(Executors.newScheduledThreadPool(1), 20, TimeUnit.MILLISECONDS);
-        // s.submit(() -> this.input.onNext(updateRequestMessageProvider.get()));
     }
 
     @Override
@@ -112,7 +108,7 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
                 .apply(inputProcessor);
     }
 
-    @Override
+   @Override
     public FlowStrategy<Input, Output> getFlowStrategy() {
         return BufferFlowStrategy
                 .<Input>create(getInputBufferSize(), BufferOverflowStrategy.DROP_OLDEST)
