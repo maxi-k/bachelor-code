@@ -98,7 +98,6 @@ public class RobotControl<
                 .map((entry) -> Flux.merge(
                         entry.getValue()
                                 .stream()
-                                .map(MessageType::asSimpleType)
                                 .map((mt) ->
                                         this.messageStrategies
                                                 .getOrDefault(mt, TransparentFlowStrategy.create())

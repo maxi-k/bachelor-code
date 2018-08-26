@@ -8,21 +8,27 @@ import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.function.ProcessorTransformation;
 import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
 import de.unia.oc.robotcontrol.flow.function.SubscriberTransformation;
+import de.unia.oc.robotcontrol.flow.strategy.BufferFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.LoggingFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy;
 import de.unia.oc.robotcontrol.message.Message;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signedness.qual.Constant;
 import org.checkerframework.dataflow.qual.Pure;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
+import reactor.core.publisher.BufferOverflowStrategy;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 public abstract class LockingDeviceConnector<Input extends Message, Output extends Message>
         implements Device<Input, Output> {
@@ -108,31 +114,31 @@ public abstract class LockingDeviceConnector<Input extends Message, Output exten
     @Override
     public Processor<Input, Output> asProcessor() {
         return ProcessorTransformation
-                .liftProcessor(Function.<Input>identity(), this::sendAndReceive)
-                .apply(inputProcessor);
+                .transformProcessor(inputProcessor, Function.identity(), getFlowStrategy());
     }
 
     @Override
     public FlowStrategy<Input, Output> getFlowStrategy() {
-/*        return BufferFlowStrategy
+        return BufferFlowStrategy
                 .<Input>create(getInputBufferSize(), BufferOverflowStrategy.DROP_OLDEST)
                 .with(clockState.getFlowStrategy())
-                .with(PublisherTransformation.liftPublisher(this::sendAndReceive));*/
-            return TransparentFlowStrategy
-                    .<Input>create()
-                    // .with(clockState.getFlowStrategy())
-                    .with(PublisherTransformation.liftPublisher(this::sendAndReceive));
+                .with(PublisherTransformation.liftPublisher(this::sendAndReceive));
     }
 
-    protected ProcessingClockState<Input, Input> createClockState() {
-        return ProcessingClockState.create(updateRequestMessageProvider::get,
-                (l, m) -> {
-                    System.out.println(l + " ; " + m);
-                    if (m.getCreationTime() < l) {
-                        return m;
+    protected ClockState<Input, Input> createClockState() {
+        return ProcessingClockState.create(updateRequestMessageProvider,
+                new BiFunction<Long, Input, Input>() {
+                    @Nullable Message lastMessage = null;
+                    @Override
+                    public synchronized Input apply(Long time, Input input) {
+                        if (lastMessage == input) {
+                            return updateRequestMessageProvider.get();
+                        }
+                        lastMessage = input;
+                        return input;
                     }
-                    return updateRequestMessageProvider.get();
-                });
+                }
+        );
     }
 
     @Override

@@ -64,6 +64,11 @@ public interface MessageType<T extends Message> extends Encoding<T> {
             public Message decode(byte[] raw) throws IllegalArgumentException {
                 return self.decode(raw);
             }
+
+            @Override
+            public String toString() {
+                return "[Encoding from MessageType: " + self.toString();
+            }
         };
     }
 
@@ -88,6 +93,11 @@ public interface MessageType<T extends Message> extends Encoding<T> {
            @Override
            public CodingContext getContext() {
                return self.getContext();
+           }
+
+           @Override
+           public String toString() {
+               return self.toString();
            }
        };
     }
@@ -114,6 +124,38 @@ public interface MessageType<T extends Message> extends Encoding<T> {
             @Override
             public CodingContext getContext() {
                 return e.getContext();
+            }
+
+            @Override
+            public String toString() {
+                return "[MessageType " + super.toString() + " for Encoding: " + e.toString() + "]";
+            }
+        };
+    }
+
+    default MessageType<T> withName(String name) {
+        MessageType<T> self = this;
+
+        return new MessageType<T>() {
+            @NonNull
+            @Override
+            public T decode(byte[] raw) throws IllegalArgumentException {
+                return self.decode(raw);
+            }
+
+            @Override
+            public byte[] encode(T object) throws IllegalArgumentException {
+                return self.encode(object);
+            }
+
+            @Override
+            public CodingContext getContext() {
+                return self.getContext();
+            }
+
+            @Override
+            public String toString() {
+                return "[MessageType " + self.toString() + " - " +  name + "]";
             }
         };
     }

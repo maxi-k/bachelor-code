@@ -2,7 +2,9 @@
 package de.unia.oc.robotcontrol.flow;
 
 import de.unia.oc.robotcontrol.flow.function.SubscriberTransformation;
+import de.unia.oc.robotcontrol.flow.strategy.LoggingFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy;
+import de.unia.oc.robotcontrol.util.Logger;
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
@@ -15,6 +17,7 @@ import reactor.core.scheduler.Schedulers;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
+import java.util.logging.Level;
 
 public abstract class ReemittingMulticast<Topic extends Object, Value extends Object>
         implements ValueBoundMulticast<Topic, Value> {
@@ -80,6 +83,8 @@ public abstract class ReemittingMulticast<Topic extends Object, Value extends Ob
         synchronized (multicastMap) {
             if (multicastMap.containsKey(topic)) {
                 multicastMap.get(topic).onNext(value);
+            } else {
+                Logger.instance().debug("[Multicast] No subscriber found for topic " + topic);
             }
         }
     }

@@ -9,6 +9,7 @@ import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import reactor.core.publisher.DirectProcessor;
+import reactor.core.publisher.EmitterProcessor;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -50,7 +51,14 @@ public final class Flow {
         return applyStrategy(publisher, FolderFlowStrategy.create(folder));
     }
     public static <T extends Object, R extends Object> Processor<T, R> withProcessor(FlowStrategy<T, R> strategy) {
-        DirectProcessor<T> processor = DirectProcessor.create();
+        EmitterProcessor<T> processor = EmitterProcessor.create();
+        return ProcessorTransformation.transformProcessor(processor, Function.identity(), strategy);
+    }
+
+    public static <S extends Object, T extends Object, R extends Object> Processor<S, R> withProcessor(
+            Processor<S, T> processor,
+            FlowStrategy<T, R> strategy
+    ) {
         return ProcessorTransformation.transformProcessor(processor, Function.identity(), strategy);
     }
 

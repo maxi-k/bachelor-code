@@ -62,7 +62,6 @@ public class TimedFlowStrategy<Input extends Object, Output extends Object> impl
         return Flux.combineLatest(
                 timer,
                 Flux.from(publisher).startWith(initialInput.get()),
-                mergingFunction)
-                .doOnNext(System.out::println);
+                mergingFunction);
     }
 }

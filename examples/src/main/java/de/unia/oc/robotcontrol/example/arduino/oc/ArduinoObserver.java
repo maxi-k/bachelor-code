@@ -9,6 +9,7 @@ import de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.function.PublisherTransformation;
 import de.unia.oc.robotcontrol.flow.strategy.LatestFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.LoggingFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TimedFlowStrategy;
 import de.unia.oc.robotcontrol.message.SensorMessage;

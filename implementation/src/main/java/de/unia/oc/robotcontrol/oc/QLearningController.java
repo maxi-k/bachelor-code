@@ -11,6 +11,7 @@ import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public abstract class QLearningController<WorldState extends Object,
         extends TickingController<WorldState, Model, Command> {
 
     private final Table<String, Command, Double> qMatrix;
-    private final List<Command> possibleActions;
+    private final List<? extends Command> possibleActions;
 
     private volatile @MonotonicNonNull Command lastAction;
     private volatile @MonotonicNonNull WorldState lastWorldState;
@@ -29,7 +30,7 @@ public abstract class QLearningController<WorldState extends Object,
     public QLearningController() {
         super();
         this.qMatrix = HashBasedTable.create(getApproximateStateSpaceSize(), getPossibleActions().size()) ;
-        this.possibleActions = new ArrayList<>(getPossibleActions());
+        this.possibleActions = new ArrayList<>((Collection<? extends Command>) getPossibleActions());
     }
 
     @RequiresNonNull("this.qMatrix")

@@ -20,7 +20,6 @@ public class MockArduino extends LockingDeviceConnector<Message, Message> {
     @Override
     protected void pushMessage(byte[] message) {
         // stub - message is not sent to any actual device
-        System.out.println("pushing message!");
     }
 
     @Override

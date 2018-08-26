@@ -3,8 +3,11 @@ package de.unia.oc.robotcontrol.concurrent;
 
 import de.unia.oc.robotcontrol.flow.Flow;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
-import de.unia.oc.robotcontrol.flow.strategy.*;
+import de.unia.oc.robotcontrol.flow.strategy.FlatteningFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.MappingFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.TimedFlowStrategy;
 import org.reactivestreams.Processor;
+import reactor.core.publisher.EmitterProcessor;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -19,16 +22,14 @@ public class ProcessingClockState<T extends Object, R extends Object>
     @SuppressWarnings("initialization")
     private ProcessingClockState(Supplier<T> initialInput, BiFunction<Long, T, R> mergingFunction) {
         this.timerPublisher = Flow.withProcessor(
-                MappingFlowStrategy
-                        .create(TimeProvider::getTicks)
-                        .with(FlatteningFlowStrategy.create())
-                        .with(MappingFlowStrategy.create((t) -> System.currentTimeMillis())
+                EmitterProcessor.create(),
+                FlowStrategy.concat(
+                        MappingFlowStrategy.create(TimeProvider::getTicks),
+                        FlatteningFlowStrategy.create()
                 )
         );
 
-        this.strategy = TimedFlowStrategy
-                .createTimed(timerPublisher, initialInput, mergingFunction)
-                .with(CallbackFlowStrategy.create((m) -> System.out.println("ClockState: " + m)));
+        this.strategy = TimedFlowStrategy.createTimed(timerPublisher, initialInput, mergingFunction);
         this.clockType = Clockable.ClockType.createClocked(this::setTimer);
     }
 

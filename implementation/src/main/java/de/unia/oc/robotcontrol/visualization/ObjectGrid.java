@@ -35,15 +35,14 @@ public class ObjectGrid implements Visualization<Component> {
         final int width = c.getWidth();
         final int height = c.getHeight();
 
-        float scaleX = width / cellsX;
-        float scaleY = height / cellsY;
+        float scaleX = (float) width / cellsX;
+        float scaleY = (float) height / cellsY;
         drawGrid(g, scaleX, scaleY, height, width);
 
         GridObjectDrawContext context = new GridObjectDrawContext(scaleX, scaleY);
-        synchronized(this.objects) {
-            for (GridObject o : objects.values()) {
-                o.draw(g, context);
-            }
+        Collection<GridObject> values = this.objects.values();
+        for (GridObject o : values) {
+            o.draw(g, context);
         }
     }
 
@@ -138,6 +137,7 @@ public class ObjectGrid implements Visualization<Component> {
 
     public synchronized boolean move(int x, int y, int newX, int newY) {
         if (!objects.contains(x, y) || objects.contains(newX, newY)) {
+            System.out.println("Collision");
             return false;
         }
         try {

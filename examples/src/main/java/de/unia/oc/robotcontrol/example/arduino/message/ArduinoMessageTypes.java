@@ -29,7 +29,7 @@ public final class ArduinoMessageTypes {
                                     (List<Integer> ints) -> new DistanceDataMessage(ints.get(0), ints.get(1), ints.get(2))
                             )
                     )
-            );
+            ).withName("DistanceData");
 
     /**
      * MessageType for {@link SpeedCmdMessage}. [char, byte] -> [direction, speed]
@@ -44,12 +44,12 @@ public final class ArduinoMessageTypes {
                                     (Tuple<Character, Integer> t) -> new SpeedCmdMessage(t.first, t.second)
                             )
                     )
-            );
+            ).withName("SpeedCommand");
 
     public static final MessageType<UpdateRequestMessage> UPDATE_REQUEST =
             MessageType.fromEncoding(
                     Encodings.nullEncoding(CONTEXT, UpdateRequestMessage::new)
-            );
+            ).withName("UpdateRequest");
 
 
     /**

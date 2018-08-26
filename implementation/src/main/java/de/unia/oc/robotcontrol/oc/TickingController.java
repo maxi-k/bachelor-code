@@ -3,6 +3,7 @@ package de.unia.oc.robotcontrol.oc;
 
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.BufferFlowStrategy;
+import de.unia.oc.robotcontrol.flow.strategy.LoggingFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TimedFlowStrategy;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;

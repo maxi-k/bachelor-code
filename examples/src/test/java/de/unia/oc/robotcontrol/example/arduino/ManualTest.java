@@ -22,8 +22,6 @@ class ManualTest {
 
     @Test
     void manualTest() throws InterruptedException {
-        Hooks.onOperatorDebug();
-
         final Duration time = Duration.ofMillis(100);
 
         Clock timer = EmittingClock.create(time);
@@ -41,15 +39,6 @@ class ManualTest {
             protected void hookOnSubscribe(Subscription subscription) {
                 System.out.println("onSubscribe! on Thread " + Thread.currentThread().getName());
                 subscription.request(Long.MAX_VALUE);
-            }
-        });
-
-        device.asSubscriber().onNext(new SpeedCmdMessage(RobotDrivingCommand.FRONT, 20));
-
-        timer.getTicks().subscribe(new BaseSubscriber<Long>() {
-            @Override
-            protected void hookOnNext(Long value) {
-                System.out.println("Received Long " + value + " on Thread " + Thread.currentThread().getName());
             }
         });
 
