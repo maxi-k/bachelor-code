@@ -33,6 +33,22 @@ public final class Tuple<F, S> {
         return this == t || Objects.equals(first, t.first) && Objects.equals(second, t.second);
     }
 
+    /**
+     *
+     * @return the first element in this tuple
+     */
+    public F getFirst() {
+        return first;
+    }
+
+    /**
+     *
+     * @return the second element in this tuple
+     */
+    public S getSecond() {
+        return second;
+    }
+
     @Override
     public String toString() {
         return "Tuple(" + first + ", " + second + ")";

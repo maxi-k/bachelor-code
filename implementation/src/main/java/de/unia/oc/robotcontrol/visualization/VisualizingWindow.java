@@ -20,7 +20,7 @@ public class VisualizingWindow {
 
     @EnsuresNonNull("frame")
     public synchronized void setup() {
-        JPanel mainPanel = new VisualizingPanel(toVisualize);
+        JPanel mainPanel = toVisualize.hasOwnPanel() ? toVisualize.getPanel() : new VisualizingPanel(toVisualize);
 
         JFrame frame = new JFrame("DrawRect");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -28,6 +28,7 @@ public class VisualizingWindow {
         frame.pack();
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
+        frame.requestFocus();
 
         this.frame = frame;
     }

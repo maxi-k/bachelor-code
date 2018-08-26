@@ -11,6 +11,7 @@ import de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage;
 import de.unia.oc.robotcontrol.example.arduino.message.UpdateRequestMessage;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.reactivestreams.Subscription;
 import reactor.core.publisher.BaseSubscriber;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Hooks;
 
 import java.time.Duration;
 
+@Disabled
 class ManualTest {
 
     @Test

@@ -47,7 +47,7 @@ public abstract class ReemittingMulticast<Topic extends Object, Value extends Ob
     }
 
     @Override
-    public  Publisher<Value> subscribeTo(Topic topic) {
+    public Publisher<Value> subscribeTo(Topic topic) {
         return multicastMap.compute(topic, (t, current) -> {
             if (current == null || current.hasCompleted() || current.isTerminated() || current.isDisposed()) {
                 return createTopicProcessor();

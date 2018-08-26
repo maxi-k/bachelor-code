@@ -12,6 +12,7 @@ import de.unia.oc.robotcontrol.message.EmittingMessageMulticast;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.message.MessageType;
 import de.unia.oc.robotcontrol.util.Logger;
+import de.unia.oc.robotcontrol.visualization.GraphingRuntimeMetrics;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import reactor.core.Disposable;
@@ -137,6 +138,8 @@ public class RobotControl<
                 .subscribe(multicast.asSubscriber());
 
        // this.resultingFlow.subscribeOn(Schedulers.newSingle("Robot Control"));
+
+        // GraphingRuntimeMetrics<String> metrics = GraphingRuntimeMetrics.create();
 
         isRunning = true;
         isStarting = false;
