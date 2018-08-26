@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * An interface that describes a device, an abstraction
  * for an actual hardware this connects to, which can send
- * and receive messages
+ * and receive messages ({@link Message}).
  *
  * @param <Output> The subtype of Messages this accepts
  */

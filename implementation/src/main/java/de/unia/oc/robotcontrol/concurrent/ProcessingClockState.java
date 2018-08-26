@@ -30,7 +30,7 @@ public class ProcessingClockState<T extends Object, R extends Object>
         );
 
         this.strategy = TimedFlowStrategy.createTimed(timerPublisher, initialInput, mergingFunction);
-        this.clockType = Clockable.ClockType.createClocked(this::setTimer);
+        this.clockType = Clockable.ClockType.createClocked(this::runOnClock);
     }
 
     public static <T extends Object, R extends Object> ProcessingClockState<T, R> create(
@@ -47,7 +47,8 @@ public class ProcessingClockState<T extends Object, R extends Object>
         return strategy;
     }
 
-    public boolean setTimer(TimeProvider provider) {
+    @Override
+    public boolean runOnClock(TimeProvider provider) {
         timerPublisher.onNext(provider);
         return true;
     }

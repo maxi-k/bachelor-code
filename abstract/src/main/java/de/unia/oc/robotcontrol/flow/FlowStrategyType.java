@@ -1,6 +1,12 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.flow;
 
+/**
+ * Categorization of the possible effects a {@link Flowable} flow element
+ * might have on the overall program flow (pipeline),
+ * especially concerning situations where a recipient cannot handle the
+ * rate of data coming from a source (backpressure).
+ */
 public enum FlowStrategyType {
 
     /**

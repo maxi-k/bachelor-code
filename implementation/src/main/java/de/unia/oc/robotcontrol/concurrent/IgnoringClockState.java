@@ -21,7 +21,7 @@ public class IgnoringClockState<T extends Object> implements ClockState<T, T> {
     }
 
     @Override
-    public boolean setTimer(TimeProvider provider) {
+    public boolean runOnClock(TimeProvider provider) {
         return false;
     }
 

@@ -137,7 +137,7 @@ public class ObjectGrid implements Visualization<Component> {
 
     public synchronized boolean move(int x, int y, int newX, int newY) {
         if (!objects.contains(x, y) || objects.contains(newX, newY)) {
-            System.out.println("Collision");
+            // System.out.println("Collision");
             return false;
         }
         try {

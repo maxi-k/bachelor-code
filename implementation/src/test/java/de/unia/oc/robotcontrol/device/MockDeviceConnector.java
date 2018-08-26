@@ -2,7 +2,6 @@
 package de.unia.oc.robotcontrol.device;
 
 import de.unia.oc.robotcontrol.coding.Encoding;
-import de.unia.oc.robotcontrol.concurrent.ScheduleProvider;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy;
 import de.unia.oc.robotcontrol.message.Message;
@@ -23,8 +22,7 @@ public class MockDeviceConnector implements Device<Message, Message> {
     private final UUID uuid;
 
     @SuppressWarnings("initialization")
-    public MockDeviceConnector(Encoding<Message> encoding,
-                               ScheduleProvider schedule) {
+    public MockDeviceConnector(Encoding<Message> encoding) {
         this.encoding = encoding;
         this.processor = EmitterProcessor.create();
         this.uuid = UUID.randomUUID();

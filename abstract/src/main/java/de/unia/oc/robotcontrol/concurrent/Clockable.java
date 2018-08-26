@@ -9,6 +9,10 @@ import java.util.function.Function;
  * Describes something whose execution may be clocked,
  * that is, executed multiple times on a fixed or dynamic
  * schedule.
+ *
+ * It is not specified what 'execution' means in this context.
+ * This is assumed to be specified in sub-interfaces or concrete
+ * implementations.
  */
 public interface Clockable extends Concurrent {
 
@@ -24,8 +28,31 @@ public interface Clockable extends Concurrent {
     @Pure
     ClockType getClockType();
 
+    /**
+     * Schedule the execution of this Object on the given {@link TimeProvider}.
+     *
+     * @param provider the provider on which to schedule the execution
+     * @return whether the switch to the {@link TimeProvider} was successful
+     */
+    default boolean runOnClock(TimeProvider provider) {
+        return getClockType().runOn(provider);
+    }
+
+    /**
+     * Describes the different mechanics a {@link Clockable} can implement.
+     */
     class ClockType {
 
+        /**
+         * Run on the given {@link TimeProvider}, and return whether
+         * the switch to the {@link TimeProvider} was successful.
+         *
+         * The default implementation returns false, meaning it does
+         * not change anything and reports the switch as being unsuccessful.
+         *
+         * @param timeProvider the clock to switch to
+         * @return whether the switch was successful
+         */
         public boolean runOn(TimeProvider timeProvider) { return false; }
 
         /**
@@ -49,6 +76,11 @@ public interface Clockable extends Concurrent {
             return new ClockedClockType(acceptor);
         }
 
+        /**
+         * Subclass describing some behavior run on a schedule. Requires a callback
+         * to be supplied which is executed for the {@link #runOn(TimeProvider)} function,
+         * and whose result ist returned.
+         */
         private static final class ClockedClockType extends ClockType {
 
             private final Function<TimeProvider, Boolean> acceptor;
