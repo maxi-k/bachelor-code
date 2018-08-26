@@ -9,7 +9,8 @@ import org.reactivestreams.Publisher;
  * called a 'Filter' in the 'Pipes & Filters' architecture.
  *
  * For complex transformations that alter the structure of the pipline itself, for example
- * by branching it, or that perform very expensive tasks, use a {@link FlowableProcessor} instead.
+ * by branching it, or transformations that perform very expensive tasks,
+ * it is best to use a {@link FlowableProcessor} instead.
  *
  * @param <Input> the type of data this accepts as input
  * @param <Output> the type of data this outputs
