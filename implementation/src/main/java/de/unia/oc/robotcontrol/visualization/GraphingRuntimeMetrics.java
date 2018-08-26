@@ -14,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.reactivestreams.Publisher;
 import reactor.core.Disposable;
+import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -24,12 +25,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 public class GraphingRuntimeMetrics<Type extends Object>
         implements RuntimeMetrics<Type, Component> {
@@ -37,7 +37,7 @@ public class GraphingRuntimeMetrics<Type extends Object>
     private volatile @Nullable Type selectedMetric;
 
     private final ConcurrentMap<Type, Flux<Tuple<Long, Double>>> valueProviders;
-    private final int maxValues = 500;
+    private final int maxValues = 2000;
 
     private final EmptyDrawer drawEmpty;
     private  @MonotonicNonNull MetricDrawer drawMetric;
@@ -72,6 +72,13 @@ public class GraphingRuntimeMetrics<Type extends Object>
     public void selectMetric(Type metric) {
         this.selectedMetric = metric;
         updateContainer(metric);
+    }
+
+    @Override
+    public Consumer<Double> registerCallback(Type metric) {
+        DirectProcessor<Double> processor = DirectProcessor.create();
+        register(metric, processor);
+        return processor::onNext;
     }
 
     @Override
@@ -171,18 +178,26 @@ public class GraphingRuntimeMetrics<Type extends Object>
 
     }
 
+    @Override
+    public String getVisualizationName() {
+        return "Graphical Runtime Metrics";
+    }
+
     private class MetricDrawer implements Terminable {
 
         private final Disposable subscription;
         private final XChartPanel panel;
         private final Type metric;
 
-        private final ArrayList<Double> times;
-        private final ArrayList<Double> values;
+        private final Object arrayLock = new Object();
+        private final LinkedList<Double> times;
+        private final LinkedList<Double> values;
 
         private MetricDrawer(Type metric) {
-            times = new ArrayList<>(maxValues);
-            values = new ArrayList<>(maxValues);
+            synchronized (arrayLock) {
+                times = new LinkedList<>();
+                values = new LinkedList<>();
+            }
 
             this.metric = metric;
             Flux<Tuple<Long, Double>> dataFlow = valueProviders.get(metric);
@@ -198,11 +213,27 @@ public class GraphingRuntimeMetrics<Type extends Object>
 
         @RequiresNonNull({"this.panel", "this.metric", "this.times", "this.values"})
         @SuppressWarnings("nullness")
-        private synchronized void updateData(@UnknownInitialization MetricDrawer this, Tuple<Long, Double> value) {
-            times.add((double) value.first);
-            values.add(value.second);
+        private void updateData(@UnknownInitialization MetricDrawer this, Tuple<Long, Double> value) {
+            synchronized (arrayLock) {
+                int remove = times.size() - maxValues;
+                synchronized (times) {
+                    if (remove >= 0) {
+                        times.removeFirst();
+                    }
+                    times.add((double) value.first);
+                }
+                synchronized (values) {
+                    if (remove >= 0) {
+                        values.removeFirst();
+                    }
+                    values.add(value.second);
+                }
+            }
 
-            panel.updateSeries(metric.toString(), times, values, null);
+            panel.updateSeries(metric.toString(),
+                    Collections.unmodifiableList(times),
+                    Collections.unmodifiableList(values),
+                    null);
 
             panel.revalidate();
             panel.repaint();
@@ -234,7 +265,6 @@ public class GraphingRuntimeMetrics<Type extends Object>
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     Type item = selector.getItemAt(selector.getSelectedIndex());
                     if (selectedMetric != item) {
-                        System.out.println("action performed!");
                         selectMetric(item);
                     }
                 }

@@ -5,6 +5,8 @@ import de.unia.oc.robotcontrol.util.Registry;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.reactivestreams.Publisher;
 
+import java.util.function.Consumer;
+
 public interface RuntimeMetrics<Type extends Object, Context extends Object>
         extends
         Visualization<Context>,
@@ -13,5 +15,7 @@ public interface RuntimeMetrics<Type extends Object, Context extends Object>
     @Nullable Type getSelectedMetric();
 
     void selectMetric(Type metric);
+
+    Consumer<Double> registerCallback(Type metric);
 
 }

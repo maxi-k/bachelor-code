@@ -22,4 +22,8 @@ public interface Visualization<T> {
         return null;
     }
 
+    default String getVisualizationName() {
+        return "Visualization";
+    }
+
 }

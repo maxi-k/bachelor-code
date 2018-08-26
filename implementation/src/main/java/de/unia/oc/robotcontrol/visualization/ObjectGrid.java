@@ -12,6 +12,7 @@ import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ObjectGrid implements Visualization<Component> {
@@ -135,9 +136,11 @@ public class ObjectGrid implements Visualization<Component> {
         return this.objects.remove(x, y) != null;
     }
 
+    private int collisions = 0;
+    private Consumer<Double> collisionMetric = Metrics.instance().registerCallback("Simulated Robot Collisions");
     public synchronized boolean move(int x, int y, int newX, int newY) {
         if (!objects.contains(x, y) || objects.contains(newX, newY)) {
-            // System.out.println("Collision");
+            collisionMetric.accept((double) ++collisions);
             return false;
         }
         try {
