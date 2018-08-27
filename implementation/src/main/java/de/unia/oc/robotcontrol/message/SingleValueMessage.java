@@ -8,7 +8,7 @@ public abstract class SingleValueMessage<T> implements Message<SingleValueMessag
         this.value = value;
     }
 
-    public T getValue() {
+    public synchronized T getValue() {
         return value;
     }
 

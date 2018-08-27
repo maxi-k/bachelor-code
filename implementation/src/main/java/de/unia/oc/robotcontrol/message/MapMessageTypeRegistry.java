@@ -4,7 +4,7 @@ package de.unia.oc.robotcontrol.message;
 import de.unia.oc.robotcontrol.coding.CodingContext;
 import de.unia.oc.robotcontrol.util.BidirectionalRegistry;
 
-class MapMessageTypeRegistry<I>
+class MapMessageTypeRegistry<I extends Object>
         extends BidirectionalRegistry<I, MessageType>
         implements MessageTypeRegistry<I> {
 

@@ -1,16 +1,20 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.oc;
 
-import de.unia.oc.robotcontrol.flow.InFlowElement;
-import de.unia.oc.robotcontrol.flow.OutFlowElement;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import de.unia.oc.robotcontrol.concurrent.TimeProvider;
+import de.unia.oc.robotcontrol.flow.FlowableTransformer;
+import de.unia.oc.robotcontrol.flow.SelectiveRecipient;
+import de.unia.oc.robotcontrol.message.Message;
 
-public interface Observer<@NonNull T, M extends @NonNull ObservationModel<T>>
-        extends InFlowElement, OutFlowElement {
+public interface Observer<Incoming extends Message, WorldState extends Object,
+        Model extends ObservationModel<WorldState>>
+        extends FlowableTransformer<Incoming, WorldState>, SelectiveRecipient<Incoming> {
 
-    M getObservationModel();
+    Model getObservationModel();
 
-    void setObservationModel(M observationModel);
+    void setObservationModel(Model observationModel);
 
-    @NonNull T getModelState();
+    WorldState getModelState();
+
+    TimeProvider getTimeProvider();
 }

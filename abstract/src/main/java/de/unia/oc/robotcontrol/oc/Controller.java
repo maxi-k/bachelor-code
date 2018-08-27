@@ -1,21 +1,20 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.oc;
 
-import de.unia.oc.robotcontrol.flow.InFlowElement;
-import de.unia.oc.robotcontrol.flow.OutFlowElement;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import de.unia.oc.robotcontrol.flow.FlowableTransformer;
 import org.checkerframework.checker.signedness.qual.Constant;
 import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.Set;
 
-public interface Controller<T, M extends ObservationModel<T>, O> extends InFlowElement, OutFlowElement {
+public interface Controller<WorldState extends Object, Model extends ObservationModel<WorldState>, Command extends Object>
+        extends FlowableTransformer<WorldState, Command> {
 
-    M getObservationModel();
+    Model getObservationModel();
 
-    void setObserver(Observer<T, M> observer);
+    void setObserver(Observer<?, ? extends WorldState, ? super Model> observer);
 
     @Pure
     @Constant
-    Set<@NonNull O> getPossibleActions();
+    Set<? extends Command> getPossibleActions();
 }

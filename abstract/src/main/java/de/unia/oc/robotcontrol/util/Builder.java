@@ -24,13 +24,13 @@ public final class Builder<T> {
      * @param <M> the type of the resulting value held in the new builder
      * @return A builder which holds the transformed value
      */
-    public <M> Builder<M> map(Function<T, M> mapper) {
+    public <M> Builder<M> map(Function<? super T, M> mapper) {
         return Builder.start(mapper.apply(this.value));
     }
 
     /**
      * Extract the value from the Builder instance.
-     * Used at the end of the build chain to get the actual
+     * Used at the end of the build with to get the actual
      * desired value.
      *
      * @return The {@link Builder#value} this Builder holds

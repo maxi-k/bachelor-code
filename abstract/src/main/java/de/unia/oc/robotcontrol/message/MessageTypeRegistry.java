@@ -9,10 +9,14 @@ import de.unia.oc.robotcontrol.util.Tuple;
  * A generic interface for a Registry that associates a MessageIdentifier
  * with a MessageType, so that it is possible to decode received bytes
  * with an included identifier to all registered MessageTypes.
- *
+ *this.mockAnswerEncoding.encode(Arrays.asList(
+                (int) (Math.random() * 100),
+                (int) (Math.random() * 100),
+                (int) (Math.random() * 100)
+        ));
  * @param <I> The element used as an identifier
  */
-public interface MessageTypeRegistry<I>
+public interface MessageTypeRegistry<I extends Object>
         extends Registry<I, MessageType>, Encoding<Message> {
 
     /**

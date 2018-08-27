@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>de.unia.oc.robotcontrol</OriginalElement>
+  <nodes>
+    <node x="1186.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.IgnoringFlowStrategy</node>
+    <node x="3041.458333333333" y="466.0">de.unia.oc.robotcontrol.concurrent.Terminable</node>
+    <node x="3867.25" y="896.0">de.unia.oc.robotcontrol.coding.ListEncodingTest</node>
+    <node x="2715.708333333333" y="367.0">de.unia.oc.robotcontrol.flow.FlowableProcessor</node>
+    <node x="1871.0" y="1128.0">de.unia.oc.robotcontrol.flow.Flow</node>
+    <node x="0.0" y="1128.0">de.unia.oc.robotcontrol.coding.CodingUtil</node>
+    <node x="1845.764781536294" y="743.0">de.unia.oc.robotcontrol.example.arduino.oc.ArduinoController</node>
+    <node x="5781.909010369479" y="585.0">de.unia.oc.robotcontrol.coding.LongEncoding</node>
+    <node x="5268.369228833185" y="743.0">de.unia.oc.robotcontrol.message.AbstractSensorMessage</node>
+    <node x="371.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy</node>
+    <node x="6058.25" y="896.0">de.unia.oc.robotcontrol.flow.FlowPipeline</node>
+    <node x="1078.0" y="1128.0">de.unia.oc.robotcontrol.util.Builder</node>
+    <node x="5626.909010369479" y="585.0">de.unia.oc.robotcontrol.coding.CharEncoding</node>
+    <node x="5294.869228833185" y="664.0">de.unia.oc.robotcontrol.message.SensorMessage</node>
+    <node x="6148.409010369479" y="158.0">de.unia.oc.robotcontrol.coding.Encoding</node>
+    <node x="6393.25" y="896.0">de.unia.oc.robotcontrol.concurrent.Scheduling</node>
+    <node x="2369.25" y="896.0">de.unia.oc.robotcontrol.example.arduino.message.ArduinoMessageTypes</node>
+    <node x="4067.25" y="896.0">de.unia.oc.robotcontrol.visualization.VisualizingPanel</node>
+    <node x="5540.25" y="896.0">de.unia.oc.robotcontrol.visualization.GridDirection</node>
+    <node x="3064.5692288331848" y="664.0">de.unia.oc.robotcontrol.concurrent.Terminable.ConstantlyTerminated</node>
+    <node x="1214.0" y="1128.0">de.unia.oc.robotcontrol.flow.FlowPipeline.Builder</node>
+    <node x="2875.5692288331848" y="664.0">de.unia.oc.robotcontrol.flow.ReemittingMulticast</node>
+    <node x="6554.25" y="896.0">de.unia.oc.robotcontrol.message.Messaging</node>
+    <node x="1572.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.OldestFlowStrategy</node>
+    <node x="6024.159010369479" y="367.0">de.unia.oc.robotcontrol.coding.FixedEncoding</node>
+    <node x="1350.0" y="1128.0">de.unia.oc.robotcontrol.util.Logger</node>
+    <node x="0.0" y="1054.0">de.unia.oc.robotcontrol.example.arduino.visualization.TargetGridObject</node>
+    <node x="1749.0" y="1128.0">de.unia.oc.robotcontrol.example.arduino.Main</node>
+    <node x="5918.409010369479" y="466.0">de.unia.oc.robotcontrol.coding.SingleValueEncoding</node>
+    <node x="167.25" y="896.0">de.unia.oc.robotcontrol.visualization.Visualization</node>
+    <node x="629.0" y="1128.0">de.unia.oc.robotcontrol.util.TupleTest</node>
+    <node x="6283.409010369479" y="367.0">de.unia.oc.robotcontrol.message.MessageIdentifier</node>
+    <node x="2677.958333333333" y="466.0">de.unia.oc.robotcontrol.flow.FlowableMulticast</node>
+    <node x="4487.709968874798" y="466.0">de.unia.oc.robotcontrol.device.DeviceTarget</node>
+    <node x="2573.8192288331848" y="158.0">de.unia.oc.robotcontrol.flow.FlowableTransformer</node>
+    <node x="4070.7423437028124" y="158.0">de.unia.oc.robotcontrol.message.Message</node>
+    <node x="5466.909010369479" y="585.0">de.unia.oc.robotcontrol.coding.ShortEncoding</node>
+    <node x="473.0" y="1128.0">de.unia.oc.robotcontrol.concurrent.TaskMode</node>
+    <node x="2681.3192288331848" y="79.0">de.unia.oc.robotcontrol.flow.Flowable</node>
+    <node x="5065.369228833185" y="743.0">de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage</node>
+    <node x="1385.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.BufferFlowStrategy</node>
+    <node x="4877.535895499852" y="367.0">de.unia.oc.robotcontrol.message.SingleValueMessage</node>
+    <node x="1622.0" y="1128.0">de.unia.oc.robotcontrol.util.Tuple</node>
+    <node x="3169.458333333333" y="367.0">de.unia.oc.robotcontrol.message.MessageTransformer</node>
+    <node x="4828.035895499852" y="664.0">de.unia.oc.robotcontrol.message.ActuatorMessage</node>
+    <node x="3515.369228833185" y="585.0">de.unia.oc.robotcontrol.message.MessageMulticast</node>
+    <node x="4259.25" y="896.0">de.unia.oc.robotcontrol.device.SchedulingTest</node>
+    <node x="3176.458333333333" y="466.0">de.unia.oc.robotcontrol.message.MessageProcessor</node>
+    <node x="4447.25" y="896.0">de.unia.oc.robotcontrol.coding.CodingContext</node>
+    <node x="5938.909010369479" y="585.0">de.unia.oc.robotcontrol.coding.FloatEncoding</node>
+    <node x="3268.5692288331848" y="664.0">de.unia.oc.robotcontrol.concurrent.ScheduleProvider</node>
+    <node x="5616.659010369479" y="367.0">de.unia.oc.robotcontrol.message.MessageType</node>
+    <node x="1838.764781536294" y="664.0">de.unia.oc.robotcontrol.oc.QLearningController</node>
+    <node x="240.25" y="975.0">de.unia.oc.robotcontrol.visualization.ObjectGrid</node>
+    <node x="2602.25" y="896.0">de.unia.oc.robotcontrol.example.arduino.message.ArduinoMessageTest</node>
+    <node x="2825.25" y="896.0">de.unia.oc.robotcontrol.coding.IntegerEncodingTest</node>
+    <node x="6226.25" y="896.0">de.unia.oc.robotcontrol.concurrent.Schedulable</node>
+    <node x="5142.119228833185" y="367.0">de.unia.oc.robotcontrol.message.AbstractMessage</node>
+    <node x="3972.119228833185" y="585.0">de.unia.oc.robotcontrol.device.Device</node>
+    <node x="5714.25" y="896.0">de.unia.oc.robotcontrol.example.arduino.data.ArduinoState</node>
+    <node x="3665.25" y="896.0">de.unia.oc.robotcontrol.example.arduino.MockArduinoTest</node>
+    <node x="6417.909010369479" y="585.0">de.unia.oc.robotcontrol.coding.IntegerEncoding</node>
+    <node x="5013.619228833185" y="664.0">de.unia.oc.robotcontrol.message.AbstractDeviceMessage</node>
+    <node x="1125.25" y="896.0">de.unia.oc.robotcontrol.coding.BijectiveTransformationTest</node>
+    <node x="2702.5692288331848" y="664.0">de.unia.oc.robotcontrol.flow.FilteringMulticast</node>
+    <node x="4288.814135541465" y="664.0">de.unia.oc.robotcontrol.device.LockingDeviceConnector</node>
+    <node x="2336.742343702813" y="585.0">de.unia.oc.robotcontrol.example.arduino.oc.ArduinoObserver</node>
+    <node x="6094.909010369479" y="585.0">de.unia.oc.robotcontrol.coding.DoubleEncoding</node>
+    <node x="2734.3192288331848" y="585.0">de.unia.oc.robotcontrol.flow.ValueBoundMulticast</node>
+    <node x="783.0" y="1128.0">de.unia.oc.robotcontrol.MainTest</node>
+    <node x="185.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.FolderFlowStrategy</node>
+    <node x="6086.909010369479" y="79.0">de.unia.oc.robotcontrol.util.Bijection</node>
+    <node x="891.4506770361454" y="158.0">de.unia.oc.robotcontrol.flow.FlowStrategy</node>
+    <node x="1895.25" y="896.0">de.unia.oc.robotcontrol.visualization.GridObjectDrawContext</node>
+    <node x="5365.25" y="896.0">de.unia.oc.robotcontrol.util.CollectionUtil</node>
+    <node x="106.24999999999999" y="975.0">de.unia.oc.robotcontrol.visualization.GridObject</node>
+    <node x="316.0" y="1128.0">de.unia.oc.robotcontrol.concurrent.ClockType</node>
+    <node x="1486.0" y="1128.0">de.unia.oc.robotcontrol.oc.RobotControl.Builder</node>
+    <node x="4217.369228833185" y="743.0">de.unia.oc.robotcontrol.example.arduino.device.DiscreteSimulatedRobot</node>
+    <node x="3462.25" y="896.0">de.unia.oc.robotcontrol.flow.FlowStrategyType</node>
+    <node x="6207.909010369479" y="79.0">de.unia.oc.robotcontrol.coding.Contextual</node>
+    <node x="6459.409010369479" y="367.0">de.unia.oc.robotcontrol.message.MessageTypeRegistry</node>
+    <node x="857.25" y="896.0">de.unia.oc.robotcontrol.util.Registry.ItemNotRegisteredException</node>
+    <node x="2678.3192288331848" y="0.0">de.unia.oc.robotcontrol.concurrent.Clockable</node>
+    <node x="5581.159010369479" y="466.0">de.unia.oc.robotcontrol.message.SingleValueMessageType</node>
+    <node x="4432.369228833185" y="743.0">de.unia.oc.robotcontrol.example.arduino.device.MockArduino</node>
+    <node x="932.0" y="1128.0">de.unia.oc.robotcontrol.util.Wrapper</node>
+    <node x="5189.25" y="896.0">de.unia.oc.robotcontrol.flow.MulticastTest</node>
+    <node x="3394.258333333333" y="743.0">de.unia.oc.robotcontrol.message.EmittingMessageMulticast</node>
+    <node x="3118.5692288331848" y="585.0">de.unia.oc.robotcontrol.concurrent.Terminable.TimedTerminable</node>
+    <node x="584.25" y="896.0">de.unia.oc.robotcontrol.device.LockingDeviceConnectorTest</node>
+    <node x="4819.25" y="896.0">de.unia.oc.robotcontrol.coding.CodingUtilTest</node>
+    <node x="2134.25" y="896.0">de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand</node>
+    <node x="4911.994228833185" y="585.0">de.unia.oc.robotcontrol.device.ModifiableDeviceTarget</node>
+    <node x="3644.369228833185" y="367.0">de.unia.oc.robotcontrol.message.MessageRecipient</node>
+    <node x="2867.8192288331848" y="158.0">de.unia.oc.robotcontrol.flow.FlowableSource</node>
+    <node x="4897.535895499852" y="466.0">de.unia.oc.robotcontrol.message.ErrorMessage</node>
+    <node x="1760.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy</node>
+    <node x="978.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.TypeFilterFlowStrategy</node>
+    <node x="6713.25" y="896.0">de.unia.oc.robotcontrol.util.Dispatcher</node>
+    <node x="6263.909010369479" y="585.0">de.unia.oc.robotcontrol.coding.ByteEncoding</node>
+    <node x="405.25" y="896.0">de.unia.oc.robotcontrol.util.MultiRegistry</node>
+    <node x="4836.369228833185" y="743.0">de.unia.oc.robotcontrol.message.AbstractActuatorMessage</node>
+    <node x="3255.25" y="896.0">de.unia.oc.robotcontrol.coding.CharEncodingTest</node>
+    <node x="1976.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.ErrorFlowStrategy</node>
+    <node x="6623.159010369479" y="158.0">de.unia.oc.robotcontrol.util.Registry</node>
+    <node x="1480.8881770361454" y="79.0">de.unia.oc.robotcontrol.flow.function.PublisherTransformation</node>
+    <node x="482.25" y="466.0">de.unia.oc.robotcontrol.flow.strategy.PrinterFlowStrategy</node>
+    <node x="6115.409010369479" y="466.0">de.unia.oc.robotcontrol.coding.ListEncoding</node>
+    <node x="5004.25" y="896.0">de.unia.oc.robotcontrol.coding.CodingTestUtil</node>
+    <node x="2545.644228833185" y="585.0">de.unia.oc.robotcontrol.oc.RobotControl</node>
+    <node x="2335.208333333333" y="466.0">de.unia.oc.robotcontrol.oc.Controller</node>
+    <node x="1391.25" y="896.0">de.unia.oc.robotcontrol.flow.function.SubscriberTransformation</node>
+    <node x="158.0" y="1128.0">de.unia.oc.robotcontrol.coding.Encodings</node>
+    <node x="3089.708333333333" y="743.0">de.unia.oc.robotcontrol.concurrent.TrackingScheduleProvider</node>
+    <node x="1645.25" y="896.0">de.unia.oc.robotcontrol.flow.function.ProcessorTransformation</node>
+    <node x="1891.264781536294" y="585.0">de.unia.oc.robotcontrol.oc.TickingController</node>
+    <node x="6661.409010369479" y="367.0">de.unia.oc.robotcontrol.util.BidirectionalRegistry</node>
+    <node x="792.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.LatestFlowStrategy</node>
+    <node x="4992.5615414946815" y="822.0">de.unia.oc.robotcontrol.example.arduino.message.UpdateRequestMessage</node>
+    <node x="0.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.TimedFlowStrategy</node>
+    <node x="2488.6115414946817" y="466.0">de.unia.oc.robotcontrol.oc.Observer</node>
+    <node x="3367.458333333333" y="367.0">de.unia.oc.robotcontrol.message.MessageSender</node>
+    <node x="3046.25" y="896.0">de.unia.oc.robotcontrol.visualization.VisualizingWindow</node>
+    <node x="174.0" y="1054.0">de.unia.oc.robotcontrol.example.arduino.visualization.RobotGridObject</node>
+    <node x="4633.25" y="896.0">de.unia.oc.robotcontrol.message.DispatcherTest</node>
+    <node x="3901.119228833185" y="664.0">de.unia.oc.robotcontrol.device.MockDeviceConnector</node>
+    <node x="399.25" y="975.0">de.unia.oc.robotcontrol.util.MultiBiRegistry</node>
+    <node x="6263.409010369479" y="466.0">de.unia.oc.robotcontrol.message.SimpleMessageIdentifier</node>
+    <node x="6545.409010369479" y="466.0">de.unia.oc.robotcontrol.message.MapMessageTypeRegistry</node>
+    <node x="5888.25" y="896.0">de.unia.oc.robotcontrol.message.RegistryTest</node>
+    <node x="2155.0" y="367.0">de.unia.oc.robotcontrol.oc.ObservationModel</node>
+    <node x="3671.119228833185" y="466.0">de.unia.oc.robotcontrol.message.CallbackMessageRecipient</node>
+    <node x="4064.369228833185" y="743.0">de.unia.oc.robotcontrol.device.I2CConnector</node>
+    <node x="294.25" y="466.0">de.unia.oc.robotcontrol.flow.strategy.ReplayFlowStrategy</node>
+    <node x="594.0" y="367.0">de.unia.oc.robotcontrol.flow.strategy.ReducerFlowStrategy</node>
+    <node x="4582.369228833185" y="743.0">de.unia.oc.robotcontrol.device.MockLockingDeviceConnector</node>
+    <node x="3503.4391355414646" y="158.0">de.unia.oc.robotcontrol.flow.FlowableSink</node>
+    <node x="4804.5615414946815" y="822.0">de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="de.unia.oc.robotcontrol.oc.RobotControl" target="de.unia.oc.robotcontrol.oc.ObservationModel">
+      <point x="-52.40000000000009" y="-14.5" />
+      <point x="2558.744228833185" y="545.0" />
+      <point x="2324.7083333333335" y="545.0" />
+      <point x="2324.7083333333335" y="436.0" />
+      <point x="2248.3333333333335" y="436.0" />
+      <point x="13.333333333333485" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.Encoding" target="de.unia.oc.robotcontrol.util.Bijection">
+      <point x="-26.5" y="-14.5" />
+      <point x="6174.909010369479" y="133.0" />
+      <point x="6137.409010369479" y="133.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageSender" target="de.unia.oc.robotcontrol.flow.FlowableSource">
+      <point x="-36.25" y="-14.5" />
+      <point x="3403.708333333333" y="207.0" />
+      <point x="2975.8192288331848" y="207.0" />
+      <point x="36.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.concurrent.Terminable.ConstantlyTerminated" target="de.unia.oc.robotcontrol.concurrent.Terminable.TimedTerminable">
+      <point x="0.0" y="-14.5" />
+      <point x="-38.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.AbstractDeviceMessage" target="de.unia.oc.robotcontrol.message.AbstractMessage">
+      <point x="65.0" y="-14.5" />
+      <point x="5176.119228833185" y="644.0" />
+      <point x="5219.619228833185" y="644.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.visualization.ObjectGrid" target="de.unia.oc.robotcontrol.visualization.Visualization">
+      <point x="0.0" y="-14.5" />
+      <point x="297.25" y="950.0" />
+      <point x="261.75" y="950.0" />
+      <point x="31.5" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.util.MultiBiRegistry" target="de.unia.oc.robotcontrol.util.MultiRegistry">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FlowableSource" target="de.unia.oc.robotcontrol.flow.Flowable">
+      <point x="0.0" y="-14.5" />
+      <point x="2939.8192288331848" y="133.0" />
+      <point x="2757.0692288331848" y="133.0" />
+      <point x="25.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.AbstractSensorMessage" target="de.unia.oc.robotcontrol.message.SensorMessage">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.SensorMessage" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="48.33333333333303" y="-14.5" />
+      <point x="5415.702562166518" y="644.0" />
+      <point x="5378.369228833185" y="644.0" />
+      <point x="5378.369228833185" y="277.0" />
+      <point x="4165.092343702812" y="277.0" />
+      <point x="43.350000000000364" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.AbstractDeviceMessage" target="de.unia.oc.robotcontrol.device.ModifiableDeviceTarget">
+      <point x="-65.0" y="-14.5" />
+      <point x="5046.119228833185" y="644.0" />
+      <point x="5007.494228833185" y="644.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.DoubleEncoding" target="de.unia.oc.robotcontrol.coding.SingleValueEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="6169.409010369479" y="565.0" />
+      <point x="6032.194724655194" y="565.0" />
+      <point x="25.285714285714675" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageRecipient" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="39.5" y="-14.5" />
+      <point x="3762.869228833185" y="307.0" />
+      <point x="4103.892343702812" y="307.0" />
+      <point x="-17.850000000000364" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.IgnoringFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="1275.5" y="337.0" />
+      <point x="967.0870406725089" y="337.0" />
+      <point x="11.636363636363626" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageTypeRegistry" target="de.unia.oc.robotcontrol.coding.Encoding">
+      <point x="-45.5" y="-14.5" />
+      <point x="6504.909010369479" y="337.0" />
+      <point x="6241.159010369479" y="337.0" />
+      <point x="39.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage" target="de.unia.oc.robotcontrol.message.AbstractActuatorMessage">
+      <point x="0.0" y="-14.5" />
+      <point x="-52.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FlowableTransformer" target="de.unia.oc.robotcontrol.flow.function.PublisherTransformation">
+      <point x="-44.25" y="-14.5" />
+      <point x="2618.0692288331848" y="133.0" />
+      <point x="1630.8881770361454" y="133.0" />
+      <point x="50.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FlowableProcessor" target="de.unia.oc.robotcontrol.flow.FlowableSink">
+      <point x="54.333333333333485" y="-14.5" />
+      <point x="2851.5416666666665" y="237.0" />
+      <point x="3535.1891355414646" y="237.0" />
+      <point x="-31.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FilteringMulticast" target="de.unia.oc.robotcontrol.flow.ValueBoundMulticast">
+      <point x="0.0" y="-14.5" />
+      <point x="-44.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.ShortEncoding" target="de.unia.oc.robotcontrol.coding.SingleValueEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="5536.909010369479" y="545.0" />
+      <point x="5931.051867512336" y="545.0" />
+      <point x="-75.85714285714312" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.AbstractMessage" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="38.75" y="-14.5" />
+      <point x="5258.369228833185" y="297.0" />
+      <point x="4154.892343702812" y="297.0" />
+      <point x="33.149999999999636" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.LockingDeviceConnector" target="de.unia.oc.robotcontrol.device.Device">
+      <point x="-50.25" y="-14.5" />
+      <point x="4339.064135541465" y="644.0" />
+      <point x="4038.119228833185" y="644.0" />
+      <point x="22.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.IntegerEncoding" target="de.unia.oc.robotcontrol.coding.SingleValueEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="6492.409010369479" y="545.0" />
+      <point x="6082.766153226622" y="545.0" />
+      <point x="75.85714285714312" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageTransformer" target="de.unia.oc.robotcontrol.flow.FlowableTransformer">
+      <point x="-44.5" y="-14.5" />
+      <point x="3213.958333333333" y="217.0" />
+      <point x="2728.6942288331848" y="217.0" />
+      <point x="66.375" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.CharEncoding" target="de.unia.oc.robotcontrol.coding.SingleValueEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="5694.409010369479" y="555.0" />
+      <point x="5956.33758179805" y="555.0" />
+      <point x="-50.57142857142844" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.AbstractDeviceMessage" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="5111.119228833185" y="644.0" />
+      <point x="5131.619228833185" y="644.0" />
+      <point x="5131.619228833185" y="317.0" />
+      <point x="4144.692343702813" y="317.0" />
+      <point x="22.949999999999818" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.Observer" target="de.unia.oc.robotcontrol.oc.ObservationModel">
+      <point x="-34.666666666666515" y="-14.5" />
+      <point x="2505.9448748280147" y="416.0" />
+      <point x="2301.6666666666665" y="416.0" />
+      <point x="66.66666666666652" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.ActuatorMessage" target="de.unia.oc.robotcontrol.device.ModifiableDeviceTarget">
+      <point x="39.0" y="-14.5" />
+      <point x="4945.035895499852" y="644.0" />
+      <point x="4943.827562166518" y="644.0" />
+      <point x="-63.66666666666697" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.ValueBoundMulticast" target="de.unia.oc.robotcontrol.flow.FlowableMulticast">
+      <point x="0.0" y="-14.5" />
+      <point x="2823.8192288331848" y="545.0" />
+      <point x="2717.208333333333" y="545.0" />
+      <point x="-39.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.FloatEncoding" target="de.unia.oc.robotcontrol.coding.SingleValueEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.util.BidirectionalRegistry" target="de.unia.oc.robotcontrol.util.Registry">
+      <point x="0.0" y="-14.5" />
+      <point x="6748.409010369479" y="347.0" />
+      <point x="6696.659010369479" y="347.0" />
+      <point x="24.5" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageTypeRegistry" target="de.unia.oc.robotcontrol.util.Registry">
+      <point x="45.5" y="-14.5" />
+      <point x="6595.909010369479" y="347.0" />
+      <point x="6647.659010369479" y="347.0" />
+      <point x="-24.5" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.OldestFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="1656.0" y="317.0" />
+      <point x="990.3597679452364" y="317.0" />
+      <point x="34.90909090909088" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.concurrent.Terminable.TimedTerminable" target="de.unia.oc.robotcontrol.concurrent.Terminable">
+      <point x="0.0" y="-14.5" />
+      <point x="3194.5692288331848" y="555.0" />
+      <point x="3098.958333333333" y="555.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.RobotControl" target="de.unia.oc.robotcontrol.oc.Controller">
+      <point x="-26.199999999999818" y="-14.5" />
+      <point x="2584.944228833185" y="535.0" />
+      <point x="2416.958333333333" y="535.0" />
+      <point x="27.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageType" target="de.unia.oc.robotcontrol.coding.Encoding">
+      <point x="33.0" y="-14.5" />
+      <point x="5715.659010369479" y="337.0" />
+      <point x="6161.659010369479" y="337.0" />
+      <point x="-39.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.BufferFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="1468.5" y="327.0" />
+      <point x="978.7234043088729" y="327.0" />
+      <point x="23.272727272727252" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FlowableProcessor" target="de.unia.oc.robotcontrol.flow.FlowableSource">
+      <point x="0.0" y="-14.5" />
+      <point x="2797.208333333333" y="227.0" />
+      <point x="2903.8192288331848" y="227.0" />
+      <point x="-36.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.Device" target="de.unia.oc.robotcontrol.device.DeviceTarget">
+      <point x="33.0" y="-14.5" />
+      <point x="4049.119228833185" y="565.0" />
+      <point x="4519.709968874798" y="565.0" />
+      <point x="-32.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.Flowable" target="de.unia.oc.robotcontrol.concurrent.Clockable">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.AbstractActuatorMessage" target="de.unia.oc.robotcontrol.message.AbstractDeviceMessage">
+      <point x="69.66666666666697" y="-14.5" />
+      <point x="5010.535895499852" y="723.0" />
+      <point x="5046.119228833185" y="723.0" />
+      <point x="-65.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.concurrent.ScheduleProvider" target="de.unia.oc.robotcontrol.concurrent.Terminable.TimedTerminable">
+      <point x="0.0" y="-14.5" />
+      <point x="3346.0692288331848" y="644.0" />
+      <point x="3232.5692288331848" y="644.0" />
+      <point x="38.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.I2CConnector" target="de.unia.oc.robotcontrol.device.LockingDeviceConnector">
+      <point x="33.25" y="-14.5" />
+      <point x="4164.119228833185" y="713.0" />
+      <point x="4313.939135541465" y="713.0" />
+      <point x="-75.375" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageIdentifier" target="de.unia.oc.robotcontrol.coding.Encoding">
+      <point x="0.0" y="-14.5" />
+      <point x="6361.409010369479" y="347.0" />
+      <point x="6214.659010369479" y="347.0" />
+      <point x="13.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.ListEncoding" target="de.unia.oc.robotcontrol.coding.FixedEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="6179.409010369479" y="446.0" />
+      <point x="6127.659010369479" y="446.0" />
+      <point x="34.5" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageType" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="-33.0" y="-14.5" />
+      <point x="5649.659010369479" y="267.0" />
+      <point x="4170.192343702813" y="267.0" />
+      <point x="48.44999999999982" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageMulticast" target="de.unia.oc.robotcontrol.flow.FlowableMulticast">
+      <point x="-39.5" y="-14.5" />
+      <point x="3554.869228833185" y="535.0" />
+      <point x="2795.708333333333" y="535.0" />
+      <point x="39.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.Observer" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="34.666666666666515" y="-14.5" />
+      <point x="2575.2782081613477" y="436.0" />
+      <point x="3522.958333333333" y="436.0" />
+      <point x="3522.958333333333" y="267.0" />
+      <point x="4083.4923437028124" y="267.0" />
+      <point x="-38.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageMulticast" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="39.5" y="-14.5" />
+      <point x="3633.869228833185" y="297.0" />
+      <point x="4098.792343702813" y="297.0" />
+      <point x="-22.949999999999818" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.SingleValueEncoding" target="de.unia.oc.robotcontrol.coding.FixedEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="6006.909010369479" y="446.0" />
+      <point x="6058.659010369479" y="446.0" />
+      <point x="-34.5" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.SchedulingFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="1858.0" y="307.0" />
+      <point x="1001.9961315815999" y="307.0" />
+      <point x="46.545454545454504" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.Device" target="de.unia.oc.robotcontrol.concurrent.Terminable">
+      <point x="-33.0" y="-14.5" />
+      <point x="3983.119228833185" y="525.0" />
+      <point x="3137.2916666666665" y="525.0" />
+      <point x="38.333333333333485" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.RobotControl" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="52.40000000000009" y="-14.5" />
+      <point x="2663.544228833185" y="565.0" />
+      <point x="3533.158333333333" y="565.0" />
+      <point x="3533.158333333333" y="287.0" />
+      <point x="4093.692343702812" y="287.0" />
+      <point x="-28.050000000000182" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.LockingDeviceConnector" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="50.25" y="-14.5" />
+      <point x="4439.564135541465" y="347.0" />
+      <point x="4129.392343702812" y="347.0" />
+      <point x="7.649999999999636" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.QLearningController" target="de.unia.oc.robotcontrol.oc.ObservationModel">
+      <point x="-43.0" y="-14.5" />
+      <point x="1880.764781536294" y="436.0" />
+      <point x="2168.3333333333335" y="436.0" />
+      <point x="-66.66666666666652" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MapMessageTypeRegistry" target="de.unia.oc.robotcontrol.util.BidirectionalRegistry">
+      <point x="52.0" y="-14.5" />
+      <point x="6701.409010369479" y="446.0" />
+      <point x="6748.409010369479" y="446.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.EmittingMessageMulticast" target="de.unia.oc.robotcontrol.flow.ReemittingMulticast">
+      <point x="-69.66666666666652" y="-14.5" />
+      <point x="3429.0916666666667" y="713.0" />
+      <point x="2960.0692288331848" y="713.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.visualization.TargetGridObject" target="de.unia.oc.robotcontrol.visualization.GridObject">
+      <point x="0.0" y="-14.5" />
+      <point x="77.0" y="1029.0" />
+      <point x="134.75" y="1029.0" />
+      <point x="-28.5" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.visualization.GridObject" target="de.unia.oc.robotcontrol.visualization.Visualization">
+      <point x="0.0" y="-14.5" />
+      <point x="163.25" y="950.0" />
+      <point x="198.75" y="950.0" />
+      <point x="-31.5" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.concurrent.TrackingScheduleProvider" target="de.unia.oc.robotcontrol.concurrent.ScheduleProvider">
+      <point x="0.0" y="-14.5" />
+      <point x="3193.708333333333" y="723.0" />
+      <point x="3346.0692288331848" y="723.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageProcessor" target="de.unia.oc.robotcontrol.flow.FlowableProcessor">
+      <point x="-54.666666666666515" y="-14.5" />
+      <point x="3203.7916666666665" y="426.0" />
+      <point x="2837.958333333333" y="426.0" />
+      <point x="40.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.EmittingMessageMulticast" target="de.unia.oc.robotcontrol.message.MessageMulticast">
+      <point x="0.0" y="-14.5" />
+      <point x="3498.758333333333" y="713.0" />
+      <point x="3594.369228833185" y="713.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.ActuatorMessage" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="-39.0" y="-14.5" />
+      <point x="4867.035895499852" y="337.0" />
+      <point x="4134.492343702812" y="337.0" />
+      <point x="12.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.ReducerFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="683.0" y="337.0" />
+      <point x="932.1779497634179" y="337.0" />
+      <point x="-23.272727272727252" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.SingleValueMessageType" target="de.unia.oc.robotcontrol.message.MessageType">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.SimpleMessageIdentifier" target="de.unia.oc.robotcontrol.message.MessageIdentifier">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.AbstractActuatorMessage" target="de.unia.oc.robotcontrol.message.ActuatorMessage">
+      <point x="0.0" y="-14.5" />
+      <point x="4940.869228833185" y="723.0" />
+      <point x="4945.035895499852" y="723.0" />
+      <point x="39.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.ErrorFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="2055.5" y="297.0" />
+      <point x="1013.6324952179639" y="297.0" />
+      <point x="58.181818181818244" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.LongEncoding" target="de.unia.oc.robotcontrol.coding.SingleValueEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="5850.409010369479" y="565.0" />
+      <point x="5981.623296083764" y="565.0" />
+      <point x="-25.285714285714675" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.Controller" target="de.unia.oc.robotcontrol.flow.FlowableTransformer">
+      <point x="27.25" y="-14.5" />
+      <point x="2416.958333333333" y="337.0" />
+      <point x="2595.9442288331848" y="337.0" />
+      <point x="-66.375" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FlowableTransformer" target="de.unia.oc.robotcontrol.flow.Flowable">
+      <point x="44.25" y="-14.5" />
+      <point x="-25.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.FixedEncoding" target="de.unia.oc.robotcontrol.coding.Encoding">
+      <point x="0.0" y="-14.5" />
+      <point x="6093.159010369479" y="347.0" />
+      <point x="6188.159010369479" y="347.0" />
+      <point x="-13.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.oc.ArduinoObserver" target="de.unia.oc.robotcontrol.oc.ObservationModel">
+      <point x="-38.25" y="-14.5" />
+      <point x="2374.992343702813" y="555.0" />
+      <point x="2300.5891355414647" y="555.0" />
+      <point x="2300.5891355414647" y="446.0" />
+      <point x="2221.6666666666665" y="446.0" />
+      <point x="-13.333333333333485" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.EmittingMessageMulticast" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="69.66666666666652" y="-14.5" />
+      <point x="3568.4249999999997" y="723.0" />
+      <point x="3890.619228833185" y="723.0" />
+      <point x="3890.619228833185" y="327.0" />
+      <point x="4114.092343702812" y="327.0" />
+      <point x="-7.649999999999636" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.MockDeviceConnector" target="de.unia.oc.robotcontrol.device.Device">
+      <point x="0.0" y="-14.5" />
+      <point x="-22.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageProcessor" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="54.666666666666515" y="-14.5" />
+      <point x="3313.1249999999995" y="446.0" />
+      <point x="3528.0583333333334" y="446.0" />
+      <point x="3528.0583333333334" y="277.0" />
+      <point x="4088.5923437028127" y="277.0" />
+      <point x="-33.149999999999636" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.CallbackMessageRecipient" target="de.unia.oc.robotcontrol.message.MessageRecipient">
+      <point x="-52.25" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="472.5" y="327.0" />
+      <point x="920.5415861270544" y="327.0" />
+      <point x="-34.90909090909088" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.PrinterFlowStrategy" target="de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="566.75" y="446.0" />
+      <point x="523.25" y="446.0" />
+      <point x="50.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MapMessageTypeRegistry" target="de.unia.oc.robotcontrol.message.MessageTypeRegistry">
+      <point x="-52.0" y="-14.5" />
+      <point x="6597.409010369479" y="446.0" />
+      <point x="6550.409010369479" y="446.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.SensorMessage" target="de.unia.oc.robotcontrol.device.ModifiableDeviceTarget">
+      <point x="-48.33333333333303" y="-14.5" />
+      <point x="5319.035895499852" y="634.0" />
+      <point x="5071.160895499852" y="634.0" />
+      <point x="63.66666666666697" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.visualization.RobotGridObject" target="de.unia.oc.robotcontrol.visualization.GridObject">
+      <point x="0.0" y="-14.5" />
+      <point x="249.5" y="1029.0" />
+      <point x="191.75" y="1029.0" />
+      <point x="28.5" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.ByteEncoding" target="de.unia.oc.robotcontrol.coding.SingleValueEncoding">
+      <point x="0.0" y="-14.5" />
+      <point x="6330.909010369479" y="555.0" />
+      <point x="6057.480438940907" y="555.0" />
+      <point x="50.57142857142844" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.RobotControl" target="de.unia.oc.robotcontrol.concurrent.Terminable">
+      <point x="26.199999999999818" y="-14.5" />
+      <point x="2637.344228833185" y="555.0" />
+      <point x="3060.6249999999995" y="555.0" />
+      <point x="-38.333333333333485" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.ReemittingMulticast" target="de.unia.oc.robotcontrol.flow.ValueBoundMulticast">
+      <point x="0.0" y="-14.5" />
+      <point x="2960.0692288331848" y="644.0" />
+      <point x="2868.5692288331848" y="644.0" />
+      <point x="44.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FlowStrategy" target="de.unia.oc.robotcontrol.flow.function.PublisherTransformation">
+      <point x="0.0" y="-14.5" />
+      <point x="955.4506770361454" y="133.0" />
+      <point x="1530.8881770361454" y="133.0" />
+      <point x="-50.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.QLearningController" target="de.unia.oc.robotcontrol.oc.TickingController">
+      <point x="43.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageSender" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="36.25" y="-14.5" />
+      <point x="3476.208333333333" y="257.0" />
+      <point x="4078.392343702812" y="257.0" />
+      <point x="-43.350000000000364" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.AbstractSensorMessage" target="de.unia.oc.robotcontrol.message.AbstractDeviceMessage">
+      <point x="-66.0" y="-14.5" />
+      <point x="5301.369228833185" y="713.0" />
+      <point x="5176.119228833185" y="713.0" />
+      <point x="65.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.LatestFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="875.0" y="347.0" />
+      <point x="943.8143133997819" y="347.0" />
+      <point x="-11.636363636363626" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.TickingController" target="de.unia.oc.robotcontrol.oc.ObservationModel">
+      <point x="-38.25" y="-14.5" />
+      <point x="1929.514781536294" y="565.0" />
+      <point x="1937.889781536294" y="565.0" />
+      <point x="1937.889781536294" y="446.0" />
+      <point x="2195.0" y="446.0" />
+      <point x="-40.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.RobotControl" target="de.unia.oc.robotcontrol.oc.Observer">
+      <point x="0.0" y="-14.5" />
+      <point x="2611.144228833185" y="525.0" />
+      <point x="2566.6115414946817" y="525.0" />
+      <point x="26.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.Device" target="de.unia.oc.robotcontrol.message.MessageProcessor">
+      <point x="-11.0" y="-14.5" />
+      <point x="4005.119228833185" y="515.0" />
+      <point x="3258.458333333333" y="515.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.SingleValueMessage" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="0.0" y="-14.5" />
+      <point x="4964.035895499852" y="327.0" />
+      <point x="4139.592343702812" y="327.0" />
+      <point x="17.850000000000364" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.TimedFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="82.5" y="307.0" />
+      <point x="897.2688588543269" y="307.0" />
+      <point x="-58.181818181818244" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.coding.Encoding" target="de.unia.oc.robotcontrol.coding.Contextual">
+      <point x="26.5" y="-14.5" />
+      <point x="6227.909010369479" y="133.0" />
+      <point x="6265.409010369479" y="133.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.device.MockArduino" target="de.unia.oc.robotcontrol.device.LockingDeviceConnector">
+      <point x="0.0" y="-14.5" />
+      <point x="4497.369228833185" y="723.0" />
+      <point x="4414.439135541465" y="723.0" />
+      <point x="25.125" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.I2CConnector" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="-33.25" y="-14.5" />
+      <point x="4097.619228833185" y="347.0" />
+      <point x="4124.292343702813" y="347.0" />
+      <point x="2.550000000000182" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.Controller" target="de.unia.oc.robotcontrol.oc.ObservationModel">
+      <point x="-27.25" y="-14.5" />
+      <point x="2362.458333333333" y="426.0" />
+      <point x="2275.0" y="426.0" />
+      <point x="40.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.CallbackMessageRecipient" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="52.25" y="-14.5" />
+      <point x="3827.869228833185" y="446.0" />
+      <point x="3812.869228833185" y="446.0" />
+      <point x="3812.869228833185" y="317.0" />
+      <point x="4108.992343702812" y="317.0" />
+      <point x="-12.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.TypeFilterFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="1072.0" y="347.0" />
+      <point x="955.4506770361454" y="347.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage" target="de.unia.oc.robotcontrol.message.AbstractDeviceMessage">
+      <point x="-45.75" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.message.UpdateRequestMessage" target="de.unia.oc.robotcontrol.message.AbstractActuatorMessage">
+      <point x="0.0" y="-14.5" />
+      <point x="5091.0615414946815" y="797.0" />
+      <point x="4993.119228833185" y="797.0" />
+      <point x="52.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.ModifiableDeviceTarget" target="de.unia.oc.robotcontrol.device.DeviceTarget">
+      <point x="0.0" y="-14.5" />
+      <point x="5007.494228833185" y="565.0" />
+      <point x="4583.709968874798" y="565.0" />
+      <point x="32.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.oc.ArduinoObserver" target="de.unia.oc.robotcontrol.oc.Observer">
+      <point x="38.25" y="-14.5" />
+      <point x="2451.492343702813" y="565.0" />
+      <point x="2514.6115414946817" y="565.0" />
+      <point x="-26.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FlowableMulticast" target="de.unia.oc.robotcontrol.flow.FlowableProcessor">
+      <point x="0.0" y="-14.5" />
+      <point x="-40.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.ErrorMessage" target="de.unia.oc.robotcontrol.message.SingleValueMessage">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.device.DiscreteSimulatedRobot" target="de.unia.oc.robotcontrol.device.LockingDeviceConnector">
+      <point x="0.0" y="-14.5" />
+      <point x="4314.869228833185" y="723.0" />
+      <point x="4364.189135541465" y="723.0" />
+      <point x="-25.125" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.oc.ArduinoController" target="de.unia.oc.robotcontrol.oc.QLearningController">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageRecipient" target="de.unia.oc.robotcontrol.flow.FlowableSink">
+      <point x="-39.5" y="-14.5" />
+      <point x="3683.869228833185" y="237.0" />
+      <point x="3598.6891355414646" y="237.0" />
+      <point x="31.75" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage" target="de.unia.oc.robotcontrol.message.SensorMessage">
+      <point x="45.75" y="-14.5" />
+      <point x="5202.619228833185" y="723.0" />
+      <point x="5319.035895499852" y="723.0" />
+      <point x="-48.33333333333303" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.FolderFlowStrategy" target="de.unia.oc.robotcontrol.flow.FlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="268.0" y="317.0" />
+      <point x="908.9052224906909" y="317.0" />
+      <point x="-46.545454545454504" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageTransformer" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="44.5" y="-14.5" />
+      <point x="3302.958333333333" y="247.0" />
+      <point x="4073.2923437028126" y="247.0" />
+      <point x="-48.44999999999982" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.Observer" target="de.unia.oc.robotcontrol.flow.FlowableTransformer">
+      <point x="0.0" y="-14.5" />
+      <point x="2540.6115414946817" y="446.0" />
+      <point x="2516.208333333333" y="446.0" />
+      <point x="2516.208333333333" y="347.0" />
+      <point x="2640.1942288331848" y="347.0" />
+      <point x="-22.125" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.Device" target="de.unia.oc.robotcontrol.message.Message">
+      <point x="11.0" y="-14.5" />
+      <point x="4027.119228833185" y="337.0" />
+      <point x="4119.192343702813" y="337.0" />
+      <point x="-2.550000000000182" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.oc.TickingController" target="de.unia.oc.robotcontrol.oc.Controller">
+      <point x="38.25" y="-14.5" />
+      <point x="2006.014781536294" y="565.0" />
+      <point x="2362.458333333333" y="565.0" />
+      <point x="-27.25" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.device.MockLockingDeviceConnector" target="de.unia.oc.robotcontrol.device.LockingDeviceConnector">
+      <point x="0.0" y="-14.5" />
+      <point x="4699.369228833185" y="713.0" />
+      <point x="4464.689135541465" y="713.0" />
+      <point x="75.375" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.message.MessageProcessor" target="de.unia.oc.robotcontrol.message.MessageTransformer">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.FlowableProcessor" target="de.unia.oc.robotcontrol.flow.FlowableTransformer">
+      <point x="-54.333333333333485" y="-14.5" />
+      <point x="2742.8749999999995" y="347.0" />
+      <point x="2684.4442288331848" y="347.0" />
+      <point x="22.125" y="14.5" />
+    </edge>
+    <edge source="de.unia.oc.robotcontrol.flow.strategy.ReplayFlowStrategy" target="de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy">
+      <point x="0.0" y="-14.5" />
+      <point x="378.25" y="446.0" />
+      <point x="421.75" y="446.0" />
+      <point x="-50.75" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8829246846163417" x="3743.957460026188" y="653.2853350873302" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

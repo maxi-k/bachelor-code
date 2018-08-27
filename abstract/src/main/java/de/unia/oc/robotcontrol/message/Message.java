@@ -15,4 +15,11 @@ public interface Message<T extends Message> {
      */
     MessageType<T> getType();
 
+    /**
+     * Returns the creation time of this message, see
+     * {@link System#currentTimeMillis()}
+     *
+     * @return The creation time of this piece of sensor data
+     */
+    long getCreationTime();
 }

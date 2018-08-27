@@ -3,73 +3,81 @@ package de.unia.oc.robotcontrol.oc;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import de.unia.oc.robotcontrol.flow.ActiveOutFlow;
-import de.unia.oc.robotcontrol.flow.InFlows;
-import de.unia.oc.robotcontrol.flow.OutFlows;
-import de.unia.oc.robotcontrol.flow.PassiveInFlow;
 import de.unia.oc.robotcontrol.util.Tuple;
+import de.unia.oc.robotcontrol.visualization.Metrics;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signedness.qual.Constant;
 import org.checkerframework.dataflow.qual.Pure;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
-public abstract class QLearningController<I, M extends ObservationModel<I>, O> implements Controller<I, M, O> {
+public abstract class QLearningController<WorldState extends Object,
+        Model extends ObservationModel<WorldState>,
+        Command extends Object>
+        extends TickingController<WorldState, Model, Command> {
 
-    private final Table<String, O, Double> qMatrix;
-    private final List<@NonNull O> possibleActions;
+    private final Table<String, Command, Double> qMatrix;
+    private final List<? extends Command> possibleActions;
+    private final Consumer<Double> matrixSizeMetrics;
 
-    private volatile @MonotonicNonNull O lastAction;
-    private volatile @MonotonicNonNull I lastWorldState;
-
-    private final PassiveInFlow<I> inFlow;
-    private final ActiveOutFlow<O> outFlow;
+    private volatile @MonotonicNonNull Command lastAction;
+    private volatile @MonotonicNonNull WorldState lastWorldState;
 
     @SuppressWarnings("initialization")
     public QLearningController() {
+        super();
         this.qMatrix = HashBasedTable.create(getApproximateStateSpaceSize(), getPossibleActions().size()) ;
-        this.possibleActions = new ArrayList<>(getPossibleActions());
-
-        this.inFlow = InFlows.createUnbuffered(this::applyWorldUpdate);
-        this.outFlow = OutFlows.createOnDemand(this::chooseAction);
+        this.possibleActions = new ArrayList<>((Collection<? extends Command>) getPossibleActions());
+        this.matrixSizeMetrics = Metrics.instance().registerCallback("Controller QMatrix Size");
     }
 
     @RequiresNonNull("this.qMatrix")
     @EnsuresNonNull({"this.lastWorldState", "this.lastAction"})
-    private synchronized void applyWorldUpdate(@NonNull I worldState) {
+    protected synchronized void applyWorldUpdate(@NonNull WorldState worldState) {
         String encoded = encodeState(worldState);
-        Tuple<@NonNull O, @NonNull Double> bestAction = getBestActionFor(qMatrix.row(encoded));
+        Tuple<@NonNull Command, @NonNull Double> bestAction = getBestActionFor(qMatrix.row(encoded));
 
         if (lastAction != null && lastWorldState != null) {
             String lastStateEncoded = encodeState(lastWorldState);
 
-            double prevQ = getOrDefault(lastWorldState, lastAction);
+            double prevQ = getRewardOrDefault(lastWorldState, lastAction);
             double reward = getRewardFor(worldState, bestAction.first);
 
             qMatrix.put(lastStateEncoded, lastAction,
                     prevQ + getSpeedFactor() * (reward + getDiscountFactor() * bestAction.second - prevQ));
+
+            matrixSizeMetrics.accept((double) this.qMatrix.size());
         }
 
         this.lastWorldState = worldState;
         this.lastAction = bestAction.first;
     }
 
-    private synchronized @NonNull O chooseAction() {
+    protected synchronized Command chooseAction() {
         if (lastWorldState == null || Math.random() < getExploreFactor()) {
             return chooseRandomAction();
         }
         return getBestActionFor(qMatrix.row(encodeState(lastWorldState))).first;
     }
 
+    protected Command tick(WorldState state) {
+        applyWorldUpdate(state);
+        return chooseAction();
+    }
+
     @SuppressWarnings("nullness")
-    private Tuple<@NonNull O, @NonNull Double> getBestActionFor(Map<O, Double> actionMap) {
+    protected Tuple<@NonNull Command, @NonNull Double> getBestActionFor(Map<Command, Double> actionMap) {
         if (actionMap.isEmpty()) return Tuple.create(chooseRandomAction(), getDefaultReward());
         double bestVal = - Double.MAX_VALUE;
-        @MonotonicNonNull O bestAction = null;
+        @MonotonicNonNull Command bestAction = null;
 
-        for (Map.Entry<O, Double> action : actionMap.entrySet()) {
+        for (Map.Entry<Command, Double> action : actionMap.entrySet()) {
             if (action.getValue() > bestVal) {
                 bestVal = action.getValue();
                 bestAction = action.getKey();
@@ -81,13 +89,13 @@ public abstract class QLearningController<I, M extends ObservationModel<I>, O> i
                 : Tuple.create(bestAction, actionMap.get(bestAction));
     }
 
-    private @NonNull O chooseRandomAction() {
+    protected @NonNull Command chooseRandomAction() {
         synchronized (this.possibleActions) {
             return this.possibleActions.get((int) (Math.random() * this.possibleActions.size()));
         }
     }
 
-    private double getOrDefault(@Nullable I worldState, @Nullable O action) {
+    private double getRewardOrDefault(@Nullable WorldState worldState, @Nullable Command action) {
         if (worldState == null || action == null) return getDefaultReward();
         synchronized (this.qMatrix) {
             Double val = qMatrix.get(encodeState(worldState), action);
@@ -96,14 +104,19 @@ public abstract class QLearningController<I, M extends ObservationModel<I>, O> i
     }
 
     @Pure
-    protected abstract String encodeState(@NonNull I state);
+    protected abstract String encodeState(@NonNull WorldState state);
 
     @Pure
     @Constant
     protected abstract int getApproximateStateSpaceSize();
 
     @Pure
-    protected abstract double getRewardFor(I state, O action);
+    protected abstract double getRewardFor(WorldState state, Command action);
+
+
+    protected Scheduler createScheduler() {
+        return Schedulers.newSingle("Controller");
+    }
 
     @Pure
     protected @NonNull double getDefaultReward() {
@@ -123,15 +136,5 @@ public abstract class QLearningController<I, M extends ObservationModel<I>, O> i
     @Pure
     protected double getExploreFactor() {
         return 0.2;
-    }
-
-    @Override
-    public PassiveInFlow<I> inFlow() {
-        return inFlow;
-    }
-
-    @Override
-    public ActiveOutFlow<O> outFlow() {
-        return outFlow;
     }
 }

@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public final class Messaging {
 
     @SafeVarargs
-    public static <I> MessageTypeRegistry<I> createRegistry(
+    public static <I extends Object> MessageTypeRegistry<I> createRegistry(
             MessageIdentifier<I> identifier,
             Tuple<I, MessageType>... entries) {
         MapMessageTypeRegistry<I> reg = new MapMessageTypeRegistry<>(identifier);
@@ -19,7 +19,7 @@ public final class Messaging {
         return reg;
     };
 
-    public static <I> MessageTypeRegistry<I> createRegistry(
+    public static <I extends Object> MessageTypeRegistry<I> createRegistry(
             MessageIdentifier<I> identifier,
             Consumer<BiFunction<I, MessageType, Boolean>> registration) {
         MapMessageTypeRegistry<I> reg = new MapMessageTypeRegistry<>(identifier);
@@ -27,8 +27,8 @@ public final class Messaging {
         return reg;
     }
 
-    public static MessageDispatcher createDispatcher(Executor executor) {
-        return new QueuedMessageDispatcher(executor);
+    public static MessageMulticast createDispatcher(Executor executor) {
+        return new EmittingMessageMulticast(executor);
     }
 
 }

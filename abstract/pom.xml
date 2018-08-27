@@ -11,6 +11,11 @@
     <artifactId>unia-oc-robotcontrol-abstract</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>org.reactivestreams</groupId>
+            <artifactId>reactive-streams</artifactId>
+            <version>1.0.2</version>
+        </dependency>
     </dependencies>
 
 </project>

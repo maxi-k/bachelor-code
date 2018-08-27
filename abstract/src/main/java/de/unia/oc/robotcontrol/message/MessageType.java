@@ -3,6 +3,7 @@ package de.unia.oc.robotcontrol.message;
 
 import de.unia.oc.robotcontrol.coding.CodingContext;
 import de.unia.oc.robotcontrol.coding.Encoding;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * An interface that defines the type of a message by
@@ -13,7 +14,7 @@ import de.unia.oc.robotcontrol.coding.Encoding;
 public interface MessageType<T extends Message> extends Encoding<T> {
 
     @Override
-    T decode(byte[] raw) throws IllegalArgumentException;
+    @NonNull T decode(byte[] raw) throws IllegalArgumentException;
 
     @Override
     byte[] encode(T object) throws IllegalArgumentException;
@@ -63,7 +64,42 @@ public interface MessageType<T extends Message> extends Encoding<T> {
             public Message decode(byte[] raw) throws IllegalArgumentException {
                 return self.decode(raw);
             }
+
+            @Override
+            public String toString() {
+                return "[Encoding from MessageType: " + self.toString();
+            }
         };
+    }
+
+    default MessageType<Message> asSimpleType() {
+        MessageType<T> self = this;
+       return new MessageType<Message>() {
+           @Override
+           public Message decode(byte[] raw) throws IllegalArgumentException {
+               return self.decode(raw);
+           }
+
+           @Override
+           @SuppressWarnings("unchecked")
+           public byte[] encode(Message object) throws IllegalArgumentException {
+               try {
+                   return self.encode((T) object);
+               } catch (ClassCastException e) {
+                   throw new IllegalArgumentException("Argument was of wrong class");
+               }
+           }
+
+           @Override
+           public CodingContext getContext() {
+               return self.getContext();
+           }
+
+           @Override
+           public String toString() {
+               return self.toString();
+           }
+       };
     }
 
     /**
@@ -73,7 +109,7 @@ public interface MessageType<T extends Message> extends Encoding<T> {
      * @param <T> The type of message this encodes
      * @return An instance of {@link MessageType} that uses the given encoding
      */
-    static <T extends Message> MessageType<T> fromEncoding(Encoding<T> e) {
+    static <T extends Message<T>> MessageType<T> fromEncoding(Encoding<T> e) {
         return new MessageType<T>() {
             @Override
             public byte[] encode(T object) throws IllegalArgumentException {
@@ -88,6 +124,38 @@ public interface MessageType<T extends Message> extends Encoding<T> {
             @Override
             public CodingContext getContext() {
                 return e.getContext();
+            }
+
+            @Override
+            public String toString() {
+                return "[MessageType " + super.toString() + " for Encoding: " + e.toString() + "]";
+            }
+        };
+    }
+
+    default MessageType<T> withName(String name) {
+        MessageType<T> self = this;
+
+        return new MessageType<T>() {
+            @NonNull
+            @Override
+            public T decode(byte[] raw) throws IllegalArgumentException {
+                return self.decode(raw);
+            }
+
+            @Override
+            public byte[] encode(T object) throws IllegalArgumentException {
+                return self.encode(object);
+            }
+
+            @Override
+            public CodingContext getContext() {
+                return self.getContext();
+            }
+
+            @Override
+            public String toString() {
+                return "[MessageType " + self.toString() + " - " +  name + "]";
             }
         };
     }

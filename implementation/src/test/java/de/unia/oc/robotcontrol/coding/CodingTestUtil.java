@@ -20,6 +20,9 @@ public class CodingTestUtil {
         public int getShortSize() { return 2; }
 
         @Override
+        public int getLongSize() { return 4; }
+
+        @Override
         public int getDoubleSize() { return 4; }
 
         @Override

@@ -13,12 +13,20 @@ public class ErrorMessage extends SingleValueMessage<Exception> {
                     )
             );
 
+    private final long creationTime;
+
     public ErrorMessage(Exception value) {
         super(value);
+        this.creationTime = System.currentTimeMillis();
     }
 
     @Override
     public MessageType<SingleValueMessage<Exception>> getType() {
         return errorMessageType;
+    }
+
+    @Override
+    public long getCreationTime() {
+        return creationTime;
     }
 }

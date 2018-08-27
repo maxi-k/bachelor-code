@@ -115,8 +115,8 @@ public interface Bijection<T, F> {
      * @return A new instance of {@link Bijection} (A <-> B)
      */
     static <A, B> Bijection<A, B> create(
-            Function<A, @NonNull B> encoder,
-            Function<B, @NonNull A> decoder) {
+            Function<? super A, ? extends @NonNull B> encoder,
+            Function<? super B, ? extends @NonNull A> decoder) {
         return new Bijection<A, B>() {
             @Override
             public @NonNull B encode(A object) throws IllegalArgumentException {

@@ -15,6 +15,16 @@ public interface FixedEncoding<T> extends Encoding<T> {
      */
     @Positive int numBytes();
 
+    /**
+     * Return an instance of {@link FixedEncoding}, asserting that encoding
+     * an instance of {@link R} uses the given number of bytes exactly.
+     *
+     * @param encoding the {@link Encoding} instance to wrap
+     * @param numBytes the number of byte the Encoding is asserted to use
+     * @param <R> the type of Object the given Encoding can encode
+     * @return a new instance of {@link FixedEncoding} that uses the given
+     *         encoding internally
+     */
     default <R> FixedEncoding<R> fromEncoding(Encoding<R> encoding, int numBytes) {
         return new FixedEncoding<R>() {
             @Override

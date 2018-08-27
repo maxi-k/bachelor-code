@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.visualization;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Table;
 import de.unia.oc.robotcontrol.util.Tuple;
 import org.checkerframework.checker.index.qual.Positive;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ObjectGrid implements Visualization<Component> {
@@ -21,6 +23,7 @@ public class ObjectGrid implements Visualization<Component> {
     private final int cellsX;
     private final int cellsY;
 
+    private final Object gridLock = new Object();
     private final Table<Integer, Integer, GridObject> objects;
 
     public ObjectGrid(int cellsX, int cellsY) {
@@ -35,13 +38,14 @@ public class ObjectGrid implements Visualization<Component> {
         final int width = c.getWidth();
         final int height = c.getHeight();
 
-        float scaleX = width / cellsX;
-        float scaleY = height / cellsY;
+        float scaleX = (float) width / cellsX;
+        float scaleY = (float) height / cellsY;
         drawGrid(g, scaleX, scaleY, height, width);
 
         GridObjectDrawContext context = new GridObjectDrawContext(scaleX, scaleY);
-        synchronized(this.objects) {
-            for (GridObject o : objects.values()) {
+        synchronized (this.gridLock) {
+            Collection<GridObject> values = this.objects.values();
+            for (GridObject o : values) {
                 o.draw(g, context);
             }
         }
@@ -78,12 +82,12 @@ public class ObjectGrid implements Visualization<Component> {
         return cellsY;
     }
 
-    @Pure
     public @Nullable GridObject getObjectAt(int x, int y) {
-        return objects.get(x, y);
+        synchronized (gridLock) {
+            return objects.get(x, y);
+        }
     }
 
-    @Pure
     public @Nullable GridObject getNextObjectInDirection(int x, int y, GridDirection dir) {
         Tuple<Integer, Integer> nextCoords = Tuple.create(x, y);
         do {
@@ -126,45 +130,53 @@ public class ObjectGrid implements Visualization<Component> {
         }
     }
 
-    public synchronized boolean putAt(int x, int y, GridObject o) {
+    public boolean putAt(int x, int y, GridObject o) {
         checkInRange(x, y);
         checkGridHasSpace(1);
         o.setXY(x, y);
-        return this.objects.put(x, y, o) != null;
+        synchronized (gridLock) {
+            return this.objects.put(x, y, o) != null;
+        }
     }
 
     public synchronized boolean remove(int x, int y) {
         checkInRange(x, y);
-        return this.objects.remove(x, y) != null;
-    }
-
-    public synchronized boolean move(int x, int y, int newX, int newY) {
-        if (!objects.contains(x, y) || objects.contains(newX, newY)) {
-            return false;
+        synchronized (gridLock) {
+            return this.objects.remove(x, y) != null;
         }
-        try {
-            checkInRange(newX, newY);
-            GridObject o = this.objects.remove(x, y);
-            if (o == null) return false;
-            o.setXY(newX, newY);
-            this.objects.put(newX, newY, o);
-        } catch (IllegalArgumentException e) {
-            return false;
+    }
+
+    public boolean move(int x, int y, int newX, int newY) {
+        synchronized (gridLock) {
+            if (!objects.contains(x, y) || objects.contains(newX, newY)) {
+                return false;
+            }
+            try {
+                checkInRange(newX, newY);
+                GridObject o = this.objects.remove(x, y);
+                if (o == null) return false;
+                o.setXY(newX, newY);
+                this.objects.put(newX, newY, o);
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 
-    public synchronized boolean putRandomly(GridObject o) {
-        checkGridHasSpace(1);
-        int x, y;
-        do {
-            x = (int) (Math.random() * this.cellsX);
-            y = (int) (Math.random() * this.cellsY);
-        } while (this.objects.contains(x, y));
-        return this.putAt(x, y, o);
+    public boolean putRandomly(GridObject o) {
+        synchronized (gridLock) {
+            checkGridHasSpace(1);
+            int x, y;
+            do {
+                x = (int) (Math.random() * this.cellsX);
+                y = (int) (Math.random() * this.cellsY);
+            } while (this.objects.contains(x, y));
+            return this.putAt(x, y, o);
+        }
     }
 
-    public synchronized Collection<GridObject> fillRandomly(@Positive int amount, Function<Integer, GridObject> factory) {
+    public Collection<GridObject> fillRandomly(@Positive int amount, Function<Integer, GridObject> factory) {
         checkGridHasSpace(amount);
         Set<GridObject> result = new HashSet<>(amount);
         for (int i = 0; i < amount; ++i) {
@@ -175,7 +187,7 @@ public class ObjectGrid implements Visualization<Component> {
         return result;
     }
 
-    public synchronized Collection<GridObject> fillPercentage(@Positive float percentage, Function<Integer, GridObject> factory) {
+    public Collection<GridObject> fillPercentage(@Positive float percentage, Function<Integer, GridObject> factory) {
         int amount = Math.min((int) (percentage * gridSize()), gridSize());
         checkGridHasSpace(amount);
         return fillRandomly(amount, factory);
@@ -190,8 +202,10 @@ public class ObjectGrid implements Visualization<Component> {
 
     @Pure
     private void checkGridHasSpace(int amount) throws IllegalArgumentException {
-        if (this.objects.values().size() + amount > gridSize()) {
-            throw new IllegalArgumentException("Grid is too small for this many objects!");
+        synchronized (gridLock) {
+            if (this.objects.values().size() + amount > gridSize()) {
+                throw new IllegalArgumentException("Grid is too small for this many objects!");
+            }
         }
     }
 
