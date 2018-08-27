@@ -5,6 +5,7 @@ import de.unia.oc.robotcontrol.example.arduino.message.DistanceDataMessage;
 import de.unia.oc.robotcontrol.message.SensorMessage;
 import de.unia.oc.robotcontrol.util.CollectionUtil;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 public class ArduinoState {
 
@@ -30,6 +31,20 @@ public class ArduinoState {
         if (distances == null || prevDistances == null) {
             return "";
         }
+        return encodeNewest();
+    }
+
+    @RequiresNonNull({"distances"})
+    private String encodeNewest() {
+        return CollectionUtil.joinWith(";",
+                String.valueOf(distances.getFront()),
+                String.valueOf(distances.getRight()),
+                String.valueOf(distances.getLeft())
+        );
+    }
+
+    @RequiresNonNull({"distances", "prevDistances"})
+    private String encodeWithPrevious() {
         return CollectionUtil.joinWith(";",
                 String.valueOf(distances.getFront()),
                 String.valueOf(distances.getRight()),

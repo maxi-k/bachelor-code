@@ -146,12 +146,9 @@ public class ObjectGrid implements Visualization<Component> {
         }
     }
 
-    private int collisions = 0;
-    private Consumer<Double> collisionMetric = Metrics.instance().registerCallback("Simulated Robot Collisions");
     public boolean move(int x, int y, int newX, int newY) {
         synchronized (gridLock) {
             if (!objects.contains(x, y) || objects.contains(newX, newY)) {
-                collisionMetric.accept((double) ++collisions);
                 return false;
             }
             try {

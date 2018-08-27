@@ -36,7 +36,7 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
 
     @Override
     protected double getRewardFor(ArduinoState state, RobotDrivingCommand action) {
-        int minAcceptableDist = 5; //mm
+        int minAcceptableDist = 1; //mm
         switch(action) {
             case FRONT:
                 if (state.getFrontDist() <= minAcceptableDist) return -1;

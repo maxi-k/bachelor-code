@@ -11,15 +11,13 @@ import de.unia.oc.robotcontrol.example.arduino.visualization.RobotGridObject;
 import de.unia.oc.robotcontrol.example.arduino.visualization.TargetGridObject;
 import de.unia.oc.robotcontrol.message.Message;
 import de.unia.oc.robotcontrol.util.Tuple;
-import de.unia.oc.robotcontrol.visualization.GridDirection;
-import de.unia.oc.robotcontrol.visualization.GridObject;
-import de.unia.oc.robotcontrol.visualization.ObjectGrid;
-import de.unia.oc.robotcontrol.visualization.VisualizingWindow;
+import de.unia.oc.robotcontrol.visualization.*;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static de.unia.oc.robotcontrol.visualization.GridDirection.LEFT;
@@ -65,6 +63,9 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
         return this.outputEncoding.encode(getGridDistances());
     }
 
+
+    private int collisions = 0;
+    private Consumer<Double> collisionMetric = Metrics.instance().registerCallback("Grid Collisions");
     private synchronized void actOnMessage(Message m) {
         if (m.getType() == ArduinoMessageTypes.SPEED_CMD) {
             SpeedCmdMessage cmd = (SpeedCmdMessage) m;
@@ -73,12 +74,14 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
             this.robot.updateFromCommand(command);
             Tuple<Integer, Integer> next = robot.getNextXY();
             try {
-                this.simulationEnvironment.move(
+                boolean moved = this.simulationEnvironment.move(
                         robot.getX(),
                         robot.getY(),
                         next.first,
                         next.second);
+                collisionMetric.accept(moved ? (double) collisions : (double) ++collisions);
             } catch (IllegalArgumentException e) {
+
                 System.err.println("Could not move simulated robot: ");
                 e.printStackTrace();
             }
@@ -99,7 +102,7 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
         int y = robot.getY();
         if (simulationEnvironment.isOnEdge(x, y, dir)) return 0;
         GridObject other = simulationEnvironment.getNextObjectInDirection(x, y, dir);
-        if (other == null) return -1;
+        if (other == null) return Integer.MAX_VALUE;
         return (dir == LEFT || dir == RIGHT) ?
                 Math.abs(x - other.getX()) :
                 Math.abs(y - other.getY());
