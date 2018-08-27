@@ -4,6 +4,7 @@ package de.unia.oc.robotcontrol.oc;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import de.unia.oc.robotcontrol.util.Tuple;
+import de.unia.oc.robotcontrol.visualization.Metrics;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signedness.qual.Constant;
 import org.checkerframework.dataflow.qual.Pure;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public abstract class QLearningController<WorldState extends Object,
         Model extends ObservationModel<WorldState>,
@@ -22,6 +24,7 @@ public abstract class QLearningController<WorldState extends Object,
 
     private final Table<String, Command, Double> qMatrix;
     private final List<? extends Command> possibleActions;
+    private final Consumer<Double> matrixSizeMetrics;
 
     private volatile @MonotonicNonNull Command lastAction;
     private volatile @MonotonicNonNull WorldState lastWorldState;
@@ -31,6 +34,7 @@ public abstract class QLearningController<WorldState extends Object,
         super();
         this.qMatrix = HashBasedTable.create(getApproximateStateSpaceSize(), getPossibleActions().size()) ;
         this.possibleActions = new ArrayList<>((Collection<? extends Command>) getPossibleActions());
+        this.matrixSizeMetrics = Metrics.instance().registerCallback("Controller QMatrix Size");
     }
 
     @RequiresNonNull("this.qMatrix")
@@ -47,6 +51,8 @@ public abstract class QLearningController<WorldState extends Object,
 
             qMatrix.put(lastStateEncoded, lastAction,
                     prevQ + getSpeedFactor() * (reward + getDiscountFactor() * bestAction.second - prevQ));
+
+            matrixSizeMetrics.accept((double) this.qMatrix.size());
         }
 
         this.lastWorldState = worldState;

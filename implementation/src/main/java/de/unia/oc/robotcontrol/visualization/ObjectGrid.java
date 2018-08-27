@@ -2,6 +2,7 @@
 package de.unia.oc.robotcontrol.visualization;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Table;
 import de.unia.oc.robotcontrol.util.Tuple;
 import org.checkerframework.checker.index.qual.Positive;
@@ -22,6 +23,7 @@ public class ObjectGrid implements Visualization<Component> {
     private final int cellsX;
     private final int cellsY;
 
+    private final Object gridLock = new Object();
     private final Table<Integer, Integer, GridObject> objects;
 
     public ObjectGrid(int cellsX, int cellsY) {
@@ -41,9 +43,11 @@ public class ObjectGrid implements Visualization<Component> {
         drawGrid(g, scaleX, scaleY, height, width);
 
         GridObjectDrawContext context = new GridObjectDrawContext(scaleX, scaleY);
-        Collection<GridObject> values = this.objects.values();
-        for (GridObject o : values) {
-            o.draw(g, context);
+        synchronized (this.gridLock) {
+            Collection<GridObject> values = this.objects.values();
+            for (GridObject o : values) {
+                o.draw(g, context);
+            }
         }
     }
 
@@ -79,7 +83,9 @@ public class ObjectGrid implements Visualization<Component> {
     }
 
     public @Nullable GridObject getObjectAt(int x, int y) {
-        return objects.get(x, y);
+        synchronized (gridLock) {
+            return objects.get(x, y);
+        }
     }
 
     public @Nullable GridObject getNextObjectInDirection(int x, int y, GridDirection dir) {
@@ -124,48 +130,56 @@ public class ObjectGrid implements Visualization<Component> {
         }
     }
 
-    public synchronized boolean putAt(int x, int y, GridObject o) {
+    public boolean putAt(int x, int y, GridObject o) {
         checkInRange(x, y);
         checkGridHasSpace(1);
         o.setXY(x, y);
-        return this.objects.put(x, y, o) != null;
+        synchronized (gridLock) {
+            return this.objects.put(x, y, o) != null;
+        }
     }
 
     public synchronized boolean remove(int x, int y) {
         checkInRange(x, y);
-        return this.objects.remove(x, y) != null;
+        synchronized (gridLock) {
+            return this.objects.remove(x, y) != null;
+        }
     }
 
     private int collisions = 0;
     private Consumer<Double> collisionMetric = Metrics.instance().registerCallback("Simulated Robot Collisions");
-    public synchronized boolean move(int x, int y, int newX, int newY) {
-        if (!objects.contains(x, y) || objects.contains(newX, newY)) {
-            collisionMetric.accept((double) ++collisions);
-            return false;
+    public boolean move(int x, int y, int newX, int newY) {
+        synchronized (gridLock) {
+            if (!objects.contains(x, y) || objects.contains(newX, newY)) {
+                collisionMetric.accept((double) ++collisions);
+                return false;
+            }
+            try {
+                checkInRange(newX, newY);
+                GridObject o = this.objects.remove(x, y);
+                if (o == null) return false;
+                o.setXY(newX, newY);
+                this.objects.put(newX, newY, o);
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+            return true;
         }
-        try {
-            checkInRange(newX, newY);
-            GridObject o = this.objects.remove(x, y);
-            if (o == null) return false;
-            o.setXY(newX, newY);
-            this.objects.put(newX, newY, o);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-        return true;
     }
 
-    public synchronized boolean putRandomly(GridObject o) {
-        checkGridHasSpace(1);
-        int x, y;
-        do {
-            x = (int) (Math.random() * this.cellsX);
-            y = (int) (Math.random() * this.cellsY);
-        } while (this.objects.contains(x, y));
-        return this.putAt(x, y, o);
+    public boolean putRandomly(GridObject o) {
+        synchronized (gridLock) {
+            checkGridHasSpace(1);
+            int x, y;
+            do {
+                x = (int) (Math.random() * this.cellsX);
+                y = (int) (Math.random() * this.cellsY);
+            } while (this.objects.contains(x, y));
+            return this.putAt(x, y, o);
+        }
     }
 
-    public synchronized Collection<GridObject> fillRandomly(@Positive int amount, Function<Integer, GridObject> factory) {
+    public Collection<GridObject> fillRandomly(@Positive int amount, Function<Integer, GridObject> factory) {
         checkGridHasSpace(amount);
         Set<GridObject> result = new HashSet<>(amount);
         for (int i = 0; i < amount; ++i) {
@@ -176,7 +190,7 @@ public class ObjectGrid implements Visualization<Component> {
         return result;
     }
 
-    public synchronized Collection<GridObject> fillPercentage(@Positive float percentage, Function<Integer, GridObject> factory) {
+    public Collection<GridObject> fillPercentage(@Positive float percentage, Function<Integer, GridObject> factory) {
         int amount = Math.min((int) (percentage * gridSize()), gridSize());
         checkGridHasSpace(amount);
         return fillRandomly(amount, factory);
@@ -191,8 +205,10 @@ public class ObjectGrid implements Visualization<Component> {
 
     @Pure
     private void checkGridHasSpace(int amount) throws IllegalArgumentException {
-        if (this.objects.values().size() + amount > gridSize()) {
-            throw new IllegalArgumentException("Grid is too small for this many objects!");
+        synchronized (gridLock) {
+            if (this.objects.values().size() + amount > gridSize()) {
+                throw new IllegalArgumentException("Grid is too small for this many objects!");
+            }
         }
     }
 

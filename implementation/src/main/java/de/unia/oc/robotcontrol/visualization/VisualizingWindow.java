@@ -27,9 +27,10 @@ public class VisualizingWindow {
         frame.getContentPane().add(mainPanel);
         frame.pack();
         frame.setLocationByPlatform(true);
+        frame.setTitle(toVisualize.getVisualizationName());
+        frame.setSize(500, 500);
         frame.setVisible(true);
         frame.requestFocus();
-        frame.setTitle(toVisualize.getVisualizationName());
 
         this.frame = frame;
     }

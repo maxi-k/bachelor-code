@@ -1,6 +1,7 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.visualization;
 
+import com.google.common.collect.ImmutableList;
 import com.xeiam.xchart.Chart;
 import com.xeiam.xchart.QuickChart;
 import com.xeiam.xchart.XChartPanel;
@@ -37,7 +38,7 @@ public class GraphingRuntimeMetrics<Type extends Object>
     private volatile @Nullable Type selectedMetric;
 
     private final ConcurrentMap<Type, Flux<Tuple<Long, Double>>> valueProviders;
-    private final int maxValues = 2000;
+    private final int maxValues = 1 << 12; // about 4000
 
     private final EmptyDrawer drawEmpty;
     private  @MonotonicNonNull MetricDrawer drawMetric;
@@ -86,7 +87,9 @@ public class GraphingRuntimeMetrics<Type extends Object>
         Flux<Tuple<Long, Double>> windowed = Flux
                 .from(stream)
                 .publishOn(scheduler)
-                .map((v) -> Tuple.create(System.currentTimeMillis(), v));
+                .index()
+                .map((v) -> Tuple.create(v.getT1(), v.getT2()))
+                .cache(maxValues);
 
         this.valueProviders.compute(key, (type, old) -> {
             if (old == null) {
@@ -96,9 +99,7 @@ public class GraphingRuntimeMetrics<Type extends Object>
         });
 
         synchronized (this) {
-            if (selectedMetric == null) {
-                selectMetric(key);
-            }
+            selectMetric(key);
         }
 
         return true;
@@ -202,6 +203,7 @@ public class GraphingRuntimeMetrics<Type extends Object>
             this.metric = metric;
             Flux<Tuple<Long, Double>> dataFlow = valueProviders.get(metric);
             Chart chart = QuickChart.getChart(metric.toString(), "t", metric.toString(), metric.toString(), new double[] { 0 }, new double[] { 0 });
+            chart.getStyleManager().setXAxisLabelRotation(45);
             this.panel = new XChartPanel(chart);
             subscription = dataFlow == null ? (() -> {}) : dataFlow.subscribe(this::updateData);
         }
@@ -231,8 +233,8 @@ public class GraphingRuntimeMetrics<Type extends Object>
             }
 
             panel.updateSeries(metric.toString(),
-                    Collections.unmodifiableList(times),
-                    Collections.unmodifiableList(values),
+                    ImmutableList.copyOf(times),
+                    ImmutableList.copyOf(values),
                     null);
 
             panel.revalidate();

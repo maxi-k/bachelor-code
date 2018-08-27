@@ -6,18 +6,47 @@ import java.awt.*;
 @SuppressWarnings("initialization")
 public class Metrics {
 
-    private static final Object instanceLock = new Object();
-    private static GraphingRuntimeMetrics<String> INSTANCE;
-    private static VisualizingWindow window;
+    private static volatile MetricOutput OUTPUT = GraphicsEnvironment.isHeadless()
+            ? MetricOutput.NONE
+            : MetricOutput.GRAPHICAL;
 
-    public static RuntimeMetrics<String, Component> instance() {
+    private static final Object instanceLock = new Object();
+    private static RuntimeMetrics<String, ?> INSTANCE;
+
+    public static RuntimeMetrics<String, ?> instance() {
         synchronized (instanceLock) {
             if (INSTANCE == null) {
-                INSTANCE = GraphingRuntimeMetrics.create();
-                window = new VisualizingWindow(INSTANCE);
-                window.setup();
+                switch (OUTPUT) {
+                    case GRAPHICAL:
+                        GraphingRuntimeMetrics<String> metrics = GraphingRuntimeMetrics.create();
+                        INSTANCE = metrics;
+                        new VisualizingWindow(metrics).setup();
+                        break;
+                    default:
+                        INSTANCE = IgnoringRuntimeMetrics.create();
+                        break;
+                }
             }
             return INSTANCE;
         }
+    }
+
+    public static MetricOutput getOutput() {
+        return OUTPUT;
+    }
+
+    public static boolean setOutput(MetricOutput output) {
+        synchronized (instanceLock) {
+            if (INSTANCE != null) {
+                return false;
+            }
+            OUTPUT = output;
+            return true;
+        }
+    }
+
+    public enum MetricOutput {
+        GRAPHICAL,
+        NONE
     }
 }
