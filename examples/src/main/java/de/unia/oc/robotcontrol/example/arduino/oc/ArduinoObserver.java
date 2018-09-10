@@ -55,6 +55,7 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
     }
 
     private ArduinoState acceptData(SensorMessage data) {
+        System.out.println("observer received data: " + data);
         this.lastComputedState.updateWith(data);
         this.lastUpdatedTime = System.currentTimeMillis();
         return lastComputedState;
