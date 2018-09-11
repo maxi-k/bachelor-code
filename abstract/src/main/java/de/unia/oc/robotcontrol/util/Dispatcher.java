@@ -4,6 +4,7 @@ package de.unia.oc.robotcontrol.util;
 /**
  * Generic interface for a dispatcher
  * @param <T> the type of element to dispatch
+ * @deprecated
  */
 public interface Dispatcher<T> {
 
