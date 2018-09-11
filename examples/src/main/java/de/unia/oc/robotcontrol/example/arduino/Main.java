@@ -60,10 +60,7 @@ public class Main {
 
         RobotControl
                 .build(observer, controller)
-                .withActionInterpreter((c) -> {
-                    System.out.println("controller sent command: " + c);
-                    return new SpeedCmdMessage(RobotDrivingCommand.FRONT, 20);
-                })
+                .withActionInterpreter((c) -> new SpeedCmdMessage(c, 64))
                 .withDevice(createDevice(simulate), ArduinoMessageTypes.SPEED_CMD)
                 .registerObserverMessages(ArduinoMessageTypes.DISTANCE_DATA)
                 .withMessageStrategy(ArduinoMessageTypes.DISTANCE_DATA, LatestFlowStrategy.create())
