@@ -8,6 +8,11 @@ import de.unia.oc.robotcontrol.util.Tuple;
 
 import java.util.*;
 
+/**
+ * Define all message types ({@link MessageType}) which can
+ * possibly be sent or received by the connected Arduino
+ * as static fields.
+ */
 public final class ArduinoMessageTypes {
 
     private ArduinoMessageTypes() {}
@@ -46,6 +51,11 @@ public final class ArduinoMessageTypes {
                     )
             ).withName("SpeedCommand");
 
+    /**
+     * Empty message for requesting an update from the arduino.
+     * When sent over the wire, contains only the identifier defined
+     * by {@link #REGISTRY}.
+     */
     public static final MessageType<UpdateRequestMessage> UPDATE_REQUEST =
             MessageType.fromEncoding(
                     Encodings.nullEncoding(CONTEXT, UpdateRequestMessage::new)
@@ -53,7 +63,7 @@ public final class ArduinoMessageTypes {
 
 
     /**
-     * List of all basic Message Types
+     * List of all basic Message Types sendable to the arduino
      */
     public static final Set<MessageType<? extends Message>> messageTypeList =
             Collections.unmodifiableSet(
@@ -83,7 +93,8 @@ public final class ArduinoMessageTypes {
             );
 
     /**
-     * Encoding for the {@link ArduinoMessageTypes#REGISTRY}
+     * Encoding for the {@link ArduinoMessageTypes#REGISTRY}.
+     * Is able to encode and decode all messages defined here.
      */
     public static final Encoding<Message> ENCODING = REGISTRY;
 

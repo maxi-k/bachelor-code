@@ -5,6 +5,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Optional;
 
+/**
+ * Defines the possible commands that can be received by
+ * an arduino, and their respective identifiers.
+ */
 public enum RobotDrivingCommand {
 
     FRONT('w'),

@@ -9,9 +9,20 @@ import de.unia.oc.robotcontrol.visualization.GridObjectDrawContext;
 
 import java.awt.*;
 
+/**
+ * Represents a robot on the grid defined
+ * by {@link de.unia.oc.robotcontrol.example.arduino.device.DiscreteSimulatedRobot}.
+ */
 public class RobotGridObject extends GridObject {
 
+    /**
+     * The last received command from the controller
+     */
     private RobotDrivingCommand command;
+
+    /**
+     * The current direction this is facing
+     */
     private GridDirection rotation;
 
     public RobotGridObject() {
@@ -47,6 +58,15 @@ public class RobotGridObject extends GridObject {
         g.setColor(c);
     }
 
+    /**
+     * Draw the front of the robot depending on the current rotation.
+     *
+     * @param g the graphics
+     * @param c the drawing context
+     * @param centerx the x coordinate of the center of the grid cell this is in
+     * @param centery the y coordinate of the center of the grid cell this is in
+     * @param padding the padding to the edge of the grid cell that should be kept
+     */
     private void drawFront(Graphics g, GridObjectDrawContext c, int centerx, int centery, int padding) {
         int offsetx = 0, offsety = 0;
         switch(this.rotation) {
@@ -89,11 +109,24 @@ public class RobotGridObject extends GridObject {
         return command;
     }
 
+    /**
+     * Update the {@link #rotation} and {@link #command} based
+     * on the passed {@link RobotDrivingCommand}
+     *
+     * @param cmd the command to use to set the internal state
+     */
     public void updateFromCommand(RobotDrivingCommand cmd) {
         setCommand(cmd);
         setRotation(commandToRotation(cmd));
     }
 
+    /**
+     * Calculates the new rotation based on the received command.
+     * Does not set any internal state.
+     *
+     * @param cmd the command to calculate the new rotation from
+     * @return the new rotation this would have if the command applied
+     */
     private GridDirection commandToRotation(RobotDrivingCommand cmd) {
         switch(cmd) {
             case ROTATE:
@@ -104,6 +137,11 @@ public class RobotGridObject extends GridObject {
     }
 
 
+    /**
+     * Calculates the next coordinates based on the currently set command
+     * ({@link #command})
+     * @return a tuple (x, y) describing the new coordinates
+     */
     public Tuple<Integer, Integer> getNextXY() {
         if (command == RobotDrivingCommand.ROTATE || command == RobotDrivingCommand.STOP) {
             return Tuple.create(getX(), getY());
@@ -117,6 +155,11 @@ public class RobotGridObject extends GridObject {
         }
     }
 
+    /**
+     * Utility function for calculating a new absolute direction
+     * based on the current direction and the current command.
+     * @return a {@link GridDirection}
+     */
     private GridDirection foldCommandDirection() {
         switch(this.command) {
             case RIGHT:

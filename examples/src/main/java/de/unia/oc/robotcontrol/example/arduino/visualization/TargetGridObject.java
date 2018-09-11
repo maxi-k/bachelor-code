@@ -5,6 +5,10 @@ import de.unia.oc.robotcontrol.visualization.GridObject;
 
 import java.awt.*;
 
+/**
+ * Grid object representing the target for a robot
+ * ({@link RobotGridObject}).
+ */
 public class TargetGridObject extends GridObject {
 
     @Override

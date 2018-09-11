@@ -15,6 +15,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The 'automatic' controller used by the arduino,
+ * implemented using QLearning
+ */
 public class ArduinoController extends QLearningController<ArduinoState, ObservationModel<ArduinoState>, RobotDrivingCommand> {
 
     private final static int DEFAULT_SPEED = 20;

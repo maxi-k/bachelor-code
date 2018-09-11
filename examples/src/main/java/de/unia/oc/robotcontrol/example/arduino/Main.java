@@ -18,7 +18,6 @@ import de.unia.oc.robotcontrol.message.*;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
 import de.unia.oc.robotcontrol.oc.RobotControl;
 import de.unia.oc.robotcontrol.util.Logger;
-import de.unia.oc.robotcontrol.visualization.Metrics;
 import de.unia.oc.robotcontrol.visualization.ObjectGrid;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import reactor.core.publisher.Flux;

@@ -9,15 +9,18 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A message wrapping the distance data from the
- * three arduino ultrasound sensors (front, y, z).
+ * three arduino ultrasound sensors (front, right, left).
  */
 public class DistanceDataMessage
         extends AbstractDeviceMessage<DistanceDataMessage>
         implements SensorMessage<DistanceDataMessage> {
 
+    /**
+     * The timestamp at which this message was received.
+     */
     private final long time;
 
-    private final @NonNegative int front, right, left; // front, right, left
+    private final @NonNegative int front, right, left; // front, right, left distance sensor
 
     public DistanceDataMessage(@NonNegative int front, @NonNegative int right, @NonNegative int left) {
         this.time = System.currentTimeMillis();
