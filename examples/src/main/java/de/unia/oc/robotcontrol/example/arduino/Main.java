@@ -69,43 +69,6 @@ public class Main {
                 .run();
     }
 
-    private static void startWithoutFacade(boolean simulate, boolean manual) throws IOException {
-
-        // Define a recipient for the arduino messages
-        // which executes the given callback
-        final MessageRecipient<Message> printer = createPrinter();
-
-        MessageMulticast<Message> dispatcher = new EmittingMessageMulticast<>();
-
-        // dispatcher.register(ErrorMessage.errorMessageType, printer);
-
-        final Device<Message, Message> arduino = createDevice(simulate);
-        arduino.asPublisher().subscribe(dispatcher.asSubscriber());
-        dispatcher.subscribe(ArduinoMessageTypes.SPEED_CMD, arduino.asSubscriber());
-
-        if (manual) {
-            setupManual(dispatcher, printer);
-        } else {
-            setupControlled(dispatcher);
-        }
-
-    }
-
-    private static MessageRecipient<Message> createPrinter() {
-        return new CallbackMessageRecipient<>((msg) -> {
-            // ∂t ist konsistent zwischen 6 und 7 millisekunden
-            // außer bei der ersten kommunikation (~400ms).
-            // vermutung: i2c protokoll *oder* jvm optimierung der
-            // neu allokierten objekte im while loop
-            // console.println("∂t:" + (System.currentTimeMillis() - now));
-            // console.print("Arduino: ");
-            // console.print(msg.toString());
-            // console.emptyLine();
-            System.out.println(msg);
-            lastMessage = msg;
-        });
-    }
-
     private static Device<Message, Message> createDevice(boolean simulate) throws IOException {
         return simulate
                 ?
@@ -126,52 +89,4 @@ public class Main {
                         UpdateRequestMessage::new);
     }
 
-    private static void setupControlled(MessageMulticast<Message> dispatcher) {
-        final ArduinoController controller = new ArduinoController();
-        final ArduinoObserver<ObservationModel<ArduinoState>> observer = new ArduinoObserver<>(controller.getObservationModel());
-        controller.setObserver(observer);
-        Flux.from(dispatcher.subscribeToAll())
-                .transform(TypeFilterFlowStrategy.create(SensorMessage.class))
-                .<ArduinoState>transform(observer::apply)
-                .<RobotDrivingCommand>transform(controller::apply)
-                .map((c) -> new SpeedCmdMessage(c, DEFAULT_SPEED))
-                .subscribe(dispatcher.asSubscriber());
-    }
-
-    /**
-     * Control the arduino using
-     * - w (forward)
-     * - a (left)
-     * - s (stop)
-     * - d (right)
-     * - r (rotate)
-     * -- p to print the last received arduino message
-     **/
-    private static void setupManual(MessageMulticast<Message> dispatcher,
-                                    MessageRecipient<Message> printer) {
-        // read user commands and send them to the arduino constantly
-        dispatcher.subscribe(ArduinoMessageTypes.DISTANCE_DATA, printer.asSubscriber());
-        Logger.instance().println("Press 'q' to stop, p to print the last received message");
-        try (Scanner reader = new Scanner(System.in)) {
-            while (true) {
-                try {
-                    Logger.instance().println("Enter a message: ");
-                    String read = reader.next();
-                    char first = read.charAt(0);
-                    if (first == 'q') break;
-                    if (first == 'p') {
-                        Logger.instance().println(lastMessage != null ? lastMessage.toString() : "No last Message");
-                        continue;
-                    }
-                    // send the read command as a driving command to the arduino,
-                    // with the driving direction specified by the read character
-                    // with a fixed speed of 20 mmps
-                    dispatcher.multicast(new SpeedCmdMessage(first, DEFAULT_SPEED));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        System.out.println("Stopping...");
-    }
 }

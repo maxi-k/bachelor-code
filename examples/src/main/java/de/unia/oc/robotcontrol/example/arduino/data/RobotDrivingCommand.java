@@ -15,6 +15,7 @@ public enum RobotDrivingCommand {
     LEFT('a'),
     RIGHT('d'),
     STOP('s'),
+    BACKWARD('b'),
     ROTATE('r');
 
 

@@ -61,6 +61,8 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
             case ROTATE:
                 if (state.getFrontDist() <= minAcceptableDist) return 2;
                 return -5;
+            case BACKWARD:
+                return 0;
             default:
                 return 0;
         }

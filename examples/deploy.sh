@@ -8,13 +8,15 @@ address="robot-pi1.local"
 
 workingdir=/home/pi/dev/ba-raspberry-setup
 
-echo "DEPLOYTING $jar TO $address AT $workingdir/$target"
+echo "Removing old files"
 
 ssh pi@$address RWD=$workingdir RTG=$target ROT=$oldtargetname 'bash -s' <<-'ENDSSH'
   cd $RWD
   rm $ROT
   mv $RTG $ROT
 ENDSSH
+
+echo "DEPLOYING $jar TO $address AT $workingdir/$target using RSYNC"
 
 rsync $jar pi@$address:$workingdir/$target
 
