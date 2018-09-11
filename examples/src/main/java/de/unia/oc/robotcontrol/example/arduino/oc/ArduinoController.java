@@ -68,7 +68,7 @@ public class ArduinoController extends QLearningController<ArduinoState, Observa
 
     @Override
     protected int getTargetTickFreqMs(@UnderInitialization ArduinoController this) {
-        return 40;
+        return 100;
     }
 
     @Override

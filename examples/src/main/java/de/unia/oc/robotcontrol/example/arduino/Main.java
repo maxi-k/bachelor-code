@@ -11,10 +11,12 @@ import de.unia.oc.robotcontrol.example.arduino.message.SpeedCmdMessage;
 import de.unia.oc.robotcontrol.example.arduino.message.UpdateRequestMessage;
 import de.unia.oc.robotcontrol.example.arduino.oc.ArduinoController;
 import de.unia.oc.robotcontrol.example.arduino.oc.ArduinoObserver;
+import de.unia.oc.robotcontrol.example.arduino.oc.ManualController;
 import de.unia.oc.robotcontrol.flow.strategy.IgnoringFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.LatestFlowStrategy;
 import de.unia.oc.robotcontrol.flow.strategy.TypeFilterFlowStrategy;
 import de.unia.oc.robotcontrol.message.*;
+import de.unia.oc.robotcontrol.oc.Controller;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
 import de.unia.oc.robotcontrol.oc.RobotControl;
 import de.unia.oc.robotcontrol.util.Logger;
@@ -50,12 +52,14 @@ public class Main {
 
     private static void startWithFacade(boolean simulate, boolean manual) throws IOException {
         // RobotControl<> control =
-        final ArduinoController controller = new ArduinoController();
+        final Controller<ArduinoState, ObservationModel<ArduinoState>, RobotDrivingCommand> controller = manual
+                ? new ManualController()
+                : new ArduinoController();
         final ArduinoObserver<ObservationModel<ArduinoState>> observer = new ArduinoObserver<>(controller.getObservationModel());
 
         RobotControl
                 .build(observer, controller)
-                .withActionInterpreter((c) -> new SpeedCmdMessage(c, 20))
+                .withActionInterpreter((c) -> new SpeedCmdMessage(c, 64))
                 .withDevice(createDevice(simulate), ArduinoMessageTypes.SPEED_CMD)
                 .registerObserverMessages(ArduinoMessageTypes.DISTANCE_DATA)
                 .withMessageStrategy(ArduinoMessageTypes.DISTANCE_DATA, LatestFlowStrategy.create())

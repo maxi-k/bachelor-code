@@ -18,6 +18,10 @@ import org.reactivestreams.Publisher;
 public interface FlowableTransformer<Input extends Object, Output extends Object>
         extends Flowable, PublisherTransformation<Input, Output> {
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     FlowStrategy<Input, Output> getFlowStrategy();
 
