@@ -29,9 +29,9 @@ public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
 
     /**
      * Return an encoding of type {@link T}  with its context
-     * set to {@param context}
+     * set to {@code context}
      * @param context The coding context that has to be set
-     * @return An encoding with the context set to {@param context}
+     * @return An encoding with the context set to {@code context}
      */
     @Override
     default Encoding<T> withContext(CodingContext context) {

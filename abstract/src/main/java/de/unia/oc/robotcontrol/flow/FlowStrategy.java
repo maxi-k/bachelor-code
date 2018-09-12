@@ -13,8 +13,8 @@ import java.util.function.Function;
  *
  * These effects are categorized in {@link FlowStrategyType}.
  *
- * @param <T>
- * @param <R>
+ * @param <T> the type which is streamed by the input publisher
+ * @param <R> the type which will be streamed by the output publisher
  */
 public interface FlowStrategy<T extends Object, R extends Object>
         extends PublisherTransformation<T, R> {
@@ -43,7 +43,7 @@ public interface FlowStrategy<T extends Object, R extends Object>
      * @param resultingType the {@link FlowStrategyType} the resulting
      *                      strategy is asserted to have
      * @param <S> the type of data given transformation emits
-     * @return a new instance of {@link FlowStrategy<T, S>}
+     * @return a new instance of {@link FlowStrategy}
      */
     default <S extends Object> FlowStrategy<T, S> with(
             Function<? super Publisher<R>, ? extends Publisher<S>> other,
@@ -73,7 +73,7 @@ public interface FlowStrategy<T extends Object, R extends Object>
      *
      * @param other the transformation to apply after
      * @param <S> the type of data given transformation emits
-     * @return a new instance of {@link FlowStrategy<T, S>}
+     * @return a new instance of {@link FlowStrategy}
      */
     default <S extends Object> FlowStrategy<T, S> with(Function<? super Publisher<R>, ? extends Publisher<S>> other) {
         return with(other, this.getType());
@@ -87,7 +87,7 @@ public interface FlowStrategy<T extends Object, R extends Object>
      * @param type the {@link FlowStrategyType} that will be
      *            returned from {@link #getType()} on the
      *             resulting {@link FlowStrategy}
-     * @return a new instance of {@link FlowStrategy<T, R>}
+     * @return a new instance of {@link FlowStrategy}
      */
     default FlowStrategy<T, R> assertType(FlowStrategyType type) {
         FlowStrategy<T, R> self = this;

@@ -31,8 +31,8 @@ public interface Visualization<T> {
      * or is just drawn in the context of a provided one.
      * If this is true, {@link #getPanel()} has to be non-null.
      *
-     * @return {@link true} if this defines its own {@link Panel},
-     *         {@link false} otherwise
+     * @return {@code true} if this defines its own {@link Panel},
+     *         {@code false} otherwise
      */
     @Pure
     @EnsuresNonNullIf(expression = "getPanel()", result = true)
@@ -43,7 +43,7 @@ public interface Visualization<T> {
     /**
      *
      * @return the {@link Panel} instance this holds; if
-     *         there is none, returns {@null}
+     *         there is none, returns {@code null}
      */
     default @Nullable JPanel getPanel() {
         return null;

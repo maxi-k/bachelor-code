@@ -9,7 +9,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * An interface that defines the type of a message by
  * providing an {@link Encoding} for it.
  *
- * @param <T>
+ * @param <T> the type of message this acts as Message type for,
+ *            and can encode and decode
  */
 public interface MessageType<T extends Message> extends Encoding<T> {
 
@@ -21,7 +22,8 @@ public interface MessageType<T extends Message> extends Encoding<T> {
 
     /**
      * Try to cast the message to a message of this message type.
-     * @param m
+     *
+     * @param m the message to try to cast to {@link T}
      * @return A Message of type {@link T}
      * @throws IllegalArgumentException if the message could not be cast.
      */

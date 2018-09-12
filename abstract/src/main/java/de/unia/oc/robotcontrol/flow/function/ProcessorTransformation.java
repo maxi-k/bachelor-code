@@ -58,8 +58,8 @@ public interface ProcessorTransformation<I1, O1, I2, O2> extends Function<Proces
      * @param <T2> the type of values the resulting processor can receive
      * @param <R2> the type of values the resulting processor will emit
      *
-     * @return a function that will transform a given {@link Processor<T1, R1>} to
-     *          a {@link Processor<T2, R2>} using the given functions
+     * @return a function that will transform a given {@link Processor} to
+     *          a {@link Processor} using the given functions
      */
     static <T1, R1, T2, R2> Function<Processor<T1, R1>, Processor<T2, R2>> liftProcessor(
             Function<? super T2, ? extends T1> inputFn,
@@ -130,6 +130,7 @@ public interface ProcessorTransformation<I1, O1, I2, O2> extends Function<Proces
      * @param <R1> the type of values the given processor emits
      * @param <T2> the type of values the resulting processor can receive
      * @param <R2> the type of values the resulting processor will emit
+     * @return A new instance of {@link Processor}
      */
     static <T1, R1, T2, R2> Processor<T2, R2> transformProcessor(
             Processor<T1, R1> processor,

@@ -71,6 +71,10 @@ public interface Clockable extends Concurrent {
          * A (possibly changing) execution schedule is provided by the system.
          * The clocked Object needs to accept the provided Clock and adjust
          * its behavior accordingly.
+         *
+         * @param acceptor the function to be executed when a new TimeProvider
+         *        is set.
+         * @return a new Instance of {@link ClockType}
          */
         public static final ClockType createClocked(Function<TimeProvider, Boolean> acceptor) {
             return new ClockedClockType(acceptor);

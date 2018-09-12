@@ -11,7 +11,7 @@ import de.unia.oc.robotcontrol.concurrent.Concurrent;
  * - {@link FlowableSource} a source (origin) of data
  * - {@link FlowableSink} a sink (final destination) for data
  * - {@link FlowableTransformer} a transformer of data
- *      (classically called 'filter' in the pipes & filters model)
+ *      (classically called 'filter' in the 'pipes and filters' model)
  * - {@link FlowableProcessor} a processor of data, which acts as both sink and source,
  *      and may do more than a transformer in that it can break / branch the data pipeline
  * - {@link FlowableMulticast} a special processor used for multicasting data

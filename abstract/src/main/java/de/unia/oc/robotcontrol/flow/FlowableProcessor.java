@@ -26,7 +26,7 @@ public interface FlowableProcessor<Input extends Object, Output extends Object>
      * Get a view on this {@link FlowableProcessor} which adheres
      * to the reactive-streams {@link Processor} specification
      *
-     * @return an instance of {@link Processor<Input, Output>}
+     * @return an instance of {@link Processor}
      */
     Processor<Input, Output> asProcessor();
 

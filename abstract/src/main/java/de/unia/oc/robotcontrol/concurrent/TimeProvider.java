@@ -14,13 +14,14 @@ import java.time.Duration;
 public interface TimeProvider {
 
     /**
-     * Retrieve an instance of {@link Publisher<Long>},
-     * that will emit increasing Longs at some rate (which may change).
+     * Retrieve an instance of {@link Publisher} with the {@code Long}
+     * type parameter, that will emit increasing Longs at some rate
+     * (which may change).
      *
      * It is guaranteed that this Publisher can be subscribed to,
      * and that it will never complete or error.
      *
-     * @return An instance of {@link Publisher }
+     * @return An instance of {@link Publisher}
      */
     Publisher<Long> getTicks();
 

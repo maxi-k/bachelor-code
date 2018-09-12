@@ -23,7 +23,7 @@ public interface SubscriberTransformation<I, O> extends Function<Subscriber<I>, 
      *           given subscriber
      * @param <T> the type of value the given subscriber can receive
      * @param <R> the type of value the resulting subscriber will can receive
-     * @return a new instance of {@link Subscriber<R>}
+     * @return a new instance of {@link Subscriber}
      */
     static <T, R> Subscriber<R> mapSubscriber(Subscriber<T> subscriber,
                                               Function<R, T> fn
@@ -41,8 +41,8 @@ public interface SubscriberTransformation<I, O> extends Function<Subscriber<I>, 
      *           given subscriber
      * @param <T> the type of value the given subscriber can receive
      * @param <R> the type of value the resulting subscriber will can receive
-     * @return a function transforming a given instance of {@link Subscriber<T>} to
-     *          a new instance of {@link Subscriber<R>}
+     * @return a function transforming a given instance of {@link Subscriber} to
+     *          a new instance of {@link Subscriber}
      */
     static <T, R> Function<Subscriber<T>, Subscriber<R>> liftSubscriber(Function<? super R, ? extends T> fn) {
         return (actual) -> new Subscriber<R>() {
@@ -74,8 +74,8 @@ public interface SubscriberTransformation<I, O> extends Function<Subscriber<I>, 
      * method to the given subscriber.
      *
      * @param subscriber the subscriber to anonymize
-     * @param <T> the type of value the given & resulting subscriber can receive
-     * @return an instance of {@link Subscriber<T>} that does nothing on {@link Subscriber#onSubscribe}
+     * @param <T> the type of value the given and resulting subscriber can receive
+     * @return an instance of {@link Subscriber} that does nothing on {@link Subscriber#onSubscribe}
      */
     static <T extends Object> Subscriber<T> anonymizeSubscription(Subscriber<T> subscriber) {
         return new Subscriber<T>() {
@@ -106,7 +106,7 @@ public interface SubscriberTransformation<I, O> extends Function<Subscriber<I>, 
      * when {@link Subscriber#onSubscribe(Subscription)} is called, essentially creating
      * an unbounded subscription.
      * @param subscriber the instance of {@link Subscriber} to transform
-     * @param <T> the type of values that the given & resulting subscriber will
+     * @param <T> the type of values that the given / resulting subscriber will
      *           be able to receive
      * @return a new instance of {@link Subscriber} that will request an unbounded
      * amount of items on {@link Subscriber#onSubscribe(Subscription)}

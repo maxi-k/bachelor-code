@@ -29,7 +29,7 @@ public interface FlowableMulticast<Topic extends Object, Value extends Object>
     Publisher<Value> subscribeTo(Topic topic);
 
     /**
-     * Like {@link #subscribeTo(Topic)}, but immediately subscribes the passed
+     * Like {@code subscribeTo(Topic)}, but immediately subscribes the passed
      * {@link Subscriber} to a publisher that streams values which were multicast
      * under the given {@link Topic}
      * @param topic the {@link Topic} to subscribe to
@@ -67,7 +67,6 @@ public interface FlowableMulticast<Topic extends Object, Value extends Object>
      * This is defined to be internal for the multicast,
      * as it is assumed that there will be parallelization
      * of multicasting.
-     * @return
      */
     @Override
     default ClockType getClockType() {

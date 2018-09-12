@@ -23,7 +23,7 @@ public final class ArduinoMessageTypes {
     public static final CodingContext CONTEXT = CodingContext.ARDUINO;
 
     /**
-     * MessageType for {@link DistanceDataMessage}. [int, int, int] -> [x, y, z]
+     * MessageType for {@link DistanceDataMessage}. {@code [int, int, int] -> [x, y, z]}
      */
     public static final MessageType<DistanceDataMessage> DISTANCE_DATA =
             MessageType.fromEncoding(
@@ -37,7 +37,7 @@ public final class ArduinoMessageTypes {
             ).withName("DistanceData");
 
     /**
-     * MessageType for {@link SpeedCmdMessage}. [char, byte] -> [direction, speed]
+     * MessageType for {@link SpeedCmdMessage}. {@code (char, byte) -> (direction, speed)}
      */
     public static final MessageType<SpeedCmdMessage> SPEED_CMD =
             MessageType.fromEncoding(

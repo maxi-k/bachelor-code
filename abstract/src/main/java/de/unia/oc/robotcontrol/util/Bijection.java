@@ -7,10 +7,10 @@ import java.util.function.Function;
 
 /**
  * A generic functional interface for bijective transformations from
- * type {@link T} to type {@link F} and vice versa (short: T <-> F)
+ * type {@link T} to type {@link F} and vice versa (short: {@code T <-> F})
  *
- * The transformation from type {@link T} into type {@link F} (T -> F)
- * is considered encoding ({@link #encode}), whereas the reverse transformation (F -> T)
+ * The transformation from type {@link T} into type {@link F} {@code (T -> F)}
+ * is considered encoding ({@link #encode}), whereas the reverse transformation {@code (F -> T)}
  * is considered decoding ({@link #decode}).
  *
  * @param <T> The 'unencoded' type.
@@ -55,11 +55,11 @@ public interface Bijection<T, F> {
     /**
      * Builds a new {@link Bijection} interface that uses
      * this instance as well as the given instance to decode and encode:
-     * (T <-> F), (R <-> T) => (R <-> F)
+     * {@code (T <-> F), (R <-> T) => (R <-> F)}
      * @param top The instance of of {@link Bijection} that is used
-     *            to encode first and decode last (R <-> T)
+     *            to encode first and decode last {@code (R <-> T)}
      * @param <R> The type that is used for encoding and targeted by decoding
-     * @return A new {@link Bijection} interface (R <-> F)
+     * @return A new {@link Bijection} interface {@code (R <-> F)}
      */
     default <R> Bijection<R, F> stack(
             Bijection<R, T> top) {
@@ -72,11 +72,11 @@ public interface Bijection<T, F> {
     /**
      * Builds a new {@link Bijection} interface that uses
      * this instance as well as the given instance to decode and encode:
-     * (T <-> F), (F <-> R) => (T <-> R)
+     * {@code (T <-> F), (F <-> R) => (T <-> R)}
      * @param bottom The instance of of {@link Bijection} that is used
-     *               to encode last and decode first (F <-> R)
+     *               to encode last and decode first {@code (F <-> R)}
      * @param <R> The type that is targeted by encoding and used for decoding
-     * @return A new {@link Bijection} interface (T <-> R)
+     * @return A new {@link Bijection} interface {@code (T <-> R)}
      */
     default <R> Bijection<T, R> supplement(
             Bijection<F, R> bottom
@@ -87,15 +87,15 @@ public interface Bijection<T, F> {
     /**
      * Builds a new {@link Bijection} interface that uses
      * this instance as well as the given instances to decode and encode:
-     * (T <-> F), (R <-> T), (F <-> S) => (T <-> R)
+     * {@code (T <-> F), (R <-> T), (F <-> S) => (T <-> R)}
      *
      * @param top The instance of of {@link Bijection} that is used
-     *            to encode first and decode last (R <-> T)
+     *            to encode first and decode last {@code (R <-> T)}
      * @param bottom The instance of of {@link Bijection} that is used
-     *               to encode last and decode first (F <-> S)
+     *               to encode last and decode first {@code (F <-> S)}
      * @param <R> The type that is used for encoding and targeted by decoding
      * @param <S> The type that is targeted by encoding and used for decoding
-     * @return A new {@link Bijection} interface (R <-> S)
+     * @return A new {@link Bijection} interface {@code (R <-> S)}
      */
     default <R, S> Bijection<R, S> wrap(
             Bijection<R, T> top,
@@ -105,14 +105,14 @@ public interface Bijection<T, F> {
     }
 
     /**
-     * Creates a {@link Bijection} instance (A <-> B)
-     * given an encoder function (A -> B) and a decoder function (B -> A).
+     * Creates a {@link Bijection} instance {@code (A <-> B)}
+     * given an encoder function {@code (A -> B)} and a decoder function {@code (B -> A)}.
      *
-     * @param encoder The function used for encoding (A -> B)
-     * @param decoder The function used for decoding (B -> A)
+     * @param encoder The function used for encoding {@code (A -> B)}
+     * @param decoder The function used for decoding {@code (B -> A)}
      * @param <A> The type of the unencoded value
      * @param <B> The type of the encoded value
-     * @return A new instance of {@link Bijection} (A <-> B)
+     * @return A new instance of {@link Bijection} {@code (A <-> B)}
      */
     static <A, B> Bijection<A, B> create(
             Function<? super A, ? extends @NonNull B> encoder,

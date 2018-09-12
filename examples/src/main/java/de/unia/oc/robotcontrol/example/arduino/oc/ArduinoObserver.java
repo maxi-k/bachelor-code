@@ -104,7 +104,7 @@ public class ArduinoObserver<T extends ObservationModel<ArduinoState>>
      * Set the current observation model.
      * Als update the internal state, in particular {@link #timeSupplier}
      * to reflect the possibly change target update time.
-     * @param model
+     * @param model the {@link ObservationModel} to set
      */
     @Override
     public synchronized void setObservationModel(T model) {

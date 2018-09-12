@@ -19,8 +19,8 @@ public interface Terminable {
      * It must not return false again after having returned true once,
      * that is, the termination must be permanent for any given object.
      *
-     * @return {@link true} if this has stopped running or was terminated
-     *         {@link false} if it is still running and has not been termianted
+     * @return {@code true} if this has stopped running or was terminated
+     *         {@code false} if it is still running and has not been termianted
      */
     boolean isTerminated();
 
@@ -57,7 +57,7 @@ public interface Terminable {
     }
 
     /**
-     * Subinterface of {@link Terminable}, providing functionality
+     * Subinterface of {@code Terminable}, providing functionality
      * for terminating something on a timeout
      */
     interface TimedTerminable extends Terminable {

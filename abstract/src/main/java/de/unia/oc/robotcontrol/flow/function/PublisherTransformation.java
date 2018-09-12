@@ -24,7 +24,7 @@ public interface PublisherTransformation<T, R>
      * @param fn the function used to transform the values emitted from the publisher
      * @param <T> the type of value the given publisher emits
      * @param <R> the type of value the resulting publisher will emit
-     * @return a new instance of {@link Publisher<R>}
+     * @return a new instance of {@link Publisher}
      */
     static <T, R> Publisher<R> mapPublisher(
             Publisher<T> publisher,
@@ -41,8 +41,8 @@ public interface PublisherTransformation<T, R>
      * @param fn the function used to transform the values emitted from the publisher
      * @param <T> the type of value the given publisher emits
      * @param <R> the type of value the resulting publisher will emit
-     * @return a function transforming a given instance of {@link Publisher<T>} to
-     *          a new instance of {@link Publisher<R>}
+     * @return a function transforming a given instance of {@link Publisher} to
+     *          a new instance of {@link Publisher}
      */
     static <T, R> PublisherTransformation<T, R> liftPublisher(Function<? super T, ? extends R> fn) {
         return publisher -> (Publisher<R>) new Publisher<R>() {

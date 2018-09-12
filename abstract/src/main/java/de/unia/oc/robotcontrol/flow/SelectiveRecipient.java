@@ -11,7 +11,9 @@ public interface SelectiveRecipient<T> {
 
     /**
      * The class of element this is allowed to receive.
-     * @return an instance of {@link Class<T>}
+     * If any type is allowed to be received, this should
+     * return {@code Object.class}
+     * @return an instance of {@link Class}
      */
     Class<T> getAcceptedClass();
 }

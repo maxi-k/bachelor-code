@@ -9,7 +9,7 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 /**
- * An abstract class implementing {@link Encoding<T>},
+ * An abstract class implementing {@link Encoding},
  * that represents a single value being encoded as bytes.
  * @param <T> The type of the objects to be encoded
  */

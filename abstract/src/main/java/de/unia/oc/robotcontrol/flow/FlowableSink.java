@@ -5,7 +5,7 @@ import org.reactivestreams.Subscriber;
 
 /**
  * A {@link FlowableSink} is a sink for data flowing throughout the program,
- * that is, the endpoint of a pipeline. Corresponds to {@link Subscriber<Input>}.
+ * that is, the endpoint of a pipeline. Corresponds to {@link Subscriber}.
  *
  * For Elements that receive data but pass them down the pipeline, use
  * {@link FlowableTransformer} instead.
@@ -18,7 +18,7 @@ public interface FlowableSink<Input extends Object> {
      * Get a view on this {@link FlowableSink} which adheres
      * to the reactive-streams {@link Subscriber} specification
      *
-     * @return an instance of {@link Subscriber<Input>}
+     * @return an instance of {@link Subscriber}
      */
     Subscriber<Input> asSubscriber();
 
@@ -28,8 +28,8 @@ public interface FlowableSink<Input extends Object> {
      * casting it to {@link Input}.
      *
      * @param obj the object to try to pass to {@link Subscriber#onNext(Object)}
-     * @return  {@link true} if the object could be cast to {@link Input} and was passed
-     *          {@link false} if the object could was not passed
+     * @return  {@code true} if the object could be cast to {@link Input} and was passed
+     *          {@code false} if the object could was not passed
      */
     default boolean castOnNext(Object obj) {
         try {

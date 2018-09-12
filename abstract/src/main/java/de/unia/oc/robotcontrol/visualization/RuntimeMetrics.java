@@ -13,15 +13,15 @@ import java.util.function.Consumer;
  * given metric.
  *
  * The metrics are registered dynamically using {@link #registerCallback(Object)}
- * (implicit, hidden publisher) or {@link #register(Type, Object)}
+ * (implicit, hidden publisher) or {@link #register(Object, Object)}
  * (explicitly passed publisher as second argument), and differentiated
  * using the generic {@link Type} argument.
  * The data passed through the (implicit or explicit) publisher is used for
  * the y-axis of the given graph. What is used for the x-axis is implementation specific -
  * it could be numbered or timestamped.
  *
- * @param <Type>
- * @param <Context>
+ * @param <Type> the type which acts as key to register metrics under
+ * @param <Context> the context passed to the {@link Visualization} class
  */
 public interface RuntimeMetrics<Type extends Object, Context extends Object>
         extends
@@ -30,7 +30,7 @@ public interface RuntimeMetrics<Type extends Object, Context extends Object>
 
     /**
      * The metric which is currently selected by the user.
-     * @return the currently selected metric, or {@link null} if there is none.
+     * @return the currently selected metric, or {@code null} if there is none.
      */
     @Nullable Type getSelectedMetric();
 
