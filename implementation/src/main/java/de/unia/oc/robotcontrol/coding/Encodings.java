@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 /**
  * Class with utility methods for the coding module of
- * the project ({@see de.unia.oc.robotcontrol.coding})
+ * the project ({@link de.unia.oc.robotcontrol.coding})
  * ("module-class").
  *
  * This only contains static methods and cannot be instantiated.

@@ -16,8 +16,16 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-
+/**
+ * Class with utility methods for the flow module of
+ * the project ({@link de.unia.oc.robotcontrol.flow})
+ * ("module-class").
+ *
+ * This only contains static methods and cannot be instantiated.
+ */
 public final class Flow {
+
+    private Flow() {}
 
     public static <T extends Object, R extends Object> Publisher<R> applyStrategy(Publisher<T> publisher, FlowStrategy<T, R> strategyProvider) {
         return strategyProvider.apply(publisher);

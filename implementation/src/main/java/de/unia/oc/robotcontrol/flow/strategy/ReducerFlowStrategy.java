@@ -9,16 +9,54 @@ import reactor.core.publisher.Flux;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+/**
+ * Implementation of {@link FlowStrategy} used for reducing values on
+ * the transformed publisher. The reduction always takes place. As long
+ * as the recipient is not ready, the last reduced value is held.
+ *
+ * Once the recipient is ready to receive, the reduced value is passed.
+ *
+ * @param <T> the type of object published by the Publisher
+ *           which is to be transformed by this flow strategy
+ * @param <R> the type of object published by the transformed Publisher
+ */
 public class ReducerFlowStrategy<T extends Object, R extends Object> implements FlowStrategy<T, R> {
 
+    /**
+     * The reducing function
+     */
     private final BiFunction<R, T, R> reducer;
+    /**
+     * The supplier for an initial 'reduced' value to
+     * reduce the first received value into.
+     */
     private final Supplier<R> initialValueSupplier;
 
+    /**
+     * Creates a new instance of {@link ReducerFlowStrategy},
+     * using the given initial-value-supplier to fetch a first
+     * 'reduced' value to reduce the first value on the Publisher into.
+     * Reduction is done using the given reducing function.
+     *
+     * @param initialValueSupplier the supplier for the first reduced value
+     * @param reducer the reducing function
+     */
     protected ReducerFlowStrategy(Supplier<R> initialValueSupplier, BiFunction<R, T, R> reducer) {
         this.reducer = reducer;
         this.initialValueSupplier = initialValueSupplier;
     }
 
+    /**
+     * Create a new instance of {@link ReducerFlowStrategy}.
+     * Mirror of {@link #ReducerFlowStrategy(Supplier, BiFunction)}.
+     *
+     * @param initialValueSupplier the supplier for the first reduced value
+     * @param reducer the reducing function
+     * @param <T> the type of object published by the Publisher
+     *           which is to be transformed by this flow strategy
+     * @param <R> the type of object published by the transformed Publisher
+     * @return a new instance of {@link ReducerFlowStrategy}
+     */
     public static <T, R> ReducerFlowStrategy<T, R> create(Supplier<R> initialValueSupplier, BiFunction<R, T, R> reducer) {
         return new ReducerFlowStrategy<>(initialValueSupplier, reducer);
     }
