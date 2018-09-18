@@ -5,6 +5,11 @@ import reactor.core.publisher.BaseSubscriber;
 
 import java.util.function.Consumer;
 
+/**
+ * An implementation of {@link MessageRecipient} used to execute
+ * a callback when a message is received.
+ * @param <T>
+ */
 public class CallbackMessageRecipient<T extends Message> implements MessageRecipient<T> {
 
     private final Subscriber<T> subscriber;

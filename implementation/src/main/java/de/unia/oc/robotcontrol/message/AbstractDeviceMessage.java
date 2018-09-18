@@ -8,6 +8,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Abstract Message class that is directed to- or coming from a device,
+ * hence it extends {@link ModifiableDeviceTarget}.
+ * Manages the setting and getting of the {@link UUID} identifying the
+ * device.
+ * @param <T> the concrete type of message this represents
+ */
 public abstract class AbstractDeviceMessage<T extends Message>
         extends AbstractMessage<T>
         implements ModifiableDeviceTarget {

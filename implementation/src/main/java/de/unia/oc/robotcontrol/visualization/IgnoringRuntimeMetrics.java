@@ -8,6 +8,13 @@ import java.awt.*;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+/**
+ * Implementation of {@link RuntimeMetrics} that ignores all values.
+ * May be used when the application is running in a non-gui environment,
+ * and there is no good way of displaying them.
+ *
+ * @param <Type> the type to register metrics under
+ */
 public class IgnoringRuntimeMetrics<Type extends Object> implements RuntimeMetrics<Type, Object> {
 
     public static <T extends Object> IgnoringRuntimeMetrics<T> create() {

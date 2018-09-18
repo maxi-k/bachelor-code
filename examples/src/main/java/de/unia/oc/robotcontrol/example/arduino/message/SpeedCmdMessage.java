@@ -9,8 +9,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * A message wrapping the command sent to an arduino used for
  * setting its speed.
- *
- * TODO: Currently simplified to only include one command and speed parameter
  */
 public class SpeedCmdMessage extends AbstractActuatorMessage<SpeedCmdMessage> {
 

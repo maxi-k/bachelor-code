@@ -32,22 +32,59 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
+/**
+ * An implementation of {@link RuntimeMetrics} which displays the
+ * metrics using the XChart library on the GUI.
+ * @param <Type> the type to register Metrics under
+ */
 public class GraphingRuntimeMetrics<Type extends Object>
         implements RuntimeMetrics<Type, Component> {
 
+    /**
+     * The currently selected metric (by the user)
+     */
     private volatile @Nullable Type selectedMetric;
 
+    /**
+     * The map storing all value providers registered
+     * for the types of metrics.
+     */
     private final ConcurrentMap<Type, Flux<Tuple<Long, Double>>> valueProviders;
+    /**
+     * The maximum number of values cached for each metric for display.
+     */
     private final int maxValues = 1 << 12; // about 4000
 
+    /**
+     * Display wrapper for an empty screen (no metric selected)
+     */
     private final EmptyDrawer drawEmpty;
+    /**
+     * Display wrapper for showing the currently selected
+     * metric.
+     */
     private  @MonotonicNonNull MetricDrawer drawMetric;
+    /**
+     * Display wrapper for showing the drawer which allows
+     * the user to select a specific metric for display.
+     */
     private final MetricSelectorDrawer drawMetricSelector;
 
+    /**
+     * The execution context this runs on.
+     */
     private final Scheduler scheduler;
     private volatile boolean addedToParent = false;
+
+    /**
+     * The JPanel this is contained in.
+     */
     private final JPanel container;
 
+    /**
+     * Creates a new instance of the runtime metrics with
+     * its own thread and backed by a {@link ConcurrentHashMap}.
+     */
     private GraphingRuntimeMetrics() {
         this.scheduler = Schedulers.newSingle("GraphingRuntimeMetrics");
         this.valueProviders = new ConcurrentHashMap<>();
@@ -64,17 +101,39 @@ public class GraphingRuntimeMetrics<Type extends Object>
         return new GraphingRuntimeMetrics<>();
     }
 
+    /**
+     * {@inheritDoc}
+     * @return the currently selected metric.
+     */
     @Override
     public @Nullable Type getSelectedMetric() {
         return selectedMetric;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Select a new metric, probably indirectly
+     * called by the user through some
+     * GUI-Event.
+     * @param metric the metric to select
+     */
     @Override
     public void selectMetric(Type metric) {
         this.selectedMetric = metric;
         updateContainer(metric);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Register a callback for the given type of metric,
+     * which can be used to register values to it.
+     *
+     * @param metric the metric to select
+     * @return a consumer which accepts value-points and
+     * inserts them into the respective metric.
+     */
     @Override
     public Consumer<Double> registerCallback(Type metric) {
         DirectProcessor<Double> processor = DirectProcessor.create();
@@ -119,6 +178,18 @@ public class GraphingRuntimeMetrics<Type extends Object>
         return Optional.empty();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Uses {@link #drawEmpty} and {@link #drawMetric} to
+     * produce the content of the window depending on whether
+     * a metric was selected or not
+     *
+     * @param g the graphics
+     * @param context the context to use for drawing
+     * @param <R> the context used for drawing different
+     *           things based on the passed situation
+     */
     @Override
     public <R extends Component> void draw(Graphics g, R context) {
         if (this.selectedMetric == null) {
@@ -128,6 +199,11 @@ public class GraphingRuntimeMetrics<Type extends Object>
         }
     }
 
+    /**
+     * Update the container by setting the selected metric to the given {@link Type}
+     * and redrawing the window
+     * @param metric the metric to select.
+     */
     @RequiresNonNull({"this.container", "this.drawEmpty"})
     @SuppressWarnings("nullness")
     private void updateContainer(@UnknownInitialization GraphingRuntimeMetrics<Type> this, @Nullable Type metric) {
@@ -160,6 +236,10 @@ public class GraphingRuntimeMetrics<Type extends Object>
         return true;
     }
 
+    /**
+     * Internal utility class for drawing the content of the window
+     * when no metric is selected (presumably because there are none)
+     */
     private class EmptyDrawer {
 
         private final JLabel text;
@@ -184,6 +264,11 @@ public class GraphingRuntimeMetrics<Type extends Object>
         return "Graphical Runtime Metrics";
     }
 
+    /**
+     * Internal utility class for drawing the window content
+     * when a metric is selected. Uses {@link MetricSelectorDrawer} internally
+     * to draw the selector.
+     */
     private class MetricDrawer implements Terminable {
 
         private final Disposable subscription;
@@ -256,6 +341,10 @@ public class GraphingRuntimeMetrics<Type extends Object>
         }
     }
 
+    /**
+     * Internal utility class for displaying a selector to the user,
+     * which allows him to select a metric to draw.
+     */
     private class MetricSelectorDrawer {
 
         private final JComboBox<Type> selector;

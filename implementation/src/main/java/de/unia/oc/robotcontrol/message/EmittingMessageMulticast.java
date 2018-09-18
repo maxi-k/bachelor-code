@@ -9,6 +9,12 @@ import reactor.core.scheduler.Schedulers;
 
 import java.util.concurrent.Executor;
 
+/**
+ * Message multicast following the same semantics as {@link ReemittingMulticast}.
+ * The only notable difference is the {@link #topicFromValue(Message)} function,
+ * which can be implemented using {@link Message#getType()}.
+ * @param <T> the subtype of Message this processes
+ */
 public class EmittingMessageMulticast<T extends Message>
     extends ReemittingMulticast<MessageType<? extends T>, T>
         implements MessageMulticast<T> {

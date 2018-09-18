@@ -16,6 +16,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Grid for displaying Objects
+ */
 public class ObjectGrid implements Visualization<Component> {
 
     private static final Color GRID_LINES_COLOR = Color.LIGHT_GRAY;
