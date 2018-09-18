@@ -20,15 +20,40 @@ import java.util.List;
  */
 public class ListEncoding<T> implements FixedEncoding<List<T>> {
 
+    /**
+     * The {@link FixedEncoding} instance used for
+     * encoding and decoding each element.
+     */
     private FixedEncoding<T> singleEncoding;
+
+    /**
+     * The fixed number of elements
+     * the list is asserted to have.
+     */
     private int numElements;
 
+    /**
+     * Create a new Instance of {@link ListEncoding} by wrapping
+     * an existing encoding for a single element, which is used
+     * a fixed number of times.
+     *
+     * @param singleEncoding the encoding used to encode/decode the elements
+     *                       of the list
+     * @param numElements the number of elements which will be in the list
+     */
     public ListEncoding(FixedEncoding<T> singleEncoding,
                         int numElements) {
         this.singleEncoding = singleEncoding;
         this.numElements = numElements;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return the overall number of bytes required by this encoding, that is,
+     * of the complete list
+     *
+     */
     @Override
     public int numBytes() {
         return numElements * singleEncoding.numBytes();
@@ -61,11 +86,30 @@ public class ListEncoding<T> implements FixedEncoding<List<T>> {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * The {@link CodingContext} is the same as the one used
+     * by the encoding for the single value, and they are both
+     * when using {@link #withContext(CodingContext)}
+     *
+     * @return the coding context this encoding uses
+     */
     @Override
     public CodingContext getContext() {
         return singleEncoding.getContext();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Creates a new {@link ListEncoding} instance which uses the
+     * given context. Also sets the context on the internally
+     * used encoding for the single elements
+     *
+     * @param context the {@link CodingContext} to set
+     * @return a new instance of {@link ListEncoding}
+     */
     @Override
     public ListEncoding<T> withContext(CodingContext context) {
         return new ListEncoding<T>(
