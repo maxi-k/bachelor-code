@@ -4,7 +4,8 @@ package de.unia.oc.robotcontrol.coding;
 import java.nio.ByteBuffer;
 
 /**
- * {@link Encoding} for a single character.
+ * Encodes a single character using a {@link ByteBuffer},
+ * as implemented by the superclass {@link SingleValueEncoding}.
  */
 public class CharEncoding extends SingleValueEncoding<Character> {
 

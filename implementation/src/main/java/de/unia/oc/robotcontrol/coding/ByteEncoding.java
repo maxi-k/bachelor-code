@@ -2,6 +2,10 @@ package de.unia.oc.robotcontrol.coding;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Encodes a single byte using a {@link ByteBuffer},
+ * as implemented by the superclass {@link SingleValueEncoding}.
+ */
 public class ByteEncoding extends SingleValueEncoding<Byte> {
 
     public ByteEncoding(CodingContext context) {

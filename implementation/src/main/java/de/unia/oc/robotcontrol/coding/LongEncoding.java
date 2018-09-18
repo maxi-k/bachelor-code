@@ -5,6 +5,10 @@ import org.checkerframework.checker.index.qual.Positive;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Encodes a single long integer using a {@link ByteBuffer},
+ * as implemented by the superclass {@link SingleValueEncoding}.
+ */
 public class LongEncoding extends SingleValueEncoding<Long> {
 
     @Override

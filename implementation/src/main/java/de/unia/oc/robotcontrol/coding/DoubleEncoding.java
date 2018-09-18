@@ -6,6 +6,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Encodes a single double-precision floating point number
+ * using a {@link ByteBuffer},
+ * as implemented by the superclass {@link SingleValueEncoding}.
+ */
 public class DoubleEncoding extends SingleValueEncoding<Double> {
     @Override
     protected @Positive int nativeByteCount() {

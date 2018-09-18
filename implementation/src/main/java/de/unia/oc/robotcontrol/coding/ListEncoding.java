@@ -5,6 +5,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * An encoding for a list of values which a fixed length.
+ *
+ * Uses an existing {@link FixedEncoding} to encode and
+ * decode each single value.
+ *
+ * The overall resulting {@link FixedEncoding} encodes
+ * and decodes a {@link List} from a byte array
+ * which has the byte representations of each single
+ * value just appended to each other.
+ *
+ * @param <T> The type of the single values encoded.
+ */
 public class ListEncoding<T> implements FixedEncoding<List<T>> {
 
     private FixedEncoding<T> singleEncoding;

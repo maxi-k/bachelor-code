@@ -6,6 +6,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Encodes a single short integer using a {@link ByteBuffer},
+ * as implemented by the superclass {@link SingleValueEncoding}.
+ */
 public class ShortEncoding extends SingleValueEncoding<Short> {
 
     public ShortEncoding() { super(); }
