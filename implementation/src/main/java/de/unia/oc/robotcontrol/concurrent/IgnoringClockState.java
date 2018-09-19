@@ -33,6 +33,18 @@ public class IgnoringClockState<T extends Object> implements ClockState<T, T> {
         this.strategy = new TransparentFlowStrategy<>();
     }
 
+    /**
+     * Create a new {@link IgnoringClockState} with the given {@link ClockType}
+     * Mirror of {@link IgnoringClockState#IgnoringClockState(ClockType)}
+     *
+     * @param clockType the clock type to return on {@link #getClockType()}
+     * @param <T> the type of the clock state used in {@link #getFlowStrategy()}
+     * @return a new instance of {@link IgnoringClockState}
+     */
+    public static <T extends Object> IgnoringClockState<T> create(ClockType clockType) {
+        return new IgnoringClockState<>(clockType);
+    }
+
     @Override
     public FlowStrategy<T, T> getFlowStrategy() {
         return strategy;
