@@ -18,6 +18,11 @@ import java.util.UUID;
 public interface Device<Input extends Message, Output extends Message>
         extends MessageProcessor<Input, Output>, Terminable, DeviceTarget {
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return the unique identifier of this device.
+     */
     @Override
     @NonNull UUID getDeviceUUID();
 }

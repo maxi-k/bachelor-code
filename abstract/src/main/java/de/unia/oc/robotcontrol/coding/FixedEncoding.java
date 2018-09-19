@@ -7,9 +7,18 @@ import org.checkerframework.checker.index.qual.Positive;
 import org.checkerframework.checker.nullness.NullnessUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+/**
+ * A {@link FixedEncoding} is a special encoding that guarantees
+ * a fixed number of bytes. This is, for example, used in
+ * {@link de.unia.oc.robotcontrol.message.MessageIdentifier}
+ * to generate prefixes for encodings.
+ * @param <T> the type of value this can encode and decode from
+ */
 public interface FixedEncoding<T> extends Encoding<T> {
 
     /**
+     * The fixed, guaranteed number of bytes encoded values
+     * have.
      *
      * @return The number of bytes this Encoding needs.
      */
@@ -49,6 +58,12 @@ public interface FixedEncoding<T> extends Encoding<T> {
         };
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param context The coding context that has to be set
+     * @return a new instance of {@link FixedEncoding}
+     */
     @Override
     default FixedEncoding<T> withContext(CodingContext context) {
         FixedEncoding<T> self = this;

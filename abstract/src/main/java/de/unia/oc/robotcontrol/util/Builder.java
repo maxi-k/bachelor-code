@@ -11,6 +11,9 @@ import java.util.function.Function;
  */
 public final class Builder<T> {
 
+    /**
+     * The currently stored value
+     */
     private final T value;
 
     private Builder(T value) {

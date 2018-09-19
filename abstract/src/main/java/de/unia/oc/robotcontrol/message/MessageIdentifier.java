@@ -21,6 +21,19 @@ public interface MessageIdentifier<T>
      */
     FixedEncoding<T> getIdentifierEncoding();
 
+    /**
+     * {@inheritDoc}
+     *
+     * Encode the given identifier instance and
+     * add it to the bytes of the passed objects,
+     * resulting in bytes which can be identified
+     * using the passed message identifier,
+     * and decoded using {@link #decode(byte[])}
+     *
+     * @param object The thing to transform / encode
+     * @return a new byte array
+     * @throws IllegalArgumentException
+     */
     @Override
     default byte[] encode(Tuple<T, byte[]> object) throws IllegalArgumentException {
         FixedEncoding<T> e = getIdentifierEncoding();
@@ -28,6 +41,19 @@ public interface MessageIdentifier<T>
         return CodingUtil.join(encoded.first, encoded.second);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Split the identifier bytes from the actual message data bytes,
+     * returning tuple of the already decoded identifier and
+     * the rest of the bytes.
+     *
+     * @param raw a byte representation of the value type coded by
+     *            this instance of {@link Encoding}
+     * @return a new tuple containing the decoded identifier and
+     * the message bytes
+     * @throws IllegalArgumentException
+     */
     @Override
     default Tuple<T, byte[]> decode(byte[] raw) throws IllegalArgumentException {
         FixedEncoding<T> e = getIdentifierEncoding();
@@ -35,6 +61,13 @@ public interface MessageIdentifier<T>
         return split.mapFirst(e::decode);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param context The coding context that has to be set
+     * @return A new instance of {@link MessageIdentifier} with
+     * its context set to the given context.
+     */
     @Override
     default MessageIdentifier<T> withContext(CodingContext context) {
         MessageIdentifier<T> self = this;

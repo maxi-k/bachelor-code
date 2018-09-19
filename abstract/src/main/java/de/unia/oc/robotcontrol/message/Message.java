@@ -1,6 +1,8 @@
 /* %FILE_TEMPLATE_TEXT% */
 package de.unia.oc.robotcontrol.message;
 
+import de.unia.oc.robotcontrol.coding.Encoding;
+
 /**
  * A message that has a type which can encode it,
  * to be sent to a device, and which can decode it
@@ -10,6 +12,9 @@ package de.unia.oc.robotcontrol.message;
 public interface Message<T extends Message> {
 
     /**
+     * The type of this message which doubles
+     * as the instance of {@link Encoding} which can
+     * encode and decode messages of this type.
      *
      * @return The {@link MessageType} of this Message
      */

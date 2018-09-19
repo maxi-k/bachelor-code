@@ -21,9 +21,26 @@ import java.util.function.Supplier;
  */
 public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param object The thing to encode
+     * @return a byte representation of the given object
+     * @throws IllegalArgumentException if the object could not be
+     * encoded
+     */
     @Override
     byte[] encode(T object) throws IllegalArgumentException;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param raw a byte representation of the value type coded by
+     *            this instance of {@link Encoding}
+     * @return a decoded value (from the given bytes)
+     * @throws IllegalArgumentException if the object could not be
+     * decoded from the given bytes
+     */
     @Override
     @NonNull T decode(byte[] raw) throws IllegalArgumentException;
 
@@ -55,6 +72,18 @@ public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
         };
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Transforms the type of value this encoding accepts and emits using
+     * a {@link Bijection}
+     *
+     * @param top The instance of of {@link Bijection} that is used
+     *            to encode first and decode last {@code (R <-> T)},
+     *            transforming the encoding
+     * @param <R> the new type this encoding can accept
+     * @return A new instance of {@link Encoding}
+     */
     @Override
     default <R> Encoding<R> stack(Bijection<R, T> top) {
         Encoding<T> bottom = this;
@@ -75,6 +104,15 @@ public interface Encoding<T> extends Bijection<T, byte[]>, Contextual {
         };
     }
 
+    /**
+     * A 'null' encoding that encodes an empty byte array
+     * and decodes objects as provided by the given {@link Supplier}.
+     *
+     * @param context the coding context to return in {{@link #getContext()}}
+     * @param supplier the supplier that is called in {@link #decode(byte[])}
+     * @param <T> the value type of the encoding
+     * @return new instance of {@link Encoding}
+     */
     static <T> Encoding<T> nullEncoding(CodingContext context, Supplier<@NonNull T> supplier) {
         return new Encoding<T>() {
 
