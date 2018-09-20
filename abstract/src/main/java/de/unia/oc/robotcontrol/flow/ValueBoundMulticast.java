@@ -11,6 +11,14 @@ package de.unia.oc.robotcontrol.flow;
 public interface ValueBoundMulticast<Topic extends Object, Value extends Object>
     extends FlowableMulticast<Topic, Value> {
 
+    /**
+     * Derives a topic from the given value, making it possible
+     * to create a multicast function based on the value alone,
+     * without specifying a topic.
+     *
+     * @param value a value that a topic can be derived from
+     * @return the topic associated with the value
+     */
     Topic topicFromValue(Value value);
 
 }

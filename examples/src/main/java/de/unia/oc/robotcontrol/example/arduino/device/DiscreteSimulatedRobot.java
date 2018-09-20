@@ -87,10 +87,9 @@ public class DiscreteSimulatedRobot extends LockingDeviceConnector<Message, Mess
      * message.
      *
      * @param message the encoded message to act on
-     * @throws IOException
      */
     @Override
-    protected void pushMessage(byte[] message) throws IOException {
+    protected void pushMessage(byte[] message) {
         Message m = this.inputEncoding.decode(message);
         actOnMessage(m);
         synchronized (this.window) {

@@ -57,7 +57,7 @@ public abstract class FilteringMulticast<Topic extends Object, Value extends Obj
      * Creates a new instance of {@link FilteringMulticast} which
      * runs on the passed Executor. Calls the main constructor
      * {@link #FilteringMulticast(Scheduler)}
-     * @param executor
+     * @param executor the execution context to run on
      */
     public FilteringMulticast(Executor executor) {
         this(Schedulers.fromExecutor(executor));

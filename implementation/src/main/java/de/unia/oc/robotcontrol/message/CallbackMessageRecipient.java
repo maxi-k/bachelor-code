@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 /**
  * An implementation of {@link MessageRecipient} used to execute
  * a callback when a message is received.
- * @param <T>
+ * @param <T> the type of value this (and the callback) can receive
  */
 public class CallbackMessageRecipient<T extends Message> implements MessageRecipient<T> {
 

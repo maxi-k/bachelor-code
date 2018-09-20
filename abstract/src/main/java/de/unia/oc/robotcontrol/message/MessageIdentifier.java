@@ -32,7 +32,7 @@ public interface MessageIdentifier<T>
      *
      * @param object The thing to transform / encode
      * @return a new byte array
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the identifier encoding failed
      */
     @Override
     default byte[] encode(Tuple<T, byte[]> object) throws IllegalArgumentException {
@@ -52,7 +52,7 @@ public interface MessageIdentifier<T>
      *            this instance of {@link Encoding}
      * @return a new tuple containing the decoded identifier and
      * the message bytes
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the identifier decoding failed
      */
     @Override
     default Tuple<T, byte[]> decode(byte[] raw) throws IllegalArgumentException {

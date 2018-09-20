@@ -60,7 +60,7 @@ public class Logger {
     /**
      * Print the given message, only if {@link #DEBUG}
      * is set to true.
-     * @param message
+     * @param message the message to print
      */
     public synchronized void debug(String message) {
         if (DEBUG) outStream.println(message);

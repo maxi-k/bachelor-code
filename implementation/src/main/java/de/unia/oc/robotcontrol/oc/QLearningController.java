@@ -112,7 +112,7 @@ public abstract class QLearningController<WorldState extends Object,
      * then chooses an action using {@link #chooseAction()}.
      *
      * @param state the state that was received.
-     * @return
+     * @return the command to publish
      */
     @Override
     protected Command tick(WorldState state) {

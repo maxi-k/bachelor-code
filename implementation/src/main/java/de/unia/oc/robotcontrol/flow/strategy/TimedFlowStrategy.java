@@ -68,6 +68,10 @@ public class TimedFlowStrategy<Input extends Object, Output extends Object> impl
      * @param initialInput the provider of the initial input
      * @param mergingFunction the function used to merge the tick with
      *                        the values published by the transformed Publisher
+     * @param <I> the type of object published by the Publisher
+     *           which is to be transformed by this flow strategy
+     * @param <O> the type of object published by the transformed Publisher
+     * @return a new instance of {@link TimedFlowStrategy}
      */
     public static <I, O> TimedFlowStrategy<I, O> createTimed(Publisher<Long> timer,
                                                              Supplier<I> initialInput,

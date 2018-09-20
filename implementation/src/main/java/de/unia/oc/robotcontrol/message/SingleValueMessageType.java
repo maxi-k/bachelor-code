@@ -58,7 +58,7 @@ public class SingleValueMessageType<T> implements MessageType<SingleValueMessage
      * the {@link MessageType} set to {@code this} from the
      * given value.
      * @param value The value to wrap in a {@link SingleValueMessage}
-     * @return
+     * @return a new instance of {@link SingleValueMessage} wrapping the given value.
      */
     public SingleValueMessage<T> produce(T value) {
         long now = System.currentTimeMillis();

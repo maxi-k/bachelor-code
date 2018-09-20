@@ -5,8 +5,6 @@ import de.unia.oc.robotcontrol.example.arduino.data.ArduinoState;
 import de.unia.oc.robotcontrol.example.arduino.data.RobotDrivingCommand;
 import de.unia.oc.robotcontrol.flow.FlowStrategy;
 import de.unia.oc.robotcontrol.flow.FlowStrategyType;
-import de.unia.oc.robotcontrol.flow.strategy.MappingFlowStrategy;
-import de.unia.oc.robotcontrol.flow.strategy.TransparentFlowStrategy;
 import de.unia.oc.robotcontrol.oc.Controller;
 import de.unia.oc.robotcontrol.oc.ObservationModel;
 import de.unia.oc.robotcontrol.oc.Observer;
@@ -22,12 +20,14 @@ import reactor.core.publisher.EmitterProcessor;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
-import java.awt.*;
 import java.time.Duration;
 import java.util.*;
 
+/**
+ * The controller used for manually sending messages to the arudino,
+ * using the command line input.
+ */
 public class ManualController implements Controller<ArduinoState, ObservationModel<ArduinoState>, RobotDrivingCommand> {
-
     private final EmitterProcessor<RobotDrivingCommand> processor;
     private final Scheduler scheduler;
     private volatile @Nullable Observer<?, ? extends ArduinoState, ? super ObservationModel<ArduinoState>> observer;

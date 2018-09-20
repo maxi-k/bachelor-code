@@ -35,7 +35,7 @@ public class IgnoringClockState<T extends Object> implements ClockState<T, T> {
 
     /**
      * Create a new {@link IgnoringClockState} with the given {@link ClockType}
-     * Mirror of {@link IgnoringClockState#IgnoringClockState(ClockType)}
+     * Mirror of the constructor.
      *
      * @param clockType the clock type to return on {@link #getClockType()}
      * @param <T> the type of the clock state used in {@link #getFlowStrategy()}

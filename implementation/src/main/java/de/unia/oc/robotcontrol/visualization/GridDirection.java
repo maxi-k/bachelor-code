@@ -14,8 +14,8 @@ public enum GridDirection {
 
     /**
      * Rotate the direction by the other direction.
-     * @param other
-     * @return
+     * @param other the grid direction to rotate with
+     * @return a new {@link GridDirection}
      */
     public GridDirection add(GridDirection other) {
         GridDirection[] vals = values();
